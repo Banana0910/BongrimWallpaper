@@ -36,17 +36,21 @@
             this.class_x_bar = new System.Windows.Forms.TrackBar();
             this.checker = new System.Windows.Forms.Timer(this.components);
             this.date_x_bar = new System.Windows.Forms.TrackBar();
+            this.label1 = new System.Windows.Forms.Label();
+            this.main_wall_btn = new System.Windows.Forms.Button();
+            this.meal_y_bar = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.font_color_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.meal_y_bar)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 39);
+            this.pictureBox1.Location = new System.Drawing.Point(88, 39);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(480, 270);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -56,10 +60,10 @@
             // 
             // button1
             // 
-            this.button1.Font = new System.Drawing.Font("나눔고딕 Light", 8F);
-            this.button1.Location = new System.Drawing.Point(88, 352);
+            this.button1.Font = new System.Drawing.Font("굴림", 9F);
+            this.button1.Location = new System.Drawing.Point(88, 347);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(404, 23);
+            this.button1.Size = new System.Drawing.Size(480, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "만들기";
             this.button1.UseVisualStyleBackColor = true;
@@ -68,16 +72,16 @@
             // font_color_box
             // 
             this.font_color_box.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.font_color_box.Location = new System.Drawing.Point(12, 352);
+            this.font_color_box.Location = new System.Drawing.Point(11, 29);
             this.font_color_box.Name = "font_color_box";
-            this.font_color_box.Size = new System.Drawing.Size(70, 23);
+            this.font_color_box.Size = new System.Drawing.Size(61, 46);
             this.font_color_box.TabIndex = 2;
             this.font_color_box.TabStop = false;
             this.font_color_box.Click += new System.EventHandler(this.font_color_box_Click);
             // 
             // class_y_bar
             // 
-            this.class_y_bar.Location = new System.Drawing.Point(489, 27);
+            this.class_y_bar.Location = new System.Drawing.Point(566, 26);
             this.class_y_bar.Maximum = 1080;
             this.class_y_bar.Minimum = 1;
             this.class_y_bar.Name = "class_y_bar";
@@ -89,7 +93,7 @@
             // 
             // class_x_bar
             // 
-            this.class_x_bar.Location = new System.Drawing.Point(-1, 305);
+            this.class_x_bar.Location = new System.Drawing.Point(75, 305);
             this.class_x_bar.Maximum = 1920;
             this.class_x_bar.Minimum = 1;
             this.class_x_bar.Name = "class_x_bar";
@@ -104,7 +108,7 @@
             // 
             // date_x_bar
             // 
-            this.date_x_bar.Location = new System.Drawing.Point(-1, 12);
+            this.date_x_bar.Location = new System.Drawing.Point(75, 12);
             this.date_x_bar.Maximum = 1920;
             this.date_x_bar.Minimum = 1;
             this.date_x_bar.Name = "date_x_bar";
@@ -112,15 +116,49 @@
             this.date_x_bar.TabIndex = 5;
             this.date_x_bar.Value = 960;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 12);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "폰트 색상";
+            // 
+            // main_wall_btn
+            // 
+            this.main_wall_btn.Location = new System.Drawing.Point(88, 376);
+            this.main_wall_btn.Name = "main_wall_btn";
+            this.main_wall_btn.Size = new System.Drawing.Size(480, 23);
+            this.main_wall_btn.TabIndex = 7;
+            this.main_wall_btn.Text = "메인 배경";
+            this.main_wall_btn.UseVisualStyleBackColor = true;
+            this.main_wall_btn.Click += new System.EventHandler(this.main_wall_btn_Click);
+            // 
+            // meal_y_bar
+            // 
+            this.meal_y_bar.Location = new System.Drawing.Point(599, 26);
+            this.meal_y_bar.Maximum = 1080;
+            this.meal_y_bar.Minimum = 1;
+            this.meal_y_bar.Name = "meal_y_bar";
+            this.meal_y_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.meal_y_bar.Size = new System.Drawing.Size(45, 296);
+            this.meal_y_bar.TabIndex = 8;
+            this.meal_y_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.meal_y_bar.Value = 540;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(543, 387);
+            this.ClientSize = new System.Drawing.Size(639, 419);
+            this.Controls.Add(this.meal_y_bar);
+            this.Controls.Add(this.main_wall_btn);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.font_color_box);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.date_x_bar);
             this.Controls.Add(this.class_x_bar);
             this.Controls.Add(this.class_y_bar);
@@ -134,6 +172,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.meal_y_bar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -148,6 +187,9 @@
         private System.Windows.Forms.TrackBar class_x_bar;
         private System.Windows.Forms.Timer checker;
         private System.Windows.Forms.TrackBar date_x_bar;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button main_wall_btn;
+        private System.Windows.Forms.TrackBar meal_y_bar;
     }
 }
 
