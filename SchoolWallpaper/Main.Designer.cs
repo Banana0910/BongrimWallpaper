@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.start_btn = new System.Windows.Forms.Button();
             this.class_y_bar = new System.Windows.Forms.TrackBar();
@@ -38,46 +39,50 @@
             this.main_wall_btn = new System.Windows.Forms.Button();
             this.meal_y_bar = new System.Windows.Forms.TrackBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.date_font_box = new System.Windows.Forms.TextBox();
-            this.date_font_btn = new System.Windows.Forms.Button();
-            this.date_visible_check = new System.Windows.Forms.CheckBox();
-            this.date_color = new System.Windows.Forms.Panel();
-            this.date_color_btn = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.meal_main_color_btn = new System.Windows.Forms.Button();
-            this.meal_main_color = new System.Windows.Forms.Panel();
-            this.meal_visible_check = new System.Windows.Forms.CheckBox();
-            this.meal_main_font_btn = new System.Windows.Forms.Button();
-            this.meal_main_font_box = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.meal_sub_color_btn = new System.Windows.Forms.Button();
-            this.meal_sub_color = new System.Windows.Forms.Panel();
-            this.meal_sub_font_btn = new System.Windows.Forms.Button();
-            this.meal_sub_font_box = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.class_sub_color_btn = new System.Windows.Forms.Button();
+            this.class_sub_color = new System.Windows.Forms.Panel();
+            this.class_sub_font_btn = new System.Windows.Forms.Button();
+            this.class_sub_font_box = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.class_main_color_btn = new System.Windows.Forms.Button();
             this.class_main_color = new System.Windows.Forms.Panel();
             this.class_visible_check = new System.Windows.Forms.CheckBox();
             this.class_main_font_btn = new System.Windows.Forms.Button();
             this.class_main_font_box = new System.Windows.Forms.TextBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.class_sub_color_btn = new System.Windows.Forms.Button();
-            this.class_sub_color = new System.Windows.Forms.Panel();
-            this.class_sub_font_btn = new System.Windows.Forms.Button();
-            this.class_sub_font_box = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.meal_sub_color_btn = new System.Windows.Forms.Button();
+            this.meal_sub_color = new System.Windows.Forms.Panel();
+            this.meal_sub_font_btn = new System.Windows.Forms.Button();
+            this.meal_sub_font_box = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.meal_main_color_btn = new System.Windows.Forms.Button();
+            this.meal_main_color = new System.Windows.Forms.Panel();
+            this.meal_visible_check = new System.Windows.Forms.CheckBox();
+            this.meal_main_font_btn = new System.Windows.Forms.Button();
+            this.meal_main_font_box = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.date_color_btn = new System.Windows.Forms.Button();
+            this.date_color = new System.Windows.Forms.Panel();
+            this.date_visible_check = new System.Windows.Forms.CheckBox();
+            this.date_font_btn = new System.Windows.Forms.Button();
+            this.date_font_box = new System.Windows.Forms.TextBox();
             this.startup_check = new System.Windows.Forms.CheckBox();
+            this.SchoolWallpaper = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.종료ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.meal_y_bar)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -177,173 +182,53 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "글자 설정";
             // 
-            // groupBox2
+            // groupBox6
             // 
-            this.groupBox2.Controls.Add(this.date_color_btn);
-            this.groupBox2.Controls.Add(this.date_color);
-            this.groupBox2.Controls.Add(this.date_visible_check);
-            this.groupBox2.Controls.Add(this.date_font_btn);
-            this.groupBox2.Controls.Add(this.date_font_box);
-            this.groupBox2.Location = new System.Drawing.Point(6, 22);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(211, 81);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "날짜";
+            this.groupBox6.Controls.Add(this.class_sub_color_btn);
+            this.groupBox6.Controls.Add(this.class_sub_color);
+            this.groupBox6.Controls.Add(this.class_sub_font_btn);
+            this.groupBox6.Controls.Add(this.class_sub_font_box);
+            this.groupBox6.Location = new System.Drawing.Point(6, 370);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(211, 81);
+            this.groupBox6.TabIndex = 7;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "교시 부 글꼴";
             // 
-            // date_font_box
+            // class_sub_color_btn
             // 
-            this.date_font_box.Location = new System.Drawing.Point(6, 18);
-            this.date_font_box.Name = "date_font_box";
-            this.date_font_box.Size = new System.Drawing.Size(118, 23);
-            this.date_font_box.TabIndex = 0;
+            this.class_sub_color_btn.Location = new System.Drawing.Point(130, 48);
+            this.class_sub_color_btn.Name = "class_sub_color_btn";
+            this.class_sub_color_btn.Size = new System.Drawing.Size(75, 23);
+            this.class_sub_color_btn.TabIndex = 4;
+            this.class_sub_color_btn.Text = "색상 설정";
+            this.class_sub_color_btn.UseVisualStyleBackColor = true;
+            this.class_sub_color_btn.Click += new System.EventHandler(this.class_sub_color_btn_Click);
             // 
-            // date_font_btn
+            // class_sub_color
             // 
-            this.date_font_btn.Location = new System.Drawing.Point(130, 18);
-            this.date_font_btn.Name = "date_font_btn";
-            this.date_font_btn.Size = new System.Drawing.Size(75, 23);
-            this.date_font_btn.TabIndex = 1;
-            this.date_font_btn.Text = "폰트 설정";
-            this.date_font_btn.UseVisualStyleBackColor = true;
-            this.date_font_btn.Click += new System.EventHandler(this.date_font_btn_Click);
+            this.class_sub_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.class_sub_color.Location = new System.Drawing.Point(7, 48);
+            this.class_sub_color.Name = "class_sub_color";
+            this.class_sub_color.Size = new System.Drawing.Size(117, 23);
+            this.class_sub_color.TabIndex = 3;
             // 
-            // date_visible_check
+            // class_sub_font_btn
             // 
-            this.date_visible_check.AutoSize = true;
-            this.date_visible_check.Checked = true;
-            this.date_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.date_visible_check.Location = new System.Drawing.Point(34, 1);
-            this.date_visible_check.Name = "date_visible_check";
-            this.date_visible_check.Size = new System.Drawing.Size(15, 14);
-            this.date_visible_check.TabIndex = 2;
-            this.date_visible_check.UseVisualStyleBackColor = true;
+            this.class_sub_font_btn.Location = new System.Drawing.Point(130, 18);
+            this.class_sub_font_btn.Name = "class_sub_font_btn";
+            this.class_sub_font_btn.Size = new System.Drawing.Size(75, 23);
+            this.class_sub_font_btn.TabIndex = 1;
+            this.class_sub_font_btn.Text = "폰트 설정";
+            this.class_sub_font_btn.UseVisualStyleBackColor = true;
+            this.class_sub_font_btn.Click += new System.EventHandler(this.class_sub_font_btn_Click);
             // 
-            // date_color
+            // class_sub_font_box
             // 
-            this.date_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.date_color.Location = new System.Drawing.Point(7, 48);
-            this.date_color.Name = "date_color";
-            this.date_color.Size = new System.Drawing.Size(117, 23);
-            this.date_color.TabIndex = 3;
-            // 
-            // date_color_btn
-            // 
-            this.date_color_btn.Location = new System.Drawing.Point(130, 48);
-            this.date_color_btn.Name = "date_color_btn";
-            this.date_color_btn.Size = new System.Drawing.Size(75, 23);
-            this.date_color_btn.TabIndex = 4;
-            this.date_color_btn.Text = "색상 설정";
-            this.date_color_btn.UseVisualStyleBackColor = true;
-            this.date_color_btn.Click += new System.EventHandler(this.date_color_btn_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.meal_main_color_btn);
-            this.groupBox3.Controls.Add(this.meal_main_color);
-            this.groupBox3.Controls.Add(this.meal_visible_check);
-            this.groupBox3.Controls.Add(this.meal_main_font_btn);
-            this.groupBox3.Controls.Add(this.meal_main_font_box);
-            this.groupBox3.Location = new System.Drawing.Point(6, 109);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(211, 81);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "급식 타이틀";
-            // 
-            // meal_main_color_btn
-            // 
-            this.meal_main_color_btn.Location = new System.Drawing.Point(130, 48);
-            this.meal_main_color_btn.Name = "meal_main_color_btn";
-            this.meal_main_color_btn.Size = new System.Drawing.Size(75, 23);
-            this.meal_main_color_btn.TabIndex = 4;
-            this.meal_main_color_btn.Text = "색상 설정";
-            this.meal_main_color_btn.UseVisualStyleBackColor = true;
-            this.meal_main_color_btn.Click += new System.EventHandler(this.meal_main_color_btn_Click);
-            // 
-            // meal_main_color
-            // 
-            this.meal_main_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.meal_main_color.Location = new System.Drawing.Point(7, 48);
-            this.meal_main_color.Name = "meal_main_color";
-            this.meal_main_color.Size = new System.Drawing.Size(117, 23);
-            this.meal_main_color.TabIndex = 3;
-            // 
-            // meal_visible_check
-            // 
-            this.meal_visible_check.AutoSize = true;
-            this.meal_visible_check.Checked = true;
-            this.meal_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.meal_visible_check.Location = new System.Drawing.Point(74, 1);
-            this.meal_visible_check.Name = "meal_visible_check";
-            this.meal_visible_check.Size = new System.Drawing.Size(15, 14);
-            this.meal_visible_check.TabIndex = 2;
-            this.meal_visible_check.UseVisualStyleBackColor = true;
-            // 
-            // meal_main_font_btn
-            // 
-            this.meal_main_font_btn.Location = new System.Drawing.Point(130, 18);
-            this.meal_main_font_btn.Name = "meal_main_font_btn";
-            this.meal_main_font_btn.Size = new System.Drawing.Size(75, 23);
-            this.meal_main_font_btn.TabIndex = 1;
-            this.meal_main_font_btn.Text = "폰트 설정";
-            this.meal_main_font_btn.UseVisualStyleBackColor = true;
-            this.meal_main_font_btn.Click += new System.EventHandler(this.meal_main_font_btn_Click);
-            // 
-            // meal_main_font_box
-            // 
-            this.meal_main_font_box.Location = new System.Drawing.Point(6, 18);
-            this.meal_main_font_box.Name = "meal_main_font_box";
-            this.meal_main_font_box.Size = new System.Drawing.Size(118, 23);
-            this.meal_main_font_box.TabIndex = 0;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.meal_sub_color_btn);
-            this.groupBox4.Controls.Add(this.meal_sub_color);
-            this.groupBox4.Controls.Add(this.meal_sub_font_btn);
-            this.groupBox4.Controls.Add(this.meal_sub_font_box);
-            this.groupBox4.Location = new System.Drawing.Point(6, 196);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(211, 81);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "급식 내용";
-            // 
-            // meal_sub_color_btn
-            // 
-            this.meal_sub_color_btn.Location = new System.Drawing.Point(130, 48);
-            this.meal_sub_color_btn.Name = "meal_sub_color_btn";
-            this.meal_sub_color_btn.Size = new System.Drawing.Size(75, 23);
-            this.meal_sub_color_btn.TabIndex = 4;
-            this.meal_sub_color_btn.Text = "색상 설정";
-            this.meal_sub_color_btn.UseVisualStyleBackColor = true;
-            this.meal_sub_color_btn.Click += new System.EventHandler(this.meal_sub_color_btn_Click);
-            // 
-            // meal_sub_color
-            // 
-            this.meal_sub_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.meal_sub_color.Location = new System.Drawing.Point(7, 48);
-            this.meal_sub_color.Name = "meal_sub_color";
-            this.meal_sub_color.Size = new System.Drawing.Size(117, 23);
-            this.meal_sub_color.TabIndex = 3;
-            // 
-            // meal_sub_font_btn
-            // 
-            this.meal_sub_font_btn.Location = new System.Drawing.Point(130, 18);
-            this.meal_sub_font_btn.Name = "meal_sub_font_btn";
-            this.meal_sub_font_btn.Size = new System.Drawing.Size(75, 23);
-            this.meal_sub_font_btn.TabIndex = 1;
-            this.meal_sub_font_btn.Text = "폰트 설정";
-            this.meal_sub_font_btn.UseVisualStyleBackColor = true;
-            this.meal_sub_font_btn.Click += new System.EventHandler(this.meal_sub_font_btn_Click);
-            // 
-            // meal_sub_font_box
-            // 
-            this.meal_sub_font_box.Location = new System.Drawing.Point(6, 18);
-            this.meal_sub_font_box.Name = "meal_sub_font_box";
-            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 23);
-            this.meal_sub_font_box.TabIndex = 0;
+            this.class_sub_font_box.Location = new System.Drawing.Point(6, 18);
+            this.class_sub_font_box.Name = "class_sub_font_box";
+            this.class_sub_font_box.Size = new System.Drawing.Size(118, 23);
+            this.class_sub_font_box.TabIndex = 0;
             // 
             // groupBox5
             // 
@@ -405,53 +290,173 @@
             this.class_main_font_box.Size = new System.Drawing.Size(118, 23);
             this.class_main_font_box.TabIndex = 0;
             // 
-            // groupBox6
+            // groupBox4
             // 
-            this.groupBox6.Controls.Add(this.class_sub_color_btn);
-            this.groupBox6.Controls.Add(this.class_sub_color);
-            this.groupBox6.Controls.Add(this.class_sub_font_btn);
-            this.groupBox6.Controls.Add(this.class_sub_font_box);
-            this.groupBox6.Location = new System.Drawing.Point(6, 370);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(211, 81);
-            this.groupBox6.TabIndex = 7;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "교시 부 글꼴";
+            this.groupBox4.Controls.Add(this.meal_sub_color_btn);
+            this.groupBox4.Controls.Add(this.meal_sub_color);
+            this.groupBox4.Controls.Add(this.meal_sub_font_btn);
+            this.groupBox4.Controls.Add(this.meal_sub_font_box);
+            this.groupBox4.Location = new System.Drawing.Point(6, 196);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(211, 81);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "급식 내용";
             // 
-            // class_sub_color_btn
+            // meal_sub_color_btn
             // 
-            this.class_sub_color_btn.Location = new System.Drawing.Point(130, 48);
-            this.class_sub_color_btn.Name = "class_sub_color_btn";
-            this.class_sub_color_btn.Size = new System.Drawing.Size(75, 23);
-            this.class_sub_color_btn.TabIndex = 4;
-            this.class_sub_color_btn.Text = "색상 설정";
-            this.class_sub_color_btn.UseVisualStyleBackColor = true;
-            this.class_sub_color_btn.Click += new System.EventHandler(this.class_sub_color_btn_Click);
+            this.meal_sub_color_btn.Location = new System.Drawing.Point(130, 48);
+            this.meal_sub_color_btn.Name = "meal_sub_color_btn";
+            this.meal_sub_color_btn.Size = new System.Drawing.Size(75, 23);
+            this.meal_sub_color_btn.TabIndex = 4;
+            this.meal_sub_color_btn.Text = "색상 설정";
+            this.meal_sub_color_btn.UseVisualStyleBackColor = true;
+            this.meal_sub_color_btn.Click += new System.EventHandler(this.meal_sub_color_btn_Click);
             // 
-            // class_sub_color
+            // meal_sub_color
             // 
-            this.class_sub_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.class_sub_color.Location = new System.Drawing.Point(7, 48);
-            this.class_sub_color.Name = "class_sub_color";
-            this.class_sub_color.Size = new System.Drawing.Size(117, 23);
-            this.class_sub_color.TabIndex = 3;
+            this.meal_sub_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.meal_sub_color.Location = new System.Drawing.Point(7, 48);
+            this.meal_sub_color.Name = "meal_sub_color";
+            this.meal_sub_color.Size = new System.Drawing.Size(117, 23);
+            this.meal_sub_color.TabIndex = 3;
             // 
-            // class_sub_font_btn
+            // meal_sub_font_btn
             // 
-            this.class_sub_font_btn.Location = new System.Drawing.Point(130, 18);
-            this.class_sub_font_btn.Name = "class_sub_font_btn";
-            this.class_sub_font_btn.Size = new System.Drawing.Size(75, 23);
-            this.class_sub_font_btn.TabIndex = 1;
-            this.class_sub_font_btn.Text = "폰트 설정";
-            this.class_sub_font_btn.UseVisualStyleBackColor = true;
-            this.class_sub_font_btn.Click += new System.EventHandler(this.class_sub_font_btn_Click);
+            this.meal_sub_font_btn.Location = new System.Drawing.Point(130, 18);
+            this.meal_sub_font_btn.Name = "meal_sub_font_btn";
+            this.meal_sub_font_btn.Size = new System.Drawing.Size(75, 23);
+            this.meal_sub_font_btn.TabIndex = 1;
+            this.meal_sub_font_btn.Text = "폰트 설정";
+            this.meal_sub_font_btn.UseVisualStyleBackColor = true;
+            this.meal_sub_font_btn.Click += new System.EventHandler(this.meal_sub_font_btn_Click);
             // 
-            // class_sub_font_box
+            // meal_sub_font_box
             // 
-            this.class_sub_font_box.Location = new System.Drawing.Point(6, 18);
-            this.class_sub_font_box.Name = "class_sub_font_box";
-            this.class_sub_font_box.Size = new System.Drawing.Size(118, 23);
-            this.class_sub_font_box.TabIndex = 0;
+            this.meal_sub_font_box.Location = new System.Drawing.Point(6, 18);
+            this.meal_sub_font_box.Name = "meal_sub_font_box";
+            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 23);
+            this.meal_sub_font_box.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.meal_main_color_btn);
+            this.groupBox3.Controls.Add(this.meal_main_color);
+            this.groupBox3.Controls.Add(this.meal_visible_check);
+            this.groupBox3.Controls.Add(this.meal_main_font_btn);
+            this.groupBox3.Controls.Add(this.meal_main_font_box);
+            this.groupBox3.Location = new System.Drawing.Point(6, 109);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(211, 81);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "급식 타이틀";
+            // 
+            // meal_main_color_btn
+            // 
+            this.meal_main_color_btn.Location = new System.Drawing.Point(130, 48);
+            this.meal_main_color_btn.Name = "meal_main_color_btn";
+            this.meal_main_color_btn.Size = new System.Drawing.Size(75, 23);
+            this.meal_main_color_btn.TabIndex = 4;
+            this.meal_main_color_btn.Text = "색상 설정";
+            this.meal_main_color_btn.UseVisualStyleBackColor = true;
+            this.meal_main_color_btn.Click += new System.EventHandler(this.meal_main_color_btn_Click);
+            // 
+            // meal_main_color
+            // 
+            this.meal_main_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.meal_main_color.Location = new System.Drawing.Point(7, 48);
+            this.meal_main_color.Name = "meal_main_color";
+            this.meal_main_color.Size = new System.Drawing.Size(117, 23);
+            this.meal_main_color.TabIndex = 3;
+            // 
+            // meal_visible_check
+            // 
+            this.meal_visible_check.AutoSize = true;
+            this.meal_visible_check.Checked = true;
+            this.meal_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.meal_visible_check.Location = new System.Drawing.Point(74, 1);
+            this.meal_visible_check.Name = "meal_visible_check";
+            this.meal_visible_check.Size = new System.Drawing.Size(15, 14);
+            this.meal_visible_check.TabIndex = 2;
+            this.meal_visible_check.UseVisualStyleBackColor = true;
+            // 
+            // meal_main_font_btn
+            // 
+            this.meal_main_font_btn.Location = new System.Drawing.Point(130, 18);
+            this.meal_main_font_btn.Name = "meal_main_font_btn";
+            this.meal_main_font_btn.Size = new System.Drawing.Size(75, 23);
+            this.meal_main_font_btn.TabIndex = 1;
+            this.meal_main_font_btn.Text = "폰트 설정";
+            this.meal_main_font_btn.UseVisualStyleBackColor = true;
+            this.meal_main_font_btn.Click += new System.EventHandler(this.meal_main_font_btn_Click);
+            // 
+            // meal_main_font_box
+            // 
+            this.meal_main_font_box.Location = new System.Drawing.Point(6, 18);
+            this.meal_main_font_box.Name = "meal_main_font_box";
+            this.meal_main_font_box.Size = new System.Drawing.Size(118, 23);
+            this.meal_main_font_box.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.date_color_btn);
+            this.groupBox2.Controls.Add(this.date_color);
+            this.groupBox2.Controls.Add(this.date_visible_check);
+            this.groupBox2.Controls.Add(this.date_font_btn);
+            this.groupBox2.Controls.Add(this.date_font_box);
+            this.groupBox2.Location = new System.Drawing.Point(6, 22);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(211, 81);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "날짜";
+            // 
+            // date_color_btn
+            // 
+            this.date_color_btn.Location = new System.Drawing.Point(130, 48);
+            this.date_color_btn.Name = "date_color_btn";
+            this.date_color_btn.Size = new System.Drawing.Size(75, 23);
+            this.date_color_btn.TabIndex = 4;
+            this.date_color_btn.Text = "색상 설정";
+            this.date_color_btn.UseVisualStyleBackColor = true;
+            this.date_color_btn.Click += new System.EventHandler(this.date_color_btn_Click);
+            // 
+            // date_color
+            // 
+            this.date_color.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.date_color.Location = new System.Drawing.Point(7, 48);
+            this.date_color.Name = "date_color";
+            this.date_color.Size = new System.Drawing.Size(117, 23);
+            this.date_color.TabIndex = 3;
+            // 
+            // date_visible_check
+            // 
+            this.date_visible_check.AutoSize = true;
+            this.date_visible_check.Checked = true;
+            this.date_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.date_visible_check.Location = new System.Drawing.Point(34, 1);
+            this.date_visible_check.Name = "date_visible_check";
+            this.date_visible_check.Size = new System.Drawing.Size(15, 14);
+            this.date_visible_check.TabIndex = 2;
+            this.date_visible_check.UseVisualStyleBackColor = true;
+            // 
+            // date_font_btn
+            // 
+            this.date_font_btn.Location = new System.Drawing.Point(130, 18);
+            this.date_font_btn.Name = "date_font_btn";
+            this.date_font_btn.Size = new System.Drawing.Size(75, 23);
+            this.date_font_btn.TabIndex = 1;
+            this.date_font_btn.Text = "폰트 설정";
+            this.date_font_btn.UseVisualStyleBackColor = true;
+            this.date_font_btn.Click += new System.EventHandler(this.date_font_btn_Click);
+            // 
+            // date_font_box
+            // 
+            this.date_font_box.Location = new System.Drawing.Point(6, 18);
+            this.date_font_box.Name = "date_font_box";
+            this.date_font_box.Size = new System.Drawing.Size(118, 23);
+            this.date_font_box.TabIndex = 0;
             // 
             // startup_check
             // 
@@ -463,6 +468,28 @@
             this.startup_check.Text = "컴터 킬때 실행";
             this.startup_check.UseVisualStyleBackColor = true;
             this.startup_check.CheckedChanged += new System.EventHandler(this.startup_check_CheckedChanged);
+            // 
+            // SchoolWallpaper
+            // 
+            this.SchoolWallpaper.ContextMenuStrip = this.contextMenuStrip1;
+            this.SchoolWallpaper.Icon = ((System.Drawing.Icon)(resources.GetObject("SchoolWallpaper.Icon")));
+            this.SchoolWallpaper.Text = "notifyIcon";
+            this.SchoolWallpaper.Visible = true;
+            this.SchoolWallpaper.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.종료ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 26);
+            // 
+            // 종료ToolStripMenuItem
+            // 
+            this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
+            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.종료ToolStripMenuItem.Text = "종료";
+            this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -479,12 +506,13 @@
             this.Controls.Add(this.class_y_bar);
             this.Controls.Add(this.class_x_bar);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Main";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SchoolWallpaper";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).EndInit();
@@ -492,16 +520,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.meal_y_bar)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -547,6 +576,9 @@
         private System.Windows.Forms.Button date_font_btn;
         private System.Windows.Forms.TextBox date_font_box;
         private System.Windows.Forms.CheckBox startup_check;
+        private System.Windows.Forms.NotifyIcon SchoolWallpaper;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 종료ToolStripMenuItem;
     }
 }
 

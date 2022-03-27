@@ -46,6 +46,8 @@ namespace SchoolWallpaper
             },
         };
 
+        bool force_exit = false;
+
         string backup_wallpaper = "";
         string background = "";
 
@@ -185,9 +187,10 @@ namespace SchoolWallpaper
             }
 
             //저장 및 적용
-            image.Save("wallpaper.png", System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = "./wallpaper.png";
-            set_wallpaper(Path.GetFullPath(pictureBox1.ImageLocation));
+            string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
+            image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
+            pictureBox1.ImageLocation = save_path;
+            set_wallpaper(save_path);
         }
 
         private void set_break(int lesson) {
@@ -267,9 +270,10 @@ namespace SchoolWallpaper
             }
 
             //저장 및 적용
-            image.Save("wallpaper.png", System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = "./wallpaper.png";
-            set_wallpaper(Path.GetFullPath(pictureBox1.ImageLocation));
+            string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
+            image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
+            pictureBox1.ImageLocation = save_path;
+            set_wallpaper(save_path);
         }
 
         private void set_event(string text) {
@@ -329,14 +333,15 @@ namespace SchoolWallpaper
             }
 
             //저장 및 적용
-            image.Save("wallpaper.png", System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = "./wallpaper.png";
-            set_wallpaper(Path.GetFullPath(pictureBox1.ImageLocation));
+            string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
+            image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
+            pictureBox1.ImageLocation = save_path;
+            set_wallpaper(save_path);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(pictureBox1.ImageLocation));
+            ProcessStartInfo psi = new ProcessStartInfo(pictureBox1.ImageLocation);
             Process.Start(psi);
         }
 
@@ -444,8 +449,9 @@ namespace SchoolWallpaper
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (backup_wallpaper.Length > 0) {
-                set_wallpaper(backup_wallpaper);
+            if(!force_exit) {
+                e.Cancel = true;
+                this.Hide();
             }
         }
 
@@ -554,7 +560,12 @@ namespace SchoolWallpaper
             }
         }
 
-        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void 종료ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Properties.Settings settings = new Properties.Settings();
             settings.class_x_bar = class_x_bar.Value;
@@ -575,6 +586,13 @@ namespace SchoolWallpaper
             settings.class_sub_color = class_sub_color.BackColor;
 
             settings.Save();
+
+            if (backup_wallpaper.Length > 0) {
+                set_wallpaper(backup_wallpaper);
+            }
+
+            force_exit = true;
+            Application.Exit();
         }
     }
 }
