@@ -7,6 +7,7 @@ using System.Net;
 using hap = HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Threading;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
@@ -60,9 +61,8 @@ namespace SchoolWallpaper
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 
-        public static void set_wallpaper(string path)
-        {
-            SystemParametersInfo(SPI_SETDESKWALLPAPER,0,path,SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+        public static void set_wallpaper(string path) {
+            new Thread(() => { SystemParametersInfo(SPI_SETDESKWALLPAPER,0,path,SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE); }).Start();
         }
 
         private string[] get_meal() {
@@ -165,10 +165,9 @@ namespace SchoolWallpaper
                 string subject = timetables[((int)DateTime.Now.DayOfWeek)-1,0,lesson-1];
                 string teacher = timetables[((int)DateTime.Now.DayOfWeek)-1,1,lesson-1];
                 
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((TextRenderer.MeasureText(subject, main_font).Height + 
-                    TextRenderer.MeasureText(time, sub_font).Height + 
-                    TextRenderer.MeasureText(time, main_font).Height) / 2);
                 int center_x = class_x_bar.Value - (TextRenderer.MeasureText($"{lesson} 교시", sub_font).Width / 2);
+                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((TextRenderer.MeasureText("${lesson} 교시", sub_font).Height +
+                    TextRenderer.MeasureText(subject, main_font).Height + TextRenderer.MeasureText(time, sub_font).Height) / 2);
 
                 g.DrawString($"{lesson} 교시", sub_font, sub_sb, new RectangleF(center_x,center_y,image.Width,image.Height));
                 center_x = class_x_bar.Value - ((TextRenderer.MeasureText(subject, main_font).Width + 
@@ -193,12 +192,13 @@ namespace SchoolWallpaper
             set_wallpaper(save_path);
         }
 
-        private void set_break(int lesson) {
+        private void set_break(int lesson, bool lunch) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
             if (background.Length > 0)  g.DrawImage(Image.FromFile(background), 0,0,image.Width, image.Height);
             else g.FillRectangle(Brushes.White, 0, 0, image.Width, image.Height);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            
 
             // 날짜 그리기
             if (date_visible_check.Checked) {
@@ -250,21 +250,23 @@ namespace SchoolWallpaper
                 SolidBrush sub_sb = new SolidBrush(class_sub_color.BackColor);
 
                 string time = $"{times[lesson*2-2]} ~ {times[lesson*2-1]}";
+                string title = (lunch == true) ? "점심시간" : "쉬는 시간";
 
                 string subject = timetables[((int)DateTime.Now.DayOfWeek)-1,0,lesson-1];
                 string teacher = timetables[((int)DateTime.Now.DayOfWeek)-1,1,lesson-1];
             
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((TextRenderer.MeasureText("쉬는 시간", main_font).Height + 
-                    TextRenderer.MeasureText(time, sub_font).Height) / 2);
                 int center_x = class_x_bar.Value - (TextRenderer.MeasureText($"Next {subject}({teacher})", sub_font).Width / 2);
+                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((TextRenderer.MeasureText($"Next {subject}({teacher})", sub_font).Height +
+                    TextRenderer.MeasureText(title, main_font).Height + 
+                    TextRenderer.MeasureText(time, sub_font).Height) / 2);
 
                 g.DrawString($"Next {subject}({teacher})", sub_font, sub_sb, new RectangleF(center_x,center_y,image.Width,image.Height));
-                center_x = class_x_bar.Value - (TextRenderer.MeasureText("쉬는 시간", main_font).Width / 2);
+                center_x = class_x_bar.Value - (TextRenderer.MeasureText(title, main_font).Width / 2);
                 center_y += TextRenderer.MeasureText($"Next {subject}({teacher})", sub_font).Height;
 
-                g.DrawString("쉬는 시간", main_font, main_sb, new RectangleF(center_x,center_y,image.Width,image.Height));
+                g.DrawString(title, main_font, main_sb, new RectangleF(center_x,center_y,image.Width,image.Height));
                 center_x = class_x_bar.Value - (TextRenderer.MeasureText(time, sub_font).Width / 2);
-                center_y += TextRenderer.MeasureText("쉬는 시간", main_font).Height;
+                center_y += TextRenderer.MeasureText(title, main_font).Height;
 
                 g.DrawString(time, sub_font, sub_sb, new RectangleF(center_x,center_y,image.Width,image.Height));
             }
@@ -374,6 +376,8 @@ namespace SchoolWallpaper
 
             startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Name) != null);
 
+            background = (settings.background != "") ? settings.background : "";
+
             backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
             checker.Start();
             start_btn.Text = "중지";
@@ -390,49 +394,49 @@ namespace SchoolWallpaper
                 set_event("조례 및 아침 시간");
                 now_wallpaper = "morning";
             } else if (in_time(times[0], times[1]) && now_wallpaper != "break 1") {
-                set_break(1);
+                set_break(1, false);
                 now_wallpaper = "break 1";
             } else if (in_time(times[1], times[2]) && now_wallpaper != "subject 1") {
                 set_subject(1);
                 now_wallpaper = "subject 1";
             } else if (in_time(times[2], times[3]) && now_wallpaper != "break 2") { 
-                set_break(2);
+                set_break(2, false);
                 now_wallpaper = "break 2";
             } else if (in_time(times[3], times[4]) && now_wallpaper != "subject 2") { 
                 set_subject(2);
                 now_wallpaper = "subject 2";
             } else if (in_time(times[4], times[5]) && now_wallpaper != "break 3") { 
-                set_break(3);
+                set_break(3, false);
                 now_wallpaper = "break 3";
             } else if (in_time(times[5], times[6]) && now_wallpaper != "subject 3") { 
                 set_subject(3);
                 now_wallpaper = "subject 3";
             } else if (in_time(times[6], times[7]) && now_wallpaper != "break 4") { 
-                set_break(4);
+                set_break(4, false);
                 now_wallpaper = "break 4";
             } else if (in_time(times[7], times[8]) && now_wallpaper != "subject 4") { 
                 set_subject(4);
                 now_wallpaper = "subject 4";
             } else if (in_time(times[8], times[9]) && now_wallpaper != "break 5") { 
-                set_break(5);
+                set_break(5, true);
                 now_wallpaper = "break 5";
             } else if (in_time(times[9], times[10]) && now_wallpaper != "subject 5") { 
                 set_subject(5);
                 now_wallpaper = "subject 5";
             } else if (in_time(times[10], times[11]) && now_wallpaper != "break 6") { 
-                set_break(6);
+                set_break(6, false);
                 now_wallpaper = "break 6";
             } else if (in_time(times[11], times[12]) && now_wallpaper != "subject 6") { 
                 set_subject(6);
                 now_wallpaper = "subject 6";
             } else if (in_time(times[12], times[13]) && now.DayOfWeek != DayOfWeek.Wednesday && now_wallpaper != "break 7") { 
-                set_break(7);
+                set_break(7, false);
                 now_wallpaper = "break 7";
             } else if (in_time(times[13], times[14]) && now.DayOfWeek != DayOfWeek.Wednesday && now_wallpaper != "subject 7") { 
                 set_subject(7);
                 now_wallpaper = "subject 7";
-            } else if (DateTime.Parse(times[12]) < now && now_wallpaper != "after") {
-                set_event("종레 시간");
+            } else if (((now.DayOfWeek != DayOfWeek.Wednesday && DateTime.Parse(times[14]) < now) || (now.DayOfWeek == DayOfWeek.Wednesday && DateTime.Parse(times[12]) < now)) && now_wallpaper != "after") {
+                set_event("종례 시간");
                 now_wallpaper = "after";
             }
         } 
@@ -584,6 +588,8 @@ namespace SchoolWallpaper
             settings.meal_sub_color = meal_sub_color.BackColor;
             settings.class_main_color = class_main_color.BackColor;
             settings.class_sub_color = class_sub_color.BackColor;
+
+            settings.background = background;
 
             settings.Save();
 
