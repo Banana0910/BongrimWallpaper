@@ -20,6 +20,11 @@ namespace SchoolWallpaper
             InitializeComponent();
         }
 
+        private enum Break_Type {
+            Break,
+            Lunch,
+            Cleaning,
+        }
         string[] times = new string[] {
             "08:35", "08:40", "09:30", "09:40", "10:30", "10:40"," 11:30", "11:40","12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25"
         }; 
@@ -192,7 +197,7 @@ namespace SchoolWallpaper
             set_wallpaper(save_path);
         }
 
-        private void set_break(int lesson, bool lunch) {
+        private void set_break(int lesson, Break_Type break_type) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
             if (background.Length > 0)  g.DrawImage(Image.FromFile(background), 0,0,image.Width, image.Height);
@@ -250,7 +255,18 @@ namespace SchoolWallpaper
                 SolidBrush sub_sb = new SolidBrush(class_sub_color.BackColor);
 
                 string time = $"{times[lesson*2-2]} ~ {times[lesson*2-1]}";
-                string title = (lunch == true) ? "점심시간" : "쉬는 시간";
+                string title;
+                switch(break_type) {
+                    case Break_Type.Lunch :
+                        title = "점심 시간";
+                        break;
+                    case Break_Type.Cleaning :
+                        title = "청소 시간";
+                        break;
+                    default :
+                        title = "쉬는 시간";
+                        break;
+                }
 
                 string subject = timetables[((int)DateTime.Now.DayOfWeek)-1,0,lesson-1];
                 string teacher = timetables[((int)DateTime.Now.DayOfWeek)-1,1,lesson-1];
@@ -394,43 +410,43 @@ namespace SchoolWallpaper
                 set_event("조례 및 아침 시간");
                 now_wallpaper = "morning";
             } else if (in_time(times[0], times[1]) && now_wallpaper != "break 1") {
-                set_break(1, false);
+                set_break(1, Break_Type.Break);
                 now_wallpaper = "break 1";
             } else if (in_time(times[1], times[2]) && now_wallpaper != "subject 1") {
                 set_subject(1);
                 now_wallpaper = "subject 1";
             } else if (in_time(times[2], times[3]) && now_wallpaper != "break 2") { 
-                set_break(2, false);
+                set_break(2, Break_Type.Break);
                 now_wallpaper = "break 2";
             } else if (in_time(times[3], times[4]) && now_wallpaper != "subject 2") { 
                 set_subject(2);
                 now_wallpaper = "subject 2";
             } else if (in_time(times[4], times[5]) && now_wallpaper != "break 3") { 
-                set_break(3, false);
+                set_break(3, Break_Type.Break);
                 now_wallpaper = "break 3";
             } else if (in_time(times[5], times[6]) && now_wallpaper != "subject 3") { 
                 set_subject(3);
                 now_wallpaper = "subject 3";
             } else if (in_time(times[6], times[7]) && now_wallpaper != "break 4") { 
-                set_break(4, false);
+                set_break(4, Break_Type.Break);
                 now_wallpaper = "break 4";
             } else if (in_time(times[7], times[8]) && now_wallpaper != "subject 4") { 
                 set_subject(4);
                 now_wallpaper = "subject 4";
             } else if (in_time(times[8], times[9]) && now_wallpaper != "break 5") { 
-                set_break(5, true);
+                set_break(5, Break_Type.Lunch);
                 now_wallpaper = "break 5";
             } else if (in_time(times[9], times[10]) && now_wallpaper != "subject 5") { 
                 set_subject(5);
                 now_wallpaper = "subject 5";
             } else if (in_time(times[10], times[11]) && now_wallpaper != "break 6") { 
-                set_break(6, false);
+                set_break(6, Break_Type.Break);
                 now_wallpaper = "break 6";
             } else if (in_time(times[11], times[12]) && now_wallpaper != "subject 6") { 
                 set_subject(6);
                 now_wallpaper = "subject 6";
             } else if (in_time(times[12], times[13]) && now.DayOfWeek != DayOfWeek.Wednesday && now_wallpaper != "break 7") { 
-                set_break(7, false);
+                set_break(7, Break_Type.Cleaning);
                 now_wallpaper = "break 7";
             } else if (in_time(times[13], times[14]) && now.DayOfWeek != DayOfWeek.Wednesday && now_wallpaper != "subject 7") { 
                 set_subject(7);
