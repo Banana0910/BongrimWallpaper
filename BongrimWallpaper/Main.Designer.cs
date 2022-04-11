@@ -71,6 +71,10 @@
             this.notifyicon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.종료ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
+            this.timetable_path_box = new System.Windows.Forms.TextBox();
+            this.timetable_path_btn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).BeginInit();
@@ -88,7 +92,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 80);
+            this.pictureBox1.Location = new System.Drawing.Point(13, 123);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(480, 270);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -99,33 +103,33 @@
             // start_btn
             // 
             this.start_btn.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.start_btn.Location = new System.Drawing.Point(12, 412);
+            this.start_btn.Location = new System.Drawing.Point(12, 443);
             this.start_btn.Name = "start_btn";
             this.start_btn.Size = new System.Drawing.Size(548, 23);
             this.start_btn.TabIndex = 1;
             this.start_btn.Text = "실행";
             this.start_btn.UseVisualStyleBackColor = true;
-            this.start_btn.Click += new System.EventHandler(this.button1_Click);
+            this.start_btn.Click += new System.EventHandler(this.start_btn_Click);
             // 
             // class_y_bar
             // 
-            this.class_y_bar.Location = new System.Drawing.Point(491, 67);
+            this.class_y_bar.Location = new System.Drawing.Point(491, 110);
             this.class_y_bar.Maximum = 1080;
             this.class_y_bar.Minimum = 1;
             this.class_y_bar.Name = "class_y_bar";
             this.class_y_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.class_y_bar.Size = new System.Drawing.Size(69, 296);
+            this.class_y_bar.Size = new System.Drawing.Size(45, 296);
             this.class_y_bar.TabIndex = 3;
             this.class_y_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.class_y_bar.Value = 540;
             // 
             // class_x_bar
             // 
-            this.class_x_bar.Location = new System.Drawing.Point(0, 346);
+            this.class_x_bar.Location = new System.Drawing.Point(0, 389);
             this.class_x_bar.Maximum = 1920;
             this.class_x_bar.Minimum = 1;
             this.class_x_bar.Name = "class_x_bar";
-            this.class_x_bar.Size = new System.Drawing.Size(506, 69);
+            this.class_x_bar.Size = new System.Drawing.Size(506, 45);
             this.class_x_bar.TabIndex = 4;
             this.class_x_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.class_x_bar.Value = 960;
@@ -137,18 +141,18 @@
             // 
             // date_x_bar
             // 
-            this.date_x_bar.Location = new System.Drawing.Point(0, 53);
+            this.date_x_bar.Location = new System.Drawing.Point(0, 96);
             this.date_x_bar.Maximum = 1920;
             this.date_x_bar.Minimum = 1;
             this.date_x_bar.Name = "date_x_bar";
-            this.date_x_bar.Size = new System.Drawing.Size(506, 69);
+            this.date_x_bar.Size = new System.Drawing.Size(506, 45);
             this.date_x_bar.TabIndex = 5;
             this.date_x_bar.Value = 960;
             // 
             // main_wall_btn
             // 
             this.main_wall_btn.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.main_wall_btn.Location = new System.Drawing.Point(12, 441);
+            this.main_wall_btn.Location = new System.Drawing.Point(12, 472);
             this.main_wall_btn.Name = "main_wall_btn";
             this.main_wall_btn.Size = new System.Drawing.Size(548, 23);
             this.main_wall_btn.TabIndex = 7;
@@ -158,12 +162,12 @@
             // 
             // meal_y_bar
             // 
-            this.meal_y_bar.Location = new System.Drawing.Point(524, 67);
+            this.meal_y_bar.Location = new System.Drawing.Point(524, 110);
             this.meal_y_bar.Maximum = 1080;
             this.meal_y_bar.Minimum = 1;
             this.meal_y_bar.Name = "meal_y_bar";
             this.meal_y_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.meal_y_bar.Size = new System.Drawing.Size(69, 296);
+            this.meal_y_bar.Size = new System.Drawing.Size(45, 296);
             this.meal_y_bar.TabIndex = 8;
             this.meal_y_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.meal_y_bar.Value = 540;
@@ -227,7 +231,7 @@
             // 
             this.class_sub_font_box.Location = new System.Drawing.Point(6, 18);
             this.class_sub_font_box.Name = "class_sub_font_box";
-            this.class_sub_font_box.Size = new System.Drawing.Size(118, 31);
+            this.class_sub_font_box.Size = new System.Drawing.Size(118, 23);
             this.class_sub_font_box.TabIndex = 0;
             // 
             // groupBox5
@@ -269,7 +273,7 @@
             this.class_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.class_visible_check.Location = new System.Drawing.Point(78, 1);
             this.class_visible_check.Name = "class_visible_check";
-            this.class_visible_check.Size = new System.Drawing.Size(22, 21);
+            this.class_visible_check.Size = new System.Drawing.Size(15, 14);
             this.class_visible_check.TabIndex = 2;
             this.class_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -287,7 +291,7 @@
             // 
             this.class_main_font_box.Location = new System.Drawing.Point(6, 18);
             this.class_main_font_box.Name = "class_main_font_box";
-            this.class_main_font_box.Size = new System.Drawing.Size(118, 31);
+            this.class_main_font_box.Size = new System.Drawing.Size(118, 23);
             this.class_main_font_box.TabIndex = 0;
             // 
             // groupBox4
@@ -335,7 +339,7 @@
             // 
             this.meal_sub_font_box.Location = new System.Drawing.Point(6, 18);
             this.meal_sub_font_box.Name = "meal_sub_font_box";
-            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 31);
+            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 23);
             this.meal_sub_font_box.TabIndex = 0;
             // 
             // groupBox3
@@ -377,7 +381,7 @@
             this.meal_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.meal_visible_check.Location = new System.Drawing.Point(74, 1);
             this.meal_visible_check.Name = "meal_visible_check";
-            this.meal_visible_check.Size = new System.Drawing.Size(22, 21);
+            this.meal_visible_check.Size = new System.Drawing.Size(15, 14);
             this.meal_visible_check.TabIndex = 2;
             this.meal_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -395,7 +399,7 @@
             // 
             this.meal_main_font_box.Location = new System.Drawing.Point(6, 18);
             this.meal_main_font_box.Name = "meal_main_font_box";
-            this.meal_main_font_box.Size = new System.Drawing.Size(118, 31);
+            this.meal_main_font_box.Size = new System.Drawing.Size(118, 23);
             this.meal_main_font_box.TabIndex = 0;
             // 
             // groupBox2
@@ -437,7 +441,7 @@
             this.date_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.date_visible_check.Location = new System.Drawing.Point(34, 1);
             this.date_visible_check.Name = "date_visible_check";
-            this.date_visible_check.Size = new System.Drawing.Size(22, 21);
+            this.date_visible_check.Size = new System.Drawing.Size(15, 14);
             this.date_visible_check.TabIndex = 2;
             this.date_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -455,15 +459,15 @@
             // 
             this.date_font_box.Location = new System.Drawing.Point(6, 18);
             this.date_font_box.Name = "date_font_box";
-            this.date_font_box.Size = new System.Drawing.Size(118, 31);
+            this.date_font_box.Size = new System.Drawing.Size(118, 23);
             this.date_font_box.TabIndex = 0;
             // 
             // startup_check
             // 
             this.startup_check.AutoSize = true;
-            this.startup_check.Location = new System.Drawing.Point(13, 12);
+            this.startup_check.Location = new System.Drawing.Point(12, 12);
             this.startup_check.Name = "startup_check";
-            this.startup_check.Size = new System.Drawing.Size(158, 29);
+            this.startup_check.Size = new System.Drawing.Size(106, 19);
             this.startup_check.TabIndex = 10;
             this.startup_check.Text = "컴터 킬때 실행";
             this.startup_check.UseVisualStyleBackColor = true;
@@ -483,20 +487,60 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.종료ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 36);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 26);
             // 
             // 종료ToolStripMenuItem
             // 
             this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
-            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
+            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.종료ToolStripMenuItem.Text = "종료";
             this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(566, 472);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(225, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "설정 저장";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // timetable_path_box
+            // 
+            this.timetable_path_box.BackColor = System.Drawing.Color.White;
+            this.timetable_path_box.Location = new System.Drawing.Point(87, 60);
+            this.timetable_path_box.Name = "timetable_path_box";
+            this.timetable_path_box.Size = new System.Drawing.Size(392, 23);
+            this.timetable_path_box.TabIndex = 12;
+            // 
+            // timetable_path_btn
+            // 
+            this.timetable_path_btn.Location = new System.Drawing.Point(485, 60);
+            this.timetable_path_btn.Name = "timetable_path_btn";
+            this.timetable_path_btn.Size = new System.Drawing.Size(75, 23);
+            this.timetable_path_btn.TabIndex = 13;
+            this.timetable_path_btn.Text = "경로";
+            this.timetable_path_btn.UseVisualStyleBackColor = true;
+            this.timetable_path_btn.Click += new System.EventHandler(this.timetable_path_btn_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 63);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 15);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "시간표 파일";
             // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(796, 475);
+            this.ClientSize = new System.Drawing.Size(796, 512);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.timetable_path_btn);
+            this.Controls.Add(this.timetable_path_box);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.startup_check);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.meal_y_bar);
@@ -512,7 +556,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BongrimWallpaper";
+            this.Text = "봉림고 바탕화면";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -580,6 +624,10 @@
         private System.Windows.Forms.NotifyIcon notifyicon;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 종료ToolStripMenuItem;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox timetable_path_box;
+        private System.Windows.Forms.Button timetable_path_btn;
+        private System.Windows.Forms.Label label1;
     }
 }
 
