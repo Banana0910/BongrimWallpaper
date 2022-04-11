@@ -1,4 +1,4 @@
-﻿namespace SchoolWallpaper
+﻿namespace BongrimWallpaper
 {
     partial class Main
     {
@@ -494,7 +494,6 @@
             // 
             // Main
             // 
-            this.Visible = false;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(796, 475);
@@ -513,7 +512,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SchoolWallpaper";
+            this.Text = "BongrimWallpaper";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

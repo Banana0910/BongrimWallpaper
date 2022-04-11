@@ -15,7 +15,7 @@ using System.Threading;
 using System.Windows.Forms;
 using hap = HtmlAgilityPack;
 
-namespace SchoolWallpaper
+namespace BongrimWallpaper
 {
     public partial class Main : Form
     {
@@ -24,10 +24,8 @@ namespace SchoolWallpaper
             InitializeComponent();
         }
 
-        private void json_update()
-        {
-            TimeTable timetable = new TimeTable()
-            {
+        private void json_update() {
+            TimeTable timetable = new TimeTable() {
                 weekday = new List<Subject>() {
                     new Subject() {
                         name = new string[] { "한문", "수학", "과학탐구", "체육", "영어", "통합과학", "국어" },
@@ -52,19 +50,16 @@ namespace SchoolWallpaper
                 }
             };
 
-            string jsonStr = JsonSerializer.Serialize(timetable, new JsonSerializerOptions()
-            {
+            string jsonStr = JsonSerializer.Serialize(timetable, new JsonSerializerOptions() {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
             });
             File.WriteAllText("timetable.json", jsonStr);
         }
 
-        private Subject get_timetable()
-        {
+        private Subject get_timetable() {
             string jsonString = File.ReadAllText("timetable.json");
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-            // return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
-            return timetable.weekday[1];
+            return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
 
         readonly string[] times = new string[] { "08:35", "08:40", "09:30", "09:40", "10:30", "10:40", " 11:30", "11:40", "12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25" };
@@ -85,16 +80,13 @@ namespace SchoolWallpaper
             new Thread(() => { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }).Start();
         }
 
-        private Font toFont(TextBox tb)
-        {
+        private Font toFont(TextBox tb) {
             string[] splited = tb.Text.Split(',');
             return new Font(splited[0], float.Parse(splited[1]));
         }
 
-        private string[] get_meal()
-        {
-            try
-            {
+        private string[] get_meal() {
+            try {
                 WebClient wc = new WebClient();
                 wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
                 wc.QueryString.Add("dietDate", DateTime.Now.ToString("yyyy/MM/dd"));
@@ -107,41 +99,36 @@ namespace SchoolWallpaper
                 hap.HtmlNode lunch = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='subContent']/div/div[3]/div[2]/table/tbody/tr[2]/td");
                 hap.HtmlNode dinner = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='subContent']/div/div[3]/div[3]/table/tbody/tr[2]/td");
 
-                if (string.IsNullOrWhiteSpace(lunch.InnerHtml.Trim()))
-                {
+                if (string.IsNullOrWhiteSpace(lunch.InnerHtml.Trim())) {
                     return null;
                 }
-                if (dinner != null)
-                {
+                if (dinner != null) {
                     string _lunch = Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
                     string _dinner = Regex.Replace(dinner.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
                     return new string[] { _lunch, _dinner };
                 }
-                else
-                {
+                else {
                     string _lunch = Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
                     return new string[] { _lunch };
                 }
             }
-            catch
-            {
+            catch {
                 return null;
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            set_break(1);
-            // if (start_btn.Text == "실행") {
-            //     backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-            //     checker.Start();
-            //     start_btn.Text = "중지";
-            // } else {
-            //     now_wallpaper = -2;
-            //     set_wallpaper(backup_wallpaper);
-            //     checker.Stop();
-            //     start_btn.Text = "실행";
-            // }
+            if (start_btn.Text == "실행") {
+                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+                checker.Start();
+                start_btn.Text = "중지";
+            } else {
+                now_wallpaper = -2;
+                set_wallpaper(backup_wallpaper);
+                checker.Stop();
+                start_btn.Text = "실행";
+            }
         }
 
         private void draw_base(ref Graphics g, Bitmap image)
@@ -150,8 +137,7 @@ namespace SchoolWallpaper
             if (background.Length > 0) g.DrawImage(Image.FromFile(background), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
             // 날짜 그리기
-            if (date_visible_check.Checked)
-            {
+            if (date_visible_check.Checked) {
                 string today = DateTime.Now.ToString("yyyy년 MM월 dd일");
                 string[] font = date_font_box.Text.Split(',');
                 Font date_font = new Font(font[0], float.Parse(font[1]));
@@ -161,8 +147,7 @@ namespace SchoolWallpaper
             }
 
             //급식 그리기
-            if (meal_visible_check.Checked)
-            {
+            if (meal_visible_check.Checked) {
                 string[] meal = get_meal();
 
 
@@ -176,39 +161,34 @@ namespace SchoolWallpaper
 
                 StringFormat format = new StringFormat() { Alignment = StringAlignment.Far };
 
-                if (meal != null)
-                {
+                if (meal != null) {
                     g.DrawString("중식 [lunch]", meal_title, meal_title_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
                     meal_y += TextRenderer.MeasureText("중식 (lunch)", meal_title).Height + 10;
 
                     g.DrawString(meal[0], meal_description, meal_description_sb, new RectangleF(-10, meal_y, image.Width, image.Height), format);
                     meal_y += TextRenderer.MeasureText(meal[0], meal_description).Height + 50;
 
-                    if (meal.Length > 1)
-                    { // 석식이 있다면
+                    if (meal.Length > 1) { // 석식이 있다면
                         g.DrawString("석식 [dinner]", meal_title, meal_title_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
                         meal_y += TextRenderer.MeasureText("석식 (dinner)", meal_title).Height + 10;
 
                         g.DrawString(meal[1], meal_description, meal_description_sb, new RectangleF(-10, meal_y, image.Width, image.Height), format);
                     }
                 }
-                else
-                {
+                else {
                     g.DrawString("급식이 없습니다..", meal_title, meal_title_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
                 }
             }
         }
 
-        private void set_subject(int lesson)
-        {
+        private void set_subject(int lesson) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
             draw_base(ref g, image);
 
             //현재 시간 및 과목 그리기
-            if (class_visible_check.Checked)
-            {
+            if (class_visible_check.Checked) {
                 Font main_font = toFont(class_main_font_box);
                 Font sub_font = toFont(class_sub_font_box);
 
@@ -248,15 +228,13 @@ namespace SchoolWallpaper
             set_wallpaper(save_path);
         }
 
-        private void set_break(int lesson)
-        {
+        private void set_break(int lesson) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
             draw_base(ref g, image);
 
-            if (class_visible_check.Checked)
-            {
+            if (class_visible_check.Checked) {
                 string[] main_font_sp = class_main_font_box.Text.Split(',');
                 string[] sub_font_sp = class_sub_font_box.Text.Split(',');
 
@@ -267,8 +245,7 @@ namespace SchoolWallpaper
                 SolidBrush sub_sb = new SolidBrush(class_sub_color.BackColor);
 
                 string title = "쉬는 시간";
-                switch (lesson)
-                {
+                switch (lesson) {
                     case 5:
                         title = "점심 시간";
                         break;
@@ -305,15 +282,13 @@ namespace SchoolWallpaper
             set_wallpaper(save_path);
         }
 
-        private void set_event(string text)
-        {
+        private void set_event(string text) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
             draw_base(ref g, image);
 
-            if (class_visible_check.Checked)
-            {
+            if (class_visible_check.Checked) {
                 string[] main_font_sp = class_main_font_box.Text.Split(',');
                 Font font = new Font(main_font_sp[0], float.Parse(main_font_sp[1]));
                 SolidBrush sb = new SolidBrush(class_main_color.BackColor);
@@ -330,14 +305,12 @@ namespace SchoolWallpaper
             set_wallpaper(save_path);
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
+        private void pictureBox1_Click(object sender, EventArgs e) {
             ProcessStartInfo psi = new ProcessStartInfo(pictureBox1.ImageLocation);
             Process.Start(psi);
         }
 
-        private void Main_Load(object sender, EventArgs e)
-        {
+        private void Main_Load(object sender, EventArgs e) {
             Properties.Settings settings = new Properties.Settings();
             class_x_bar.Maximum = Screen.PrimaryScreen.Bounds.Width;
             class_x_bar.Value = (settings.class_x_bar != 0) ? settings.class_x_bar : Screen.PrimaryScreen.Bounds.Width / 2;
@@ -367,25 +340,21 @@ namespace SchoolWallpaper
 
             background = (settings.background != "") ? settings.background : "";
 
-            // backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-            // checker.Start();
-            // start_btn.Text = "중지";
+            backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+            checker.Start();
+            start_btn.Text = "중지";
         }
 
-        private void checker_Tick(object sender, EventArgs e)
-        {
+        private void checker_Tick(object sender, EventArgs e) {
             DateTime now = DateTime.Now;
 
-            if (DateTime.Parse("08:30:00") > now && now_wallpaper != -1)
-            {
+            if (DateTime.Parse("08:30:00") > now && now_wallpaper != -1) {
                 set_event("조례 및 아침 시간");
                 now_wallpaper = -1;
             }
 
-            for (int i = 1; i <= ((now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14); i++)
-            {
-                if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && now_wallpaper != i)
-                {
+            for (int i = 1; i <= ((now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14); i++) {
+                if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && now_wallpaper != i) {
                     if (i % 2 == 1) set_break((i + 1) / 2);
                     else set_subject(i / 2);
                     now_wallpaper = i;
@@ -393,50 +362,43 @@ namespace SchoolWallpaper
                 }
             }
 
-            if (now_wallpaper != 15)
-            {
+            bool condition = (DateTime.Parse(times[12]) <= now && now.DayOfWeek == DayOfWeek.Wednesday) ||
+                (DateTime.Parse(times[14]) <= now && now.DayOfWeek != DayOfWeek.Wednesday) && now_wallpaper != 15;
+            if (condition) {
                 set_event("종례 시간");
                 now_wallpaper = 15;
             }
         }
 
-        private void main_wall_btn_Click(object sender, EventArgs e)
-        {
+        private void main_wall_btn_Click(object sender, EventArgs e) {
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "JPG Files (*.jpg *.jpeg)|*.jpg;*.jpeg|PNG Files (*.png)|*.png|All files (*.*)|*.*";
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
+            if (fd.ShowDialog() == DialogResult.OK) {
                 background = fd.FileName;
                 pictureBox1.ImageLocation = fd.FileName;
             }
         }
 
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!force_exit)
-            {
+        private void Main_FormClosing(object sender, FormClosingEventArgs e) {
+            if (!force_exit) {
                 e.Cancel = true;
                 this.Hide();
             }
         }
 
-        private void date_font_btn_Click(object sender, EventArgs e)
-        {
+        private void date_font_btn_Click(object sender, EventArgs e) {
             FontDialog fd = new FontDialog();
             string[] font = date_font_box.Text.Split(',');
             fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
+            if (fd.ShowDialog() == DialogResult.OK) {
                 date_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
             }
         }
 
-        private void date_color_btn_Click(object sender, EventArgs e)
-        {
+        private void date_color_btn_Click(object sender, EventArgs e) {
             ColorDialog cd = new ColorDialog();
             cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK)
-            {
+            if (cd.ShowDialog() == DialogResult.OK) {
                 date_color.BackColor = cd.Color;
             }
         }
@@ -488,8 +450,7 @@ namespace SchoolWallpaper
             FontDialog fd = new FontDialog();
             string[] font = class_main_font_box.Text.Split(',');
             fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
+            if (fd.ShowDialog() == DialogResult.OK) {
                 class_main_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
             }
         }
@@ -498,8 +459,7 @@ namespace SchoolWallpaper
         {
             ColorDialog cd = new ColorDialog();
             cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK)
-            {
+            if (cd.ShowDialog() == DialogResult.OK) {
                 class_main_color.BackColor = cd.Color;
             }
         }
@@ -509,8 +469,7 @@ namespace SchoolWallpaper
             FontDialog fd = new FontDialog();
             string[] font = class_sub_font_box.Text.Split(',');
             fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
+            if (fd.ShowDialog() == DialogResult.OK) {
                 class_sub_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
             }
         }
@@ -519,8 +478,7 @@ namespace SchoolWallpaper
         {
             ColorDialog cd = new ColorDialog();
             cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK)
-            {
+            if (cd.ShowDialog() == DialogResult.OK) {
                 class_sub_color.BackColor = cd.Color;
             }
         }
@@ -528,23 +486,19 @@ namespace SchoolWallpaper
         private void startup_check_CheckedChanged(object sender, EventArgs e)
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (startup_check.Checked)
-            {
+            if (startup_check.Checked) {
                 key.SetValue(this.Name, Application.ExecutablePath);
             }
-            else
-            {
+            else {
                 key.DeleteValue(this.Name);
             }
         }
 
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
-        {
-            this.Show();
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e) {
+            this.Show();    
         }
 
-        private void 종료ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void 종료ToolStripMenuItem_Click(object sender, EventArgs e) {
             Properties.Settings settings = new Properties.Settings();
             settings.class_x_bar = class_x_bar.Value;
             settings.class_y_bar = class_y_bar.Value;
@@ -577,14 +531,12 @@ namespace SchoolWallpaper
         }
     }
 
-    public class Subject
-    {
+    public class Subject {
         public string[] name { get; set; }
         public string[] teacher { get; set; }
     }
 
-    public class TimeTable
-    {
+    public class TimeTable {
         public List<Subject> weekday { get; set; }
     }
 }
