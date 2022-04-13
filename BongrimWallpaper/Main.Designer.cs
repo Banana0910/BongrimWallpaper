@@ -71,7 +71,7 @@
             this.notifyicon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.종료ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
+            this.settings_save_btn = new System.Windows.Forms.Button();
             this.timetable_path_box = new System.Windows.Forms.TextBox();
             this.timetable_path_btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -118,7 +118,7 @@
             this.class_y_bar.Minimum = 1;
             this.class_y_bar.Name = "class_y_bar";
             this.class_y_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.class_y_bar.Size = new System.Drawing.Size(45, 296);
+            this.class_y_bar.Size = new System.Drawing.Size(69, 296);
             this.class_y_bar.TabIndex = 3;
             this.class_y_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.class_y_bar.Value = 540;
@@ -129,7 +129,7 @@
             this.class_x_bar.Maximum = 1920;
             this.class_x_bar.Minimum = 1;
             this.class_x_bar.Name = "class_x_bar";
-            this.class_x_bar.Size = new System.Drawing.Size(506, 45);
+            this.class_x_bar.Size = new System.Drawing.Size(506, 69);
             this.class_x_bar.TabIndex = 4;
             this.class_x_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.class_x_bar.Value = 960;
@@ -145,7 +145,7 @@
             this.date_x_bar.Maximum = 1920;
             this.date_x_bar.Minimum = 1;
             this.date_x_bar.Name = "date_x_bar";
-            this.date_x_bar.Size = new System.Drawing.Size(506, 45);
+            this.date_x_bar.Size = new System.Drawing.Size(506, 69);
             this.date_x_bar.TabIndex = 5;
             this.date_x_bar.Value = 960;
             // 
@@ -167,7 +167,7 @@
             this.meal_y_bar.Minimum = 1;
             this.meal_y_bar.Name = "meal_y_bar";
             this.meal_y_bar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.meal_y_bar.Size = new System.Drawing.Size(45, 296);
+            this.meal_y_bar.Size = new System.Drawing.Size(69, 296);
             this.meal_y_bar.TabIndex = 8;
             this.meal_y_bar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.meal_y_bar.Value = 540;
@@ -231,7 +231,7 @@
             // 
             this.class_sub_font_box.Location = new System.Drawing.Point(6, 18);
             this.class_sub_font_box.Name = "class_sub_font_box";
-            this.class_sub_font_box.Size = new System.Drawing.Size(118, 23);
+            this.class_sub_font_box.Size = new System.Drawing.Size(118, 31);
             this.class_sub_font_box.TabIndex = 0;
             // 
             // groupBox5
@@ -273,7 +273,7 @@
             this.class_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.class_visible_check.Location = new System.Drawing.Point(78, 1);
             this.class_visible_check.Name = "class_visible_check";
-            this.class_visible_check.Size = new System.Drawing.Size(15, 14);
+            this.class_visible_check.Size = new System.Drawing.Size(22, 21);
             this.class_visible_check.TabIndex = 2;
             this.class_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -291,7 +291,7 @@
             // 
             this.class_main_font_box.Location = new System.Drawing.Point(6, 18);
             this.class_main_font_box.Name = "class_main_font_box";
-            this.class_main_font_box.Size = new System.Drawing.Size(118, 23);
+            this.class_main_font_box.Size = new System.Drawing.Size(118, 31);
             this.class_main_font_box.TabIndex = 0;
             // 
             // groupBox4
@@ -339,7 +339,7 @@
             // 
             this.meal_sub_font_box.Location = new System.Drawing.Point(6, 18);
             this.meal_sub_font_box.Name = "meal_sub_font_box";
-            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 23);
+            this.meal_sub_font_box.Size = new System.Drawing.Size(118, 31);
             this.meal_sub_font_box.TabIndex = 0;
             // 
             // groupBox3
@@ -381,7 +381,7 @@
             this.meal_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.meal_visible_check.Location = new System.Drawing.Point(74, 1);
             this.meal_visible_check.Name = "meal_visible_check";
-            this.meal_visible_check.Size = new System.Drawing.Size(15, 14);
+            this.meal_visible_check.Size = new System.Drawing.Size(22, 21);
             this.meal_visible_check.TabIndex = 2;
             this.meal_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -399,7 +399,7 @@
             // 
             this.meal_main_font_box.Location = new System.Drawing.Point(6, 18);
             this.meal_main_font_box.Name = "meal_main_font_box";
-            this.meal_main_font_box.Size = new System.Drawing.Size(118, 23);
+            this.meal_main_font_box.Size = new System.Drawing.Size(118, 31);
             this.meal_main_font_box.TabIndex = 0;
             // 
             // groupBox2
@@ -441,7 +441,7 @@
             this.date_visible_check.CheckState = System.Windows.Forms.CheckState.Checked;
             this.date_visible_check.Location = new System.Drawing.Point(34, 1);
             this.date_visible_check.Name = "date_visible_check";
-            this.date_visible_check.Size = new System.Drawing.Size(15, 14);
+            this.date_visible_check.Size = new System.Drawing.Size(22, 21);
             this.date_visible_check.TabIndex = 2;
             this.date_visible_check.UseVisualStyleBackColor = true;
             // 
@@ -459,7 +459,7 @@
             // 
             this.date_font_box.Location = new System.Drawing.Point(6, 18);
             this.date_font_box.Name = "date_font_box";
-            this.date_font_box.Size = new System.Drawing.Size(118, 23);
+            this.date_font_box.Size = new System.Drawing.Size(118, 31);
             this.date_font_box.TabIndex = 0;
             // 
             // startup_check
@@ -467,7 +467,7 @@
             this.startup_check.AutoSize = true;
             this.startup_check.Location = new System.Drawing.Point(12, 12);
             this.startup_check.Name = "startup_check";
-            this.startup_check.Size = new System.Drawing.Size(106, 19);
+            this.startup_check.Size = new System.Drawing.Size(158, 29);
             this.startup_check.TabIndex = 10;
             this.startup_check.Text = "컴터 킬때 실행";
             this.startup_check.UseVisualStyleBackColor = true;
@@ -487,30 +487,32 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.종료ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 36);
             // 
             // 종료ToolStripMenuItem
             // 
             this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
-            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
             this.종료ToolStripMenuItem.Text = "종료";
             this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
             // 
-            // button1
+            // settings_save_btn
             // 
-            this.button1.Location = new System.Drawing.Point(566, 472);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(225, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "설정 저장";
-            this.button1.UseVisualStyleBackColor = true;
+            this.settings_save_btn.Location = new System.Drawing.Point(566, 472);
+            this.settings_save_btn.Name = "settings_save_btn";
+            this.settings_save_btn.Size = new System.Drawing.Size(225, 23);
+            this.settings_save_btn.TabIndex = 11;
+            this.settings_save_btn.Text = "설정 저장";
+            this.settings_save_btn.UseVisualStyleBackColor = true;
+            this.settings_save_btn.Click += new System.EventHandler(this.settings_save_btn_Click);
             // 
             // timetable_path_box
             // 
             this.timetable_path_box.BackColor = System.Drawing.Color.White;
             this.timetable_path_box.Location = new System.Drawing.Point(87, 60);
             this.timetable_path_box.Name = "timetable_path_box";
-            this.timetable_path_box.Size = new System.Drawing.Size(392, 23);
+            this.timetable_path_box.ReadOnly = true;
+            this.timetable_path_box.Size = new System.Drawing.Size(392, 31);
             this.timetable_path_box.TabIndex = 12;
             // 
             // timetable_path_btn
@@ -528,7 +530,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(10, 63);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 15);
+            this.label1.Size = new System.Drawing.Size(108, 25);
             this.label1.TabIndex = 14;
             this.label1.Text = "시간표 파일";
             // 
@@ -540,7 +542,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.timetable_path_btn);
             this.Controls.Add(this.timetable_path_box);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.settings_save_btn);
             this.Controls.Add(this.startup_check);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.meal_y_bar);
@@ -624,7 +626,7 @@
         private System.Windows.Forms.NotifyIcon notifyicon;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 종료ToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button settings_save_btn;
         private System.Windows.Forms.TextBox timetable_path_box;
         private System.Windows.Forms.Button timetable_path_btn;
         private System.Windows.Forms.Label label1;

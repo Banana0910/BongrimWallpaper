@@ -22,40 +22,8 @@ namespace BongrimWallpaper
         public Main() {
             InitializeComponent();
         }
-
-        // private void json_update() {
-        //     TimeTable timetable = new TimeTable() {
-        //         weekday = new List<Subject>() {
-        //             new Subject() {
-        //                 name = new string[] { "한문", "수학", "과학탐구", "체육", "영어", "통합과학", "국어" },
-        //                 teacher = new string[] { "송윤정", "배주경", "문정원", "박효열", "이은진", "백분이", "임양경" }
-        //             },
-        //             new Subject() {
-        //                 name = new string[] { "한국사", "수학", "한국사", "국어", "통합사회", "진로", "영어" },
-        //                 teacher = new string[] { "이현선", "김석룡", "하상억", "장미정", "장봉선", "김화정", "정주은" }
-        //             },
-        //             new Subject() {
-        //                 name = new string[] { "통합사회", "미술", "미술", "자율", "창체", "창체" },
-        //                 teacher = new string[] { "김현우", "김영은", "김영은", "송윤정", "장미정", "장미정" }
-        //             },
-        //             new Subject() {
-        //                 name = new string[] { "체육", "영어", "수학", "통합과학", "국어", "기가", "기가" },
-        //                 teacher = new string[] { "박효열", "이은진", "배주경", "김수영", "장미정", "서현희", "서현희" }
-        //             },
-        //             new Subject() {
-        //                 name = new string[] { "국어", "한국사", "영어", "통합사회", "통합과학", "수학", "한문" },
-        //                 teacher = new string[] { "임양경", "하상억", "정주은", "김현우", "정송은", "김석룡", "송윤정" }
-        //             }
-        //         }
-        //     };
-
-        //     string jsonStr = JsonSerializer.Serialize(timetable, new JsonSerializerOptions() {
-        //         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-        //     });
-        //     File.WriteAllText("timetable.json", jsonStr);
-        // }
-
         private bool verify_json() {
+            if (timetable_path_box.Text == "") return false;
             string jsonString = File.ReadAllText(timetable_path_box.Text);
             try {
                 TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
@@ -78,7 +46,7 @@ namespace BongrimWallpaper
             }
         }
         private Subject get_timetable() {
-            string jsonString = File.ReadAllText("timetable.json");
+            string jsonString = File.ReadAllText(timetable_path_box.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
             return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
@@ -187,16 +155,16 @@ namespace BongrimWallpaper
 
                 if (meal != null) {
                     g.DrawString("중식 [lunch]", meal_title, meal_title_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
-                    meal_y += TextRenderer.MeasureText("중식 (lunch)", meal_title).Height + 10;
+                    meal_y += TextRenderer.MeasureText("중식 [lunch]", meal_title).Height + 10;
 
-                    g.DrawString(meal[0], meal_description, meal_description_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
+                    g.DrawString(meal[0], meal_description, meal_description_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
                     meal_y += TextRenderer.MeasureText(meal[0], meal_description).Height + 50;
 
                     if (meal.Length > 1) { // 석식이 있다면
                         g.DrawString("석식 [dinner]", meal_title, meal_title_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
-                        meal_y += TextRenderer.MeasureText("석식 (dinner)", meal_title).Height + 10;
+                        meal_y += TextRenderer.MeasureText("석식 [dinner]", meal_title).Height + 10;
 
-                        g.DrawString(meal[1], meal_description, meal_description_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
+                        g.DrawString(meal[1], meal_description, meal_description_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
                     }
                 }
                 else {
@@ -235,8 +203,8 @@ namespace BongrimWallpaper
                 center_y += lesson_size.Height;
 
                 g.DrawString(subject.name[lesson - 1], main_font, main_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x += lesson_size.Width - 20;
-                center_y += name_size.Height - teacher_size.Height - 6;
+                center_x += name_size.Width - 10;
+                center_y += name_size.Height - teacher_size.Height - 10;
 
                 g.DrawString(subject.teacher[lesson - 1], sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
                 center_y += teacher_size.Height + 10;
@@ -361,6 +329,7 @@ namespace BongrimWallpaper
             class_sub_color.BackColor = settings.class_sub_color;
 
             timetable_path_box.Text = settings.timetable_path;
+            timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
             startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
 
             background = (settings.background != "") ? settings.background : "";
@@ -515,8 +484,7 @@ namespace BongrimWallpaper
             RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (startup_check.Checked) {
                 key.SetValue(this.Text, Application.ExecutablePath);
-            }
-            else {
+            } else {
                 key.DeleteValue(this.Text);
             }
         }
@@ -526,6 +494,32 @@ namespace BongrimWallpaper
         }
 
         private void 종료ToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (backup_wallpaper.Length > 0) {
+                set_wallpaper(backup_wallpaper);
+            }
+            force_exit = true;
+            Application.Exit();
+        }
+
+        private void timetable_path_btn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog() {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                FileName = (timetable_path_box.Text != "") ? timetable_path_box.Text : Application.StartupPath
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK) {
+                timetable_path_box.Text = ofd.FileName;
+                if (verify_json()) {
+                    MessageBox.Show("올바른 시간표 파일로 확인이 되었음!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } else {
+                    MessageBox.Show("내가 원하는 양식의 시간표가 아님..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    timetable_path_box.Text = "";
+                }
+            }
+        }
+
+        private void settings_save_btn_Click(object sender, EventArgs e) {
             Properties.Settings settings = new Properties.Settings();
             settings.class_x_bar = class_x_bar.Value;
             settings.class_y_bar = class_y_bar.Value;
@@ -548,32 +542,8 @@ namespace BongrimWallpaper
             settings.background = background;
 
             settings.Save();
-
-            if (backup_wallpaper.Length > 0) {
-                set_wallpaper(backup_wallpaper);
-            }
-
-            force_exit = true;
-            Application.Exit();
-        }
-
-        private void timetable_path_btn_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog() {
-                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                FileName = (timetable_path_box.Text != "") ? timetable_path_box.Text : Application.StartupPath
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK) {
-                timetable_path_box.Text = ofd.FileName;
-                if (verify_json()) {
-                    MessageBox.Show("올바른 시간표 파일로 확인이 되었음!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                } else {
-                    MessageBox.Show("내가 원하는 양식의 시간표가 아님..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    timetable_path_box.Text = "";
-                }
-            }
-        }
+            MessageBox.Show("설정이 저장됨!", this.Name, MessageBoxButtons.OK, MessageBoxIcon.None);
+        }   
     }
 
     public class Subject {
@@ -583,5 +553,8 @@ namespace BongrimWallpaper
 
     public class TimeTable {
         public List<Subject> weekday { get; set; }
+        public TimeTable() {
+            this.weekday = new List<Subject>();
+        }
     }
 }
