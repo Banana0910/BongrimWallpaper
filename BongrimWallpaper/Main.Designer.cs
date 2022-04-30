@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.wallpaper_preview = new System.Windows.Forms.PictureBox();
             this.start_btn = new System.Windows.Forms.Button();
             this.class_y_bar = new System.Windows.Forms.TrackBar();
             this.class_x_bar = new System.Windows.Forms.TrackBar();
@@ -75,7 +75,7 @@
             this.timetable_path_box = new System.Windows.Forms.TextBox();
             this.timetable_path_btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wallpaper_preview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).BeginInit();
@@ -89,16 +89,16 @@
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // wallpaper_preview
             // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 123);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(480, 270);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.wallpaper_preview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.wallpaper_preview.Location = new System.Drawing.Point(13, 123);
+            this.wallpaper_preview.Name = "wallpaper_preview";
+            this.wallpaper_preview.Size = new System.Drawing.Size(480, 270);
+            this.wallpaper_preview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.wallpaper_preview.TabIndex = 0;
+            this.wallpaper_preview.TabStop = false;
+            this.wallpaper_preview.Click += new System.EventHandler(this.wallpaper_preview_Click);
             // 
             // start_btn
             // 
@@ -547,7 +547,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.meal_y_bar);
             this.Controls.Add(this.main_wall_btn);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.wallpaper_preview);
             this.Controls.Add(this.start_btn);
             this.Controls.Add(this.date_x_bar);
             this.Controls.Add(this.class_y_bar);
@@ -561,7 +561,7 @@
             this.Text = "봉림고 바탕화면";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wallpaper_preview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_y_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.class_x_bar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.date_x_bar)).EndInit();
@@ -585,7 +585,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox wallpaper_preview;
         private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.TrackBar class_y_bar;
         private System.Windows.Forms.TrackBar class_x_bar;

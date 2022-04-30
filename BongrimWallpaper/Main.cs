@@ -22,6 +22,23 @@ namespace BongrimWallpaper
         public Main() {
             InitializeComponent();
         }
+
+        readonly string[] times = new string[] { "08:30", "08:40", "09:30", "09:40", "10:30", "10:40", " 11:30", "11:40", "12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25" };
+
+        bool force_exit = false;
+        string backup_wallpaper = "";
+        string background = "";
+        int now_wallpaper = -2;
+
+        //배경설정 메서드
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+
+        public static void set_wallpaper(string path) {
+            new Thread(() => { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }).Start();
+        }
+
+        //json 관련 메서드
         private bool verify_json() {
             if (timetable_path_box.Text == "") return false;
             string jsonString = File.ReadAllText(timetable_path_box.Text);
@@ -49,28 +66,6 @@ namespace BongrimWallpaper
             string jsonString = File.ReadAllText(timetable_path_box.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
             return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
-        }
-
-        readonly string[] times = new string[] { "08:35", "08:40", "09:30", "09:40", "10:30", "10:40", " 11:30", "11:40", "12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25" };
-
-        bool force_exit = false;
-
-        string backup_wallpaper = "";
-        string background = "";
-
-        int now_wallpaper = -2;
-
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-
-        public static void set_wallpaper(string path) {
-            new Thread(() => { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }).Start();
-        }
-
-        private Font toFont(TextBox tb) {
-            string[] splited = tb.Text.Split(',');
-            return new Font(splited[0], float.Parse(splited[1]));
         }
 
         private string[] get_meal() {
@@ -105,24 +100,10 @@ namespace BongrimWallpaper
             }
         }
 
-        private void start_btn_Click(object sender, EventArgs e)
-        {
-            if (start_btn.Text == "실행") {
-                if (timetable_path_box.Text == "") {
-                    MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-                checker.Start();
-                start_btn.Text = "중지";
-            } else {
-                now_wallpaper = -2;
-                set_wallpaper(backup_wallpaper);
-                checker.Stop();
-                start_btn.Text = "실행";
-            }
+        private Font toFont(TextBox tb) {
+            string[] splited = tb.Text.Split(',');
+            return new Font(splited[0], float.Parse(splited[1]));
         }
-
         private void draw_base(ref Graphics g, Bitmap image)
         {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -172,7 +153,6 @@ namespace BongrimWallpaper
                 }
             }
         }
-
         private void set_subject(int lesson) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
@@ -196,10 +176,10 @@ namespace BongrimWallpaper
                 Size time_size = TextRenderer.MeasureText(time, sub_font);
 
                 int center_x = class_x_bar.Value - (lesson_size.Width / 2);
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((lesson_size.Height + name_size.Height + teacher_size.Height + time_size.Height) / 2);
+                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((lesson_size.Height + name_size.Height + time_size.Height) / 2);
 
                 g.DrawString($"{lesson} 교시", sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x = class_x_bar.Value - ((name_size.Width + teacher_size.Width + 20) / 2);
+                center_x = class_x_bar.Value - ((name_size.Width + teacher_size.Width + 10) / 2);
                 center_y += lesson_size.Height;
 
                 g.DrawString(subject.name[lesson - 1], main_font, main_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
@@ -216,7 +196,7 @@ namespace BongrimWallpaper
             //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = save_path;
+            wallpaper_preview.ImageLocation = save_path;
             set_wallpaper(save_path);
         }
 
@@ -270,7 +250,7 @@ namespace BongrimWallpaper
             //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = save_path;
+            wallpaper_preview.ImageLocation = save_path;
             set_wallpaper(save_path);
         }
 
@@ -293,12 +273,30 @@ namespace BongrimWallpaper
             //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            pictureBox1.ImageLocation = save_path;
+            wallpaper_preview.ImageLocation = save_path;
             set_wallpaper(save_path);
         }
+        
+        private void start_btn_Click(object sender, EventArgs e)
+        {
+            if (start_btn.Text == "실행") {
+                if (timetable_path_box.Text == "") {
+                    MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+                checker.Start();
+                start_btn.Text = "중지";
+            } else {
+                now_wallpaper = -2;
+                set_wallpaper(backup_wallpaper);
+                checker.Stop();
+                start_btn.Text = "실행";
+            }
+        }
 
-        private void pictureBox1_Click(object sender, EventArgs e) {
-            ProcessStartInfo psi = new ProcessStartInfo(pictureBox1.ImageLocation);
+        private void wallpaper_preview_Click(object sender, EventArgs e) {
+            ProcessStartInfo psi = new ProcessStartInfo(wallpaper_preview.ImageLocation);
             Process.Start(psi);
         }
 
@@ -371,7 +369,7 @@ namespace BongrimWallpaper
             fd.Filter = "JPG Files (*.jpg *.jpeg)|*.jpg;*.jpeg|PNG Files (*.png)|*.png|All files (*.*)|*.*";
             if (fd.ShowDialog() == DialogResult.OK) {
                 background = fd.FileName;
-                pictureBox1.ImageLocation = fd.FileName;
+                wallpaper_preview.ImageLocation = fd.FileName;
             }
         }
 
@@ -542,7 +540,7 @@ namespace BongrimWallpaper
             settings.background = background;
 
             settings.Save();
-            MessageBox.Show("설정이 저장됨!", this.Name, MessageBoxButtons.OK, MessageBoxIcon.None);
+            MessageBox.Show("설정이 저장됨!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }   
     }
 
