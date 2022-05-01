@@ -2,52 +2,82 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BongrimWallpaper.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="class_x_bar" Type="System.Int32" Scope="User">
+    <Setting Name="dateFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">맑은 고딕, 20pt</Value>
+    </Setting>
+    <Setting Name="dateFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">yyyy년 MM월 dd일</Value>
+    </Setting>
+    <Setting Name="dateColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="dateX" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="class_y_bar" Type="System.Int32" Scope="User">
+    <Setting Name="dateY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="date_x_bar" Type="System.Int32" Scope="User">
+    <Setting Name="dateVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="mealTitleFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">맑은 고딕, 32pt</Value>
+    </Setting>
+    <Setting Name="mealContentFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">맑은 고딕, 22pt</Value>
+    </Setting>
+    <Setting Name="mealContentSpace" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="date_font" Type="System.String" Scope="User">
+    <Setting Name="mealTitleColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="meal_main_font" Type="System.String" Scope="User">
+    <Setting Name="mealContentColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="meal_sub_font" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="mealAlignment" Type="System.Drawing.StringAlignment" Scope="User">
+      <Value Profile="(Default)">Near</Value>
     </Setting>
-    <Setting Name="class_main_font" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="class_sub_font" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="date_color" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="meal_main_color" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="meal_sub_color" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="class_main_color" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="class_sub_color" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="meal_y_bar" Type="System.Int32" Scope="User">
+    <Setting Name="mealLayout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="background" Type="System.String" Scope="User">
+    <Setting Name="mealX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="mealY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="mealVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="classMainFont" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="timetable_path" Type="System.String" Scope="User">
+    <Setting Name="classSubFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="classMainColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="classSubColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="classAlignment" Type="System.Drawing.StringAlignment" Scope="User">
+      <Value Profile="(Default)">Near</Value>
+    </Setting>
+    <Setting Name="classX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="classY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="classVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="backgroundPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="timetablePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

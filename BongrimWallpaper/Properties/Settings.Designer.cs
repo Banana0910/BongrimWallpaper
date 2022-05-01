@@ -12,7 +12,7 @@ namespace BongrimWallpaper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,188 +25,306 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int class_x_bar {
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 20pt")]
+        public global::System.Drawing.Font dateFont {
             get {
-                return ((int)(this["class_x_bar"]));
+                return ((global::System.Drawing.Font)(this["dateFont"]));
             }
             set {
-                this["class_x_bar"] = value;
+                this["dateFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yyyy년 MM월 dd일")]
+        public string dateFormat {
+            get {
+                return ((string)(this["dateFormat"]));
+            }
+            set {
+                this["dateFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color dateColor {
+            get {
+                return ((global::System.Drawing.Color)(this["dateColor"]));
+            }
+            set {
+                this["dateColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int class_y_bar {
+        public int dateX {
             get {
-                return ((int)(this["class_y_bar"]));
+                return ((int)(this["dateX"]));
             }
             set {
-                this["class_y_bar"] = value;
+                this["dateX"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int date_x_bar {
+        public int dateY {
             get {
-                return ((int)(this["date_x_bar"]));
+                return ((int)(this["dateY"]));
             }
             set {
-                this["date_x_bar"] = value;
+                this["dateY"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string date_font {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool dateVisible {
             get {
-                return ((string)(this["date_font"]));
+                return ((bool)(this["dateVisible"]));
             }
             set {
-                this["date_font"] = value;
+                this["dateVisible"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string meal_main_font {
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 32pt")]
+        public global::System.Drawing.Font mealTitleFont {
             get {
-                return ((string)(this["meal_main_font"]));
+                return ((global::System.Drawing.Font)(this["mealTitleFont"]));
             }
             set {
-                this["meal_main_font"] = value;
+                this["mealTitleFont"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string meal_sub_font {
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 22pt")]
+        public global::System.Drawing.Font mealContentFont {
             get {
-                return ((string)(this["meal_sub_font"]));
+                return ((global::System.Drawing.Font)(this["mealContentFont"]));
             }
             set {
-                this["meal_sub_font"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string class_main_font {
-            get {
-                return ((string)(this["class_main_font"]));
-            }
-            set {
-                this["class_main_font"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string class_sub_font {
-            get {
-                return ((string)(this["class_sub_font"]));
-            }
-            set {
-                this["class_sub_font"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color date_color {
-            get {
-                return ((global::System.Drawing.Color)(this["date_color"]));
-            }
-            set {
-                this["date_color"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color meal_main_color {
-            get {
-                return ((global::System.Drawing.Color)(this["meal_main_color"]));
-            }
-            set {
-                this["meal_main_color"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color meal_sub_color {
-            get {
-                return ((global::System.Drawing.Color)(this["meal_sub_color"]));
-            }
-            set {
-                this["meal_sub_color"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color class_main_color {
-            get {
-                return ((global::System.Drawing.Color)(this["class_main_color"]));
-            }
-            set {
-                this["class_main_color"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color class_sub_color {
-            get {
-                return ((global::System.Drawing.Color)(this["class_sub_color"]));
-            }
-            set {
-                this["class_sub_color"] = value;
+                this["mealContentFont"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int meal_y_bar {
+        public int mealContentSpace {
             get {
-                return ((int)(this["meal_y_bar"]));
+                return ((int)(this["mealContentSpace"]));
             }
             set {
-                this["meal_y_bar"] = value;
+                this["mealContentSpace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color mealTitleColor {
+            get {
+                return ((global::System.Drawing.Color)(this["mealTitleColor"]));
+            }
+            set {
+                this["mealTitleColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color mealContentColor {
+            get {
+                return ((global::System.Drawing.Color)(this["mealContentColor"]));
+            }
+            set {
+                this["mealContentColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Near")]
+        public global::System.Drawing.StringAlignment mealAlignment {
+            get {
+                return ((global::System.Drawing.StringAlignment)(this["mealAlignment"]));
+            }
+            set {
+                this["mealAlignment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mealLayout {
+            get {
+                return ((int)(this["mealLayout"]));
+            }
+            set {
+                this["mealLayout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mealX {
+            get {
+                return ((int)(this["mealX"]));
+            }
+            set {
+                this["mealX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mealY {
+            get {
+                return ((int)(this["mealY"]));
+            }
+            set {
+                this["mealY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool mealVisible {
+            get {
+                return ((bool)(this["mealVisible"]));
+            }
+            set {
+                this["mealVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Font classMainFont {
+            get {
+                return ((global::System.Drawing.Font)(this["classMainFont"]));
+            }
+            set {
+                this["classMainFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Font classSubFont {
+            get {
+                return ((global::System.Drawing.Font)(this["classSubFont"]));
+            }
+            set {
+                this["classSubFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color classMainColor {
+            get {
+                return ((global::System.Drawing.Color)(this["classMainColor"]));
+            }
+            set {
+                this["classMainColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color classSubColor {
+            get {
+                return ((global::System.Drawing.Color)(this["classSubColor"]));
+            }
+            set {
+                this["classSubColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Near")]
+        public global::System.Drawing.StringAlignment classAlignment {
+            get {
+                return ((global::System.Drawing.StringAlignment)(this["classAlignment"]));
+            }
+            set {
+                this["classAlignment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int classX {
+            get {
+                return ((int)(this["classX"]));
+            }
+            set {
+                this["classX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int classY {
+            get {
+                return ((int)(this["classY"]));
+            }
+            set {
+                this["classY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool classVisible {
+            get {
+                return ((bool)(this["classVisible"]));
+            }
+            set {
+                this["classVisible"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string background {
+        public string backgroundPath {
             get {
-                return ((string)(this["background"]));
+                return ((string)(this["backgroundPath"]));
             }
             set {
-                this["background"] = value;
+                this["backgroundPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string timetable_path {
+        public string timetablePath {
             get {
-                return ((string)(this["timetable_path"]));
+                return ((string)(this["timetablePath"]));
             }
             set {
-                this["timetable_path"] = value;
+                this["timetablePath"] = value;
             }
         }
     }

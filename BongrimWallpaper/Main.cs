@@ -301,42 +301,17 @@ namespace BongrimWallpaper
         }
 
         private void Main_Load(object sender, EventArgs e) {
-            Properties.Settings settings = new Properties.Settings();
-            class_x_bar.Maximum = Screen.PrimaryScreen.Bounds.Width;
-            class_x_bar.Value = (settings.class_x_bar != 0) ? settings.class_x_bar : Screen.PrimaryScreen.Bounds.Width / 2;
+            // timetable_path_box.Text = settings.timetable_path;
+            // timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
+            // startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
 
-            class_y_bar.Maximum = Screen.PrimaryScreen.Bounds.Height;
-            class_y_bar.Value = (settings.class_y_bar != 0) ? settings.class_y_bar : Screen.PrimaryScreen.Bounds.Height / 2;
+            // background = (settings.background != "") ? settings.background : "";
 
-            date_x_bar.Maximum = Screen.PrimaryScreen.Bounds.Width;
-            date_x_bar.Value = (settings.date_x_bar != 0) ? settings.date_x_bar : Screen.PrimaryScreen.Bounds.Width / 2;
-
-            meal_y_bar.Maximum = Screen.PrimaryScreen.Bounds.Height;
-            meal_y_bar.Value = (settings.meal_y_bar != 0) ? settings.meal_y_bar : Screen.PrimaryScreen.Bounds.Height - 10;
-
-            date_font_box.Text = (settings.date_font != "") ? settings.date_font : $"{date_font_box.Font.Name},{date_font_box.Font.Size}";
-            meal_main_font_box.Text = (settings.meal_main_font != "") ? settings.meal_main_font : $"{meal_main_font_box.Font.Name},{meal_main_font_box.Font.Size}";
-            meal_sub_font_box.Text = (settings.meal_sub_font != "") ? settings.meal_sub_font : $"{meal_sub_font_box.Font.Name},{meal_sub_font_box.Font.Size}";
-            class_main_font_box.Text = (settings.class_main_font != "") ? settings.class_main_font : $"{class_main_font_box.Font.Name},{class_main_font_box.Font.Size}";
-            class_sub_font_box.Text = (settings.class_sub_font != "") ? settings.class_sub_font : $"{class_main_font_box.Font.Name},{class_main_font_box.Font.Size}";
-
-            date_color.BackColor = settings.date_color;
-            meal_main_color.BackColor = settings.meal_main_color;
-            meal_sub_color.BackColor = settings.meal_sub_color;
-            class_main_color.BackColor = settings.class_main_color;
-            class_sub_color.BackColor = settings.class_sub_color;
-
-            timetable_path_box.Text = settings.timetable_path;
-            timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
-            startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
-
-            background = (settings.background != "") ? settings.background : "";
-
-            if (timetable_path_box.Text != "") {
-                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-                checker.Start();
-                start_btn.Text = "중지";
-            }
+            // if (timetable_path_box.Text != "") {
+            //     backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+            //     checker.Start();
+            //     start_btn.Text = "중지";
+            // }
         }
 
         private void checker_Tick(object sender, EventArgs e) {
@@ -518,29 +493,6 @@ namespace BongrimWallpaper
         }
 
         private void settings_save_btn_Click(object sender, EventArgs e) {
-            Properties.Settings settings = new Properties.Settings();
-            settings.class_x_bar = class_x_bar.Value;
-            settings.class_y_bar = class_y_bar.Value;
-            settings.date_x_bar = date_x_bar.Value;
-            settings.meal_y_bar = meal_y_bar.Value;
-
-            settings.date_font = date_font_box.Text;
-            settings.meal_main_font = meal_main_font_box.Text;
-            settings.meal_sub_font = meal_sub_font_box.Text;
-            settings.class_main_font = class_main_font_box.Text;
-            settings.class_sub_font = class_sub_font_box.Text;
-
-            settings.date_color = date_color.BackColor;
-            settings.meal_main_color = meal_main_color.BackColor;
-            settings.meal_sub_color = meal_sub_color.BackColor;
-            settings.class_main_color = class_main_color.BackColor;
-            settings.class_sub_color = class_sub_color.BackColor;
-
-            settings.timetable_path = timetable_path_box.Text;
-            settings.background = background;
-
-            settings.Save();
-            MessageBox.Show("설정이 저장됨!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }   
     }
 
