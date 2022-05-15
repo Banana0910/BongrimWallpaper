@@ -92,7 +92,7 @@ namespace BongrimWallpaper
                             mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
                         }
                         if (meals.Count == 2) {
-                            mealY += float.Parse(mealSpaceBox.Text);
+                            mealY += (float)mealSpaceBox.Value;
                             g.DrawString("석식 [Dinner]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                             mealY += g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
                             foreach (string meal in meals[1]) {
@@ -114,7 +114,7 @@ namespace BongrimWallpaper
                             mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
                         }
                         if (meals.Count == 2) {
-                            mealY += float.Parse(mealSpaceBox.Text);
+                            mealY += (float)mealSpaceBox.Value;
                             mealX = xBar.Value - (g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Width / 2);
                             g.DrawString("석식 [Dinner]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                             mealY += g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
@@ -138,7 +138,7 @@ namespace BongrimWallpaper
                             mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
                         }
                         if (meals.Count == 2) {
-                            mealY += float.Parse(mealSpaceBox.Text);
+                            mealY += (float)mealSpaceBox.Value;
                             mealX = xBar.Value - g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
                             g.DrawString("석식 [Dinner]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                             mealY += g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
@@ -168,7 +168,7 @@ namespace BongrimWallpaper
                                 float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
                                 if (maxWidth < width) maxWidth = width;
                             }
-                            mealX = xBar.Value + maxWidth + float.Parse(mealSpaceBox.Text);
+                            mealX = xBar.Value + maxWidth + (float)mealSpaceBox.Value;
                             mealY = yBar.Maximum - yBar.Value;
                             g.DrawString("석식 [Dinner]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                             mealY += g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
@@ -182,7 +182,7 @@ namespace BongrimWallpaper
                     }
                 } else if (alignmentBox.SelectedIndex == 1) {
                     if (meals.Count >= 1) {
-                        float halfMealSpace = float.Parse(mealSpaceBox.Text) / 2;
+                        float halfMealSpace = (float)mealSpaceBox.Value / 2;
                         float maxWidth = g.MeasureString("중식 [Lunch]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
                         foreach (string meal in meals[0]) {
                             float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
@@ -231,7 +231,7 @@ namespace BongrimWallpaper
                                 float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
                                 if (maxWidth< width) maxWidth = width;
                             }
-                            float space = maxWidth + float.Parse(mealSpaceBox.Text);
+                            float space = maxWidth + (float)mealSpaceBox.Value;
                             mealY = yBar.Maximum - yBar.Value;
                             mealX = xBar.Value - space - g.MeasureString("석식 [Dinner]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
                             g.DrawString("석식 [Dinner]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
@@ -248,8 +248,7 @@ namespace BongrimWallpaper
                 }
             }
 
-            image.Save(Path.Combine(Application.StartupPath, "mealTest.png"), System.Drawing.Imaging.ImageFormat.Png);
-            previewBox.ImageLocation = Path.Combine(Application.StartupPath, "mealTest.png");
+            previewBox.Image = image;
         }
 
         private void MealForm_Load(object sender, EventArgs e)
@@ -285,7 +284,7 @@ namespace BongrimWallpaper
             titleColorBox.BackColor = Properties.Settings.Default.mealTitleColor;
             contentColorBox.BackColor = Properties.Settings.Default.mealContentColor;
             contentSpaceBox.Text = Properties.Settings.Default.mealContentSpace.ToString();
-            mealSpaceBox.Text = Properties.Settings.Default.mealSpace.ToString();
+            mealSpaceBox.Value = (decimal)Properties.Settings.Default.mealSpace;
             if (Properties.Settings.Default.mealLayout == 0) verticalBtn.Select();
             else horizontalBtn.Select();
             mealVisibleCheck.Checked = Properties.Settings.Default.mealVisible;
@@ -367,10 +366,12 @@ namespace BongrimWallpaper
 
         private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            refresh_preview();
         }
 
         private void verticalBtn_CheckedChanged(object sender, EventArgs e)
         {
+            refresh_preview();
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -384,7 +385,7 @@ namespace BongrimWallpaper
                 config.mealContentSpace = float.Parse(contentSpaceBox.Text);
                 config.mealAlignment = alignmentBox.SelectedIndex;
                 config.mealLayout = (verticalBtn.Checked) ? 0 : 1;
-                config.mealSpace = float.Parse(mealSpaceBox.Text);
+                config.mealSpace = (float)mealSpaceBox.Value;
                 config.mealX = xBar.Value;
                 config.mealY = yBar.Maximum - yBar.Value;
                 config.mealVisible = true;
@@ -397,13 +398,27 @@ namespace BongrimWallpaper
 
         private void previewBox_Click(object sender, EventArgs e)
         {
-            Process.Start(previewBox.ImageLocation);
+            string path = Path.Combine(Application.StartupPath, "mealTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
         }
 
         private void mealVisibleCheck_CheckedChanged(object sender, EventArgs e)
         {
             fontGroup.Enabled = mealVisibleCheck.Checked;
             layoutGroup.Enabled = mealVisibleCheck.Checked;
+        }
+
+        private void mealSpaceBox_ValueChanged(object sender, EventArgs e)
+        {
+            refresh_preview();
+        }
+
+        private void MealForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (File.Exists(Path.Combine(Application.StartupPath, "mealTest.png"))) {
+                File.Delete(Path.Combine(Application.StartupPath, "mealTest.png"));
+            }
         }
     }
 }

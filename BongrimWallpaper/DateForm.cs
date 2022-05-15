@@ -38,8 +38,7 @@ namespace BongrimWallpaper
             float dateY = (yBar.Maximum - yBar.Value) - (dateSize.Height / 2);
 
             g.DrawString(today, font, new SolidBrush(colorBox.BackColor), new RectangleF(dateX, dateY, image.Width, image.Height), StringFormat.GenericTypographic);
-            image.Save(Path.Combine(Application.StartupPath, "dateTest.png"), System.Drawing.Imaging.ImageFormat.Png);
-            previewBox.ImageLocation = Path.Combine(Application.StartupPath, "dateTest.png");
+            previewBox.Image = image;
         }
 
 
@@ -155,7 +154,16 @@ namespace BongrimWallpaper
 
         private void previewBox_Click(object sender, EventArgs e)
         {
-            Process.Start(previewBox.ImageLocation);
+            string path = Path.Combine(Application.StartupPath, "dateTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
+        }
+
+        private void DateForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (File.Exists(Path.Combine(Application.StartupPath, "dateTest.png"))) {
+                File.Delete(Path.Combine(Application.StartupPath, "dateTest.png"));
+            }
         }
     }
 }

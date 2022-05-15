@@ -57,7 +57,6 @@
             this.xBar = new System.Windows.Forms.TrackBar();
             this.layoutGroup = new System.Windows.Forms.GroupBox();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.mealSpaceBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -68,6 +67,7 @@
             this.alignmentBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.mealVisibleCheck = new System.Windows.Forms.CheckBox();
+            this.mealSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.fontGroup.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +76,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
             this.layoutGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mealSpaceBox)).BeginInit();
             this.SuspendLayout();
             // 
             // saveBtn
@@ -349,8 +350,8 @@
             // 
             // layoutGroup
             // 
-            this.layoutGroup.Controls.Add(this.panel5);
             this.layoutGroup.Controls.Add(this.mealSpaceBox);
+            this.layoutGroup.Controls.Add(this.panel5);
             this.layoutGroup.Controls.Add(this.label9);
             this.layoutGroup.Controls.Add(this.panel3);
             this.layoutGroup.Controls.Add(this.panel4);
@@ -374,13 +375,6 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(1, 50);
             this.panel5.TabIndex = 10;
-            // 
-            // mealSpaceBox
-            // 
-            this.mealSpaceBox.Location = new System.Drawing.Point(227, 73);
-            this.mealSpaceBox.Name = "mealSpaceBox";
-            this.mealSpaceBox.Size = new System.Drawing.Size(55, 23);
-            this.mealSpaceBox.TabIndex = 9;
             // 
             // label9
             // 
@@ -479,6 +473,20 @@
             this.mealVisibleCheck.UseVisualStyleBackColor = true;
             this.mealVisibleCheck.CheckedChanged += new System.EventHandler(this.mealVisibleCheck_CheckedChanged);
             // 
+            // mealSpaceBox
+            // 
+            this.mealSpaceBox.Location = new System.Drawing.Point(227, 71);
+            this.mealSpaceBox.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.mealSpaceBox.Name = "mealSpaceBox";
+            this.mealSpaceBox.Size = new System.Drawing.Size(55, 23);
+            this.mealSpaceBox.TabIndex = 18;
+            this.mealSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.mealSpaceBox.ValueChanged += new System.EventHandler(this.mealSpaceBox_ValueChanged);
+            // 
             // MealForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -494,9 +502,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "MealForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "봉림고 바탕화면";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MealForm_FormClosed);
             this.Load += new System.EventHandler(this.MealForm_Load);
             this.fontGroup.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
@@ -510,6 +520,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).EndInit();
             this.layoutGroup.ResumeLayout(false);
             this.layoutGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mealSpaceBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -552,9 +563,9 @@
         private System.Windows.Forms.Button xCenterBtn;
         private System.Windows.Forms.TrackBar xBar;
         private System.Windows.Forms.Button yCenterBtn;
-        private System.Windows.Forms.TextBox mealSpaceBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.CheckBox mealVisibleCheck;
+        private System.Windows.Forms.NumericUpDown mealSpaceBox;
     }
 }

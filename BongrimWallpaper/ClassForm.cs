@@ -161,8 +161,7 @@ namespace BongrimWallpaper
 
                 g.DrawString(text, mainFont, sb, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
-            image.Save(Path.Combine(Application.StartupPath, "classTest.png"), System.Drawing.Imaging.ImageFormat.Png);
-            previewBox.ImageLocation = Path.Combine(Application.StartupPath, "classTest.png");
+            previewBox.Image = image;
         }
 
         private void ClassForm_Load(object sender, EventArgs e)
@@ -210,7 +209,9 @@ namespace BongrimWallpaper
 
         private void previewBox_Click(object sender, EventArgs e)
         {
-            Process.Start(previewBox.ImageLocation);
+            string path = Path.Combine(Application.StartupPath, "classTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
         }
 
         private void mainColorBox_Click(object sender, EventArgs e)
@@ -317,6 +318,13 @@ namespace BongrimWallpaper
         private void testCaseBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             refresh_preview();
+        }
+
+        private void ClassForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (File.Exists(Path.Combine(Application.StartupPath, "classTest.png"))) {
+                File.Delete(Path.Combine(Application.StartupPath, "classTest.png"));
+            }
         }
     }
 }

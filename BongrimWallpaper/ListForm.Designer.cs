@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListForm));
             this.listVisibleCheck = new System.Windows.Forms.CheckBox();
             this.layoutGroup = new System.Windows.Forms.GroupBox();
-            this.listSpaceBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -68,6 +67,7 @@
             this.yBar = new System.Windows.Forms.TrackBar();
             this.xBar = new System.Windows.Forms.TrackBar();
             this.teacherVisibleCheck = new System.Windows.Forms.CheckBox();
+            this.listSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.layoutGroup.SuspendLayout();
             this.fontGroup.SuspendLayout();
             this.teacherGroup.SuspendLayout();
@@ -76,6 +76,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).BeginInit();
             this.SuspendLayout();
             // 
             // listVisibleCheck
@@ -106,18 +107,10 @@
             this.layoutGroup.TabStop = false;
             this.layoutGroup.Text = "레이아웃";
             // 
-            // listSpaceBox
-            // 
-            this.listSpaceBox.BackColor = System.Drawing.Color.White;
-            this.listSpaceBox.Location = new System.Drawing.Point(233, 36);
-            this.listSpaceBox.Name = "listSpaceBox";
-            this.listSpaceBox.Size = new System.Drawing.Size(41, 23);
-            this.listSpaceBox.TabIndex = 16;
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(196, 39);
+            this.label9.Location = new System.Drawing.Point(182, 39);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(31, 15);
             this.label9.TabIndex = 16;
@@ -477,6 +470,20 @@
             this.teacherVisibleCheck.UseVisualStyleBackColor = true;
             this.teacherVisibleCheck.CheckedChanged += new System.EventHandler(this.teacherVisibleCheck_CheckedChanged);
             // 
+            // listSpaceBox
+            // 
+            this.listSpaceBox.Location = new System.Drawing.Point(219, 34);
+            this.listSpaceBox.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.listSpaceBox.Name = "listSpaceBox";
+            this.listSpaceBox.Size = new System.Drawing.Size(58, 23);
+            this.listSpaceBox.TabIndex = 17;
+            this.listSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.listSpaceBox.ValueChanged += new System.EventHandler(this.listSpaceBox_ValueChanged);
+            // 
             // ListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -497,6 +504,7 @@
             this.Name = "ListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "봉림고 바탕화면";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ListForm_FormClosed);
             this.Load += new System.EventHandler(this.ListForm_Load);
             this.layoutGroup.ResumeLayout(false);
             this.layoutGroup.PerformLayout();
@@ -510,6 +518,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -553,8 +562,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel subjectAccentColorBox;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox listSpaceBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox teacherVisibleCheck;
+        private System.Windows.Forms.NumericUpDown listSpaceBox;
     }
 }

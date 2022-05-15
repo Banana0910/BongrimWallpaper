@@ -46,7 +46,7 @@ namespace BongrimWallpaper
             SolidBrush subjectSB = new SolidBrush(subjectColorBox.BackColor);
             SolidBrush subjectAccentSB = new SolidBrush(subjectAccentColorBox.BackColor);
 
-            float listSpace = float.Parse(listSpaceBox.Text);
+            float listSpace = (float)listSpaceBox.Value;
 
             if (teacherVisibleCheck.Checked) {
                 List<SizeF> teacherSizes = new List<SizeF>();
@@ -107,13 +107,14 @@ namespace BongrimWallpaper
                 }
             }
 
-            image.Save(Path.Combine(Application.StartupPath, "listTest.png"), System.Drawing.Imaging.ImageFormat.Png);
-            previewBox.ImageLocation = Path.Combine(Application.StartupPath, "listTest.png");
+            previewBox.Image = image;
         }
 
         private void previewBox_Click(object sender, EventArgs e)
         {
-            Process.Start(previewBox.ImageLocation);   
+            string path = Path.Combine(Application.StartupPath, "listTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
         }
 
         private void yBar_Scroll(object sender, EventArgs e)
@@ -189,7 +190,7 @@ namespace BongrimWallpaper
                 config.listSubjectColor = subjectColorBox.BackColor;
                 config.listSubjectAccentColor = subjectAccentColorBox.BackColor;
                 config.listLayout = (verticalBtn.Checked) ? 0 : 1;
-                config.listSpace = float.Parse(listSpaceBox.Text);
+                config.listSpace = (float)listSpaceBox.Value;
                 config.listX = xBar.Value;
                 config.listY = yBar.Maximum - yBar.Value;
                 config.listVisible = true;
@@ -274,7 +275,7 @@ namespace BongrimWallpaper
             subjectAccentColorBox.BackColor = config.listSubjectAccentColor;
             teacherColorBox.BackColor = config.listTeacherColor;
             teacherAccentColorBox.BackColor = config.listTeacherAccentColor;
-            listSpaceBox.Text = config.listSpace.ToString();
+            listSpaceBox.Value = (decimal)config.listSpace;
             if (config.listLayout == 0) verticalBtn.Checked = true;
             else horizontalBtn.Checked = true;
             listVisibleCheck.Checked = config.listVisible;
@@ -292,6 +293,18 @@ namespace BongrimWallpaper
         {
             teacherGroup.Enabled = teacherVisibleCheck.Checked;
             refresh_preview();
+        }
+
+        private void listSpaceBox_ValueChanged(object sender, EventArgs e)
+        {
+            refresh_preview();
+        }
+
+        private void ListForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (File.Exists(Path.Combine(Application.StartupPath, "listTest.png"))) {
+                File.Delete(Path.Combine(Application.StartupPath, "listTest.png"));
+            }
         }
     }
 }
