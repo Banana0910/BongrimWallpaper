@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MealForm));
             this.saveBtn = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.fontGroup = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.contentColorBox = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -50,12 +50,15 @@
             this.setTitleFontBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.xCenterBtn = new System.Windows.Forms.Button();
+            this.yCenterBtn = new System.Windows.Forms.Button();
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.yBar = new System.Windows.Forms.TrackBar();
-            this.xCenterBtn = new System.Windows.Forms.Button();
             this.xBar = new System.Windows.Forms.TrackBar();
-            this.yCenterBtn = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.layoutGroup = new System.Windows.Forms.GroupBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.mealSpaceBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.horizontalBtn = new System.Windows.Forms.RadioButton();
@@ -64,19 +67,20 @@
             this.verticalBtn = new System.Windows.Forms.RadioButton();
             this.alignmentBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.groupBox2.SuspendLayout();
+            this.mealVisibleCheck = new System.Windows.Forms.CheckBox();
+            this.fontGroup.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
-            this.groupBox5.SuspendLayout();
+            this.layoutGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(448, 383);
+            this.saveBtn.Location = new System.Drawing.Point(448, 406);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(289, 23);
             this.saveBtn.TabIndex = 14;
@@ -84,16 +88,16 @@
             this.saveBtn.UseVisualStyleBackColor = true;
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
-            // groupBox2
+            // fontGroup
             // 
-            this.groupBox2.Controls.Add(this.groupBox4);
-            this.groupBox2.Controls.Add(this.groupBox3);
-            this.groupBox2.Location = new System.Drawing.Point(448, 7);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(289, 244);
-            this.groupBox2.TabIndex = 16;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "글꼴";
+            this.fontGroup.Controls.Add(this.groupBox4);
+            this.fontGroup.Controls.Add(this.groupBox3);
+            this.fontGroup.Location = new System.Drawing.Point(448, 30);
+            this.fontGroup.Name = "fontGroup";
+            this.fontGroup.Size = new System.Drawing.Size(289, 244);
+            this.fontGroup.TabIndex = 16;
+            this.fontGroup.TabStop = false;
+            this.fontGroup.Text = "글꼴";
             // 
             // groupBox4
             // 
@@ -136,7 +140,6 @@
             this.contentSpaceBox.BackColor = System.Drawing.Color.White;
             this.contentSpaceBox.Location = new System.Drawing.Point(59, 56);
             this.contentSpaceBox.Name = "contentSpaceBox";
-            this.contentSpaceBox.ReadOnly = true;
             this.contentSpaceBox.Size = new System.Drawing.Size(41, 23);
             this.contentSpaceBox.TabIndex = 12;
             // 
@@ -284,15 +287,36 @@
             this.groupBox1.Controls.Add(this.xBar);
             this.groupBox1.Location = new System.Drawing.Point(4, 7);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(438, 399);
+            this.groupBox1.Size = new System.Drawing.Size(438, 422);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "미리보기";
+            // 
+            // xCenterBtn
+            // 
+            this.xCenterBtn.Location = new System.Drawing.Point(402, 17);
+            this.xCenterBtn.Name = "xCenterBtn";
+            this.xCenterBtn.Size = new System.Drawing.Size(33, 23);
+            this.xCenterBtn.TabIndex = 10;
+            this.xCenterBtn.Text = "C";
+            this.xCenterBtn.UseVisualStyleBackColor = true;
+            this.xCenterBtn.Click += new System.EventHandler(this.xCenterBtn_Click);
+            // 
+            // yCenterBtn
+            // 
+            this.yCenterBtn.Location = new System.Drawing.Point(3, 317);
+            this.yCenterBtn.Name = "yCenterBtn";
+            this.yCenterBtn.Size = new System.Drawing.Size(33, 23);
+            this.yCenterBtn.TabIndex = 11;
+            this.yCenterBtn.Text = "C";
+            this.yCenterBtn.UseVisualStyleBackColor = true;
+            this.yCenterBtn.Click += new System.EventHandler(this.yCenterBtn_Click);
             // 
             // previewBox
             // 
             this.previewBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.previewBox.InitialImage = null;
             this.previewBox.Location = new System.Drawing.Point(38, 48);
             this.previewBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.previewBox.Name = "previewBox";
@@ -313,16 +337,6 @@
             this.yBar.Value = 10;
             this.yBar.Scroll += new System.EventHandler(this.yBar_Scroll);
             // 
-            // xCenterBtn
-            // 
-            this.xCenterBtn.Location = new System.Drawing.Point(402, 17);
-            this.xCenterBtn.Name = "xCenterBtn";
-            this.xCenterBtn.Size = new System.Drawing.Size(33, 23);
-            this.xCenterBtn.TabIndex = 10;
-            this.xCenterBtn.Text = "C";
-            this.xCenterBtn.UseVisualStyleBackColor = true;
-            this.xCenterBtn.Click += new System.EventHandler(this.xCenterBtn_Click);
-            // 
             // xBar
             // 
             this.xBar.Location = new System.Drawing.Point(25, 18);
@@ -333,37 +347,54 @@
             this.xBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.xBar.Scroll += new System.EventHandler(this.xBar_Scroll);
             // 
-            // yCenterBtn
+            // layoutGroup
             // 
-            this.yCenterBtn.Location = new System.Drawing.Point(3, 317);
-            this.yCenterBtn.Name = "yCenterBtn";
-            this.yCenterBtn.Size = new System.Drawing.Size(33, 23);
-            this.yCenterBtn.TabIndex = 11;
-            this.yCenterBtn.Text = "C";
-            this.yCenterBtn.UseVisualStyleBackColor = true;
-            this.yCenterBtn.Click += new System.EventHandler(this.yCenterBtn_Click);
+            this.layoutGroup.Controls.Add(this.panel5);
+            this.layoutGroup.Controls.Add(this.mealSpaceBox);
+            this.layoutGroup.Controls.Add(this.label9);
+            this.layoutGroup.Controls.Add(this.panel3);
+            this.layoutGroup.Controls.Add(this.panel4);
+            this.layoutGroup.Controls.Add(this.horizontalBtn);
+            this.layoutGroup.Controls.Add(this.panel2);
+            this.layoutGroup.Controls.Add(this.panel1);
+            this.layoutGroup.Controls.Add(this.verticalBtn);
+            this.layoutGroup.Controls.Add(this.alignmentBox);
+            this.layoutGroup.Controls.Add(this.label5);
+            this.layoutGroup.Location = new System.Drawing.Point(449, 280);
+            this.layoutGroup.Name = "layoutGroup";
+            this.layoutGroup.Size = new System.Drawing.Size(288, 120);
+            this.layoutGroup.TabIndex = 17;
+            this.layoutGroup.TabStop = false;
+            this.layoutGroup.Text = "레이아웃";
             // 
-            // groupBox5
+            // panel5
             // 
-            this.groupBox5.Controls.Add(this.panel3);
-            this.groupBox5.Controls.Add(this.panel4);
-            this.groupBox5.Controls.Add(this.horizontalBtn);
-            this.groupBox5.Controls.Add(this.panel2);
-            this.groupBox5.Controls.Add(this.panel1);
-            this.groupBox5.Controls.Add(this.verticalBtn);
-            this.groupBox5.Controls.Add(this.alignmentBox);
-            this.groupBox5.Controls.Add(this.label5);
-            this.groupBox5.Location = new System.Drawing.Point(449, 257);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(288, 120);
-            this.groupBox5.TabIndex = 17;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "레이아웃";
+            this.panel5.BackColor = System.Drawing.Color.Gray;
+            this.panel5.Location = new System.Drawing.Point(143, 57);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(1, 50);
+            this.panel5.TabIndex = 10;
+            // 
+            // mealSpaceBox
+            // 
+            this.mealSpaceBox.Location = new System.Drawing.Point(227, 73);
+            this.mealSpaceBox.Name = "mealSpaceBox";
+            this.mealSpaceBox.Size = new System.Drawing.Size(55, 23);
+            this.mealSpaceBox.TabIndex = 9;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(146, 76);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(75, 15);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "급식 간 간격";
             // 
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Location = new System.Drawing.Point(195, 71);
+            this.panel3.Location = new System.Drawing.Point(113, 74);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(20, 20);
             this.panel3.TabIndex = 7;
@@ -371,7 +402,7 @@
             // panel4
             // 
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Location = new System.Drawing.Point(169, 71);
+            this.panel4.Location = new System.Drawing.Point(87, 74);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(20, 20);
             this.panel4.TabIndex = 6;
@@ -379,7 +410,7 @@
             // horizontalBtn
             // 
             this.horizontalBtn.AutoSize = true;
-            this.horizontalBtn.Location = new System.Drawing.Point(149, 74);
+            this.horizontalBtn.Location = new System.Drawing.Point(67, 77);
             this.horizontalBtn.Name = "horizontalBtn";
             this.horizontalBtn.Size = new System.Drawing.Size(14, 13);
             this.horizontalBtn.TabIndex = 5;
@@ -389,7 +420,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Location = new System.Drawing.Point(97, 84);
+            this.panel2.Location = new System.Drawing.Point(34, 86);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(20, 20);
             this.panel2.TabIndex = 4;
@@ -397,7 +428,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(97, 58);
+            this.panel1.Location = new System.Drawing.Point(34, 60);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(20, 20);
             this.panel1.TabIndex = 3;
@@ -405,7 +436,7 @@
             // verticalBtn
             // 
             this.verticalBtn.AutoSize = true;
-            this.verticalBtn.Location = new System.Drawing.Point(72, 75);
+            this.verticalBtn.Location = new System.Drawing.Point(9, 77);
             this.verticalBtn.Name = "verticalBtn";
             this.verticalBtn.Size = new System.Drawing.Size(14, 13);
             this.verticalBtn.TabIndex = 2;
@@ -437,15 +468,27 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "글자 정렬";
             // 
+            // mealVisibleCheck
+            // 
+            this.mealVisibleCheck.AutoSize = true;
+            this.mealVisibleCheck.Location = new System.Drawing.Point(448, 12);
+            this.mealVisibleCheck.Name = "mealVisibleCheck";
+            this.mealVisibleCheck.Size = new System.Drawing.Size(90, 19);
+            this.mealVisibleCheck.TabIndex = 18;
+            this.mealVisibleCheck.Text = "급식 활성화";
+            this.mealVisibleCheck.UseVisualStyleBackColor = true;
+            this.mealVisibleCheck.CheckedChanged += new System.EventHandler(this.mealVisibleCheck_CheckedChanged);
+            // 
             // MealForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(749, 418);
-            this.Controls.Add(this.groupBox5);
+            this.ClientSize = new System.Drawing.Size(749, 441);
+            this.Controls.Add(this.mealVisibleCheck);
+            this.Controls.Add(this.layoutGroup);
             this.Controls.Add(this.saveBtn);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.fontGroup);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -455,7 +498,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "봉림고 바탕화면";
             this.Load += new System.EventHandler(this.MealForm_Load);
-            this.groupBox2.ResumeLayout(false);
+            this.fontGroup.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -465,16 +508,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).EndInit();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            this.layoutGroup.ResumeLayout(false);
+            this.layoutGroup.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button saveBtn;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox fontGroup;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox titleSizeBox;
         private System.Windows.Forms.Button setTitleFontBtn;
@@ -490,7 +534,7 @@
         private System.Windows.Forms.Button setContentFontBtn;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox layoutGroup;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton verticalBtn;
@@ -508,5 +552,9 @@
         private System.Windows.Forms.Button xCenterBtn;
         private System.Windows.Forms.TrackBar xBar;
         private System.Windows.Forms.Button yCenterBtn;
+        private System.Windows.Forms.TextBox mealSpaceBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.CheckBox mealVisibleCheck;
     }
 }

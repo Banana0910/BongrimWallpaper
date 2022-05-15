@@ -7,13 +7,13 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Text.Unicode;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using hap = HtmlAgilityPack;
+using System.Drawing.Text;
 
 namespace BongrimWallpaper
 {
@@ -23,11 +23,10 @@ namespace BongrimWallpaper
             InitializeComponent();
         }
 
-        readonly string[] times = new string[] { "08:30", "08:40", "09:30", "09:40", "10:30", "10:40", " 11:30", "11:40", "12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25" };
+        readonly string[] times = new string[] { "08:30", "08:40", "09:30", "09:40", "10:30", "10:40", "11:30", "11:40", "12:30", "13:30", "14:20", "14:30", "15:20", "15:35", "16:25" };
 
         bool force_exit = false;
         string backup_wallpaper = "";
-        string background = "";
         int now_wallpaper = -2;
 
         //배경설정 메서드
@@ -65,14 +64,15 @@ namespace BongrimWallpaper
         private Subject get_timetable() {
             string jsonString = File.ReadAllText(timetable_path_box.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-            return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
+            return timetable.weekday[3];
         }
 
-        private string[] get_meal() {
+       private List<string[]> get_meal() {
             try {
+                List<string[]> output = new List<string[]>();
                 WebClient wc = new WebClient();
                 wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
-                wc.QueryString.Add("dietDate", DateTime.Now.ToString("yyyy/MM/dd"));
+                wc.QueryString.Add("dietDate", /* DateTime.Now.ToString("yyyy/MM/dd") */ "2022/05/12");
                 wc.Encoding = Encoding.UTF8;
                 string html = wc.DownloadString("http://bongrim-h.gne.go.kr/bongrim-h/dv/dietView/selectDietDetailView.do");
 
@@ -85,71 +85,285 @@ namespace BongrimWallpaper
                 if (string.IsNullOrWhiteSpace(lunch.InnerHtml.Trim())) {
                     return null;
                 }
+                output.Add(Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n'));
+                int length = output[0].Length;
+                for(int i = 0; i < length; i++) {
+                    output[0][i] = output[0][i].Trim();
+                }
                 if (dinner != null) {
-                    string _lunch = Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
-                    string _dinner = Regex.Replace(dinner.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
-                    return new string[] { _lunch, _dinner };
+                    output.Add(Regex.Replace(dinner.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n'));
+                    length = output[1].Length;
+                    for(int i = 0; i < length; i++) {
+                        output[1][i] = output[1][i].Trim();
                 }
-                else {
-                    string _lunch = Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ");
-                    return new string[] { _lunch };
                 }
+                return output;
             }
             catch {
                 return null;
             }
         }
 
-        private Font toFont(TextBox tb) {
-            string[] splited = tb.Text.Split(',');
-            return new Font(splited[0], float.Parse(splited[1]));
-        }
-        private void draw_base(ref Graphics g, Bitmap image)
+        private void draw_base(ref Graphics g, Bitmap image, int lesson)
         {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            if (background.Length > 0) g.DrawImage(Image.FromFile(background), 0, 0, image.Width, image.Height);
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            if (Properties.Settings.Default.backgroundPath.Length > 0) g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
-            // 날짜 그리기
-            if (date_visible_check.Checked) {
-                string today = DateTime.Now.ToString("yyyy년 MM월 dd일");
-                string[] font = date_font_box.Text.Split(',');
-                Font date_font = new Font(font[0], float.Parse(font[1]));
-                int date_x = date_x_bar.Value - (TextRenderer.MeasureText(today, date_font).Width / 2);
 
-                g.DrawString(today, date_font, new SolidBrush(date_color.BackColor), new Rectangle(date_x, 10, image.Width, image.Height));
+            SizeF baseSize = new SizeF(image.Width, image.Height);
+            Properties.Settings config = Properties.Settings.Default;
+            if (config.dateVisible) {
+                string today = DateTime.Now.ToString(config.dateFormat);
+                SizeF dateSize = g.MeasureString(today, config.dateFont, baseSize, StringFormat.GenericTypographic);
+                float dateX = config.dateX - (dateSize.Width / 2);
+                float dateY = config.dateY - (dateSize.Height / 2);
+
+                g.DrawString(today, config.dateFont, new SolidBrush(config.dateColor), new RectangleF(dateX, dateY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
 
-            //급식 그리기
-            if (meal_visible_check.Checked) {
-                string[] meal = get_meal();
+            if (config.mealVisible) {
+                SolidBrush mealTitleSB = new SolidBrush(config.mealTitleColor);
+                SolidBrush mealContentSB = new SolidBrush(config.mealContentColor);
 
+                List<string[]> meals = get_meal();
+                float mealX = config.mealX;
+                float mealY = config.mealY;
+                float contentSpace = config.mealContentSpace;
 
-                Font meal_title = toFont(meal_main_font_box);
-                Font meal_description = toFont(meal_sub_font_box);
+                if (config.mealLayout == 0) {
+                    if (config.mealAlignment == 0) {
+                        if (meals.Count >= 1) {
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            if (meals.Count == 2) {
+                                mealY += config.mealSpace;
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, new SizeF(image.Width, image.Height), StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
+                    } else if (config.mealAlignment == 1) {
+                        if (meals.Count >= 1) {
+                            mealX = config.mealX - (g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                mealX = config.mealX - (g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            if (meals.Count == 2) {
+                                mealY += config.mealSpace;
+                                mealX = config.mealX - (g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    mealX = config.mealX - (g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
+                    } else if (config.mealAlignment == 2) {
+                        if (meals.Count >= 1) {
+                            mealX = config.mealX - g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                mealX = config.mealX - g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            if (meals.Count == 2) {
+                                mealY += config.mealSpace;
+                                mealX = config.mealX - g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    mealX = config.mealX - g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
+                    }
+                } else {
+                    if (config.mealAlignment == 0) {
+                        if (meals.Count >= 1) {
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
 
-                SolidBrush meal_title_sb = new SolidBrush(meal_main_color.BackColor);
-                SolidBrush meal_description_sb = new SolidBrush(meal_sub_color.BackColor);
-
-                int meal_y = (meal_y_bar.Maximum - meal_y_bar.Value);
-
-                StringFormat format = new StringFormat() { Alignment = StringAlignment.Far };
-
-                if (meal != null) {
-                    g.DrawString("중식 [lunch]", meal_title, meal_title_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
-                    meal_y += TextRenderer.MeasureText("중식 [lunch]", meal_title).Height + 10;
-
-                    g.DrawString(meal[0], meal_description, meal_description_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
-                    meal_y += TextRenderer.MeasureText(meal[0], meal_description).Height + 50;
-
-                    if (meal.Length > 1) { // 석식이 있다면
-                        g.DrawString("석식 [dinner]", meal_title, meal_title_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
-                        meal_y += TextRenderer.MeasureText("석식 [dinner]", meal_title).Height + 10;
-
-                        g.DrawString(meal[1], meal_description, meal_description_sb, new RectangleF(-8, meal_y, image.Width, image.Height), format);
+                            if (meals.Count == 2) {
+                                float maxWidth = g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                                foreach (string meal in meals[0]) { 
+                                    float width = g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                    if (maxWidth < width) maxWidth = width;
+                                }
+                                mealX = config.mealX + maxWidth + config.mealSpace;
+                                mealY = config.mealY;
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
+                    } else if (config.mealAlignment == 1) {
+                        if (meals.Count >= 1) {
+                            float halfMealSpace = config.mealSpace / 2;
+                            float maxWidth = g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                            foreach (string meal in meals[0]) {
+                                float width = g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                if (maxWidth < width) maxWidth = width;
+                            }
+                            mealX = config.mealX - (halfMealSpace + (maxWidth / 2) + g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                mealX = config.mealX - (halfMealSpace + (maxWidth / 2) + g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width / 2);
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            if (meals.Count == 2) {
+                                maxWidth = g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                                foreach (string meal in meals[1]) {
+                                    float width = g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                    if (maxWidth < width) maxWidth = width;
+                                }
+                                mealY = config.mealY;
+                                mealX = config.mealX + (halfMealSpace + (maxWidth / 2) - (g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width / 2));
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    mealX = config.mealX + (halfMealSpace + (maxWidth / 2) - (g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width / 2));
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
+                    } else {
+                        if (meals.Count >= 1) {
+                            mealX = config.mealX - g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                            g.DrawString("중식 [Lunch]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach(string meal in meals[0]) {
+                                mealX = config.mealX - g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            if (meals.Count == 2) {
+                                float maxWidth = g.MeasureString("중식 [Lunch]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                                foreach (string meal in meals[0]) {
+                                    float width = g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                    if (maxWidth< width) maxWidth = width;
+                                }
+                                float space = maxWidth + config.mealSpace;
+                                mealY = config.mealY;
+                                mealX = config.mealX - space - g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Width;
+                                g.DrawString("석식 [Dinner]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString("석식 [Dinner]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                foreach (string meal in meals[1]) {
+                                    mealX = config.mealX - space - g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                    g.DrawString(meal, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                    mealY += g.MeasureString(meal, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                                }
+                            }
+                        } else {
+                            g.DrawString("급식이 없습니다..", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
+                        }
                     }
                 }
-                else {
-                    g.DrawString("급식이 없습니다..", meal_title, meal_title_sb, new RectangleF(0, meal_y, image.Width, image.Height), format);
+            }
+            if (config.listVisible) {
+                Subject subject = get_timetable();
+                int subjectCount = subject.name.Length;
+                List<SizeF> subjectSizes = new List<SizeF>();
+
+                SolidBrush subjectSB = new SolidBrush(config.listSubjectColor);
+                SolidBrush subjectAccentSB = new SolidBrush(config.listSubjectAccentColor);
+
+                float listSpace = config.listSpace;
+
+                if (config.listTeacherVisible) {
+                    List<SizeF> teacherSizes = new List<SizeF>();
+                    SolidBrush teacherSB = new SolidBrush(config.listTeacherColor);
+                    SolidBrush teacherAccentSB = new SolidBrush(config.listTeacherAccentColor);
+                    for (int i = 0; i < subjectCount; i++) {
+                        subjectSizes.Add(g.MeasureString(subject.name[i], config.listSubjectFont, baseSize, StringFormat.GenericTypographic));
+                        teacherSizes.Add(g.MeasureString(subject.teacher[i], config.listTeacherFont, baseSize, StringFormat.GenericTypographic));
+                    }
+                    if (config.listLayout == 0) {
+                        float allHeight = subjectSizes.Sum(s => s.Height);
+                        float listX = config.listX;
+                        float listY = config.listY - ((allHeight + (subjectCount - 1) * listSpace) / 2);
+                        
+                        for (int i = 0; i < subjectCount; i++) {
+                            g.DrawString(subject.name[i], config.listSubjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listX += subjectSizes[i].Width + 10;
+                            listY += subjectSizes[i].Height - teacherSizes[i].Height;
+                            g.DrawString(subject.teacher[i], config.listTeacherFont, (i==lesson-1) ? teacherAccentSB : teacherSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listX = config.listX;
+                            listY += teacherSizes[i].Height + listSpace;
+                        }
+                    } else {
+                        float allSubjectWidth = subjectSizes.Sum(s => s.Width);
+                        float allTeacherWidth = teacherSizes.Sum(t => t.Width);
+                        float listX = config.listX - ((((allSubjectWidth > allTeacherWidth) ? allSubjectWidth : allTeacherWidth) + ((subjectCount - 1) * listSpace)) / 2);
+                        float listY = config.listY;
+
+                        for (int i = 0; i < subjectCount; i++) {
+                            float maxWidth = (subjectSizes[i].Width > teacherSizes[i].Width) ? subjectSizes[i].Width : teacherSizes[i].Width;
+                            listX += (maxWidth - subjectSizes[i].Width) / 2;
+                            g.DrawString(subject.name[i], config.listSubjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listX += (subjectSizes[i].Width - teacherSizes[i].Width) / 2;
+                            listY += subjectSizes[i].Height;
+                            g.DrawString(subject.teacher[i], config.listTeacherFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listX += (teacherSizes[i].Width + maxWidth) / 2 + listSpace;
+                            listY = config.listY;
+                        }
+                    }
+                } else {
+                    foreach (string s in subject.name) subjectSizes.Add(g.MeasureString(s, config.listSubjectFont, baseSize, StringFormat.GenericTypographic));
+                    if (config.mealLayout == 0) {
+                        float allHeight = subjectSizes.Sum(s => s.Height);
+                        float listX = config.listX;
+                        float listY = config.listY - ((allHeight + (subjectCount - 1) * listSpace) / 2);
+                        for (int i = 0 ; i < subjectCount; i++) {
+                            g.DrawString(subject.name[i], config.listSubjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listY += subjectSizes[i].Height + listSpace;
+                        }
+                    } else {
+                        float allWidth = subjectSizes.Sum(s => s.Width);
+                        float listX = config.listX - ((allWidth + (subjectCount - 1) * listSpace) / 2);
+                        float listY = config.listY;
+                        for (int i = 0; i < subjectCount; i++) {
+                            g.DrawString(subject.name[i], config.listSubjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            listX += subjectSizes[i].Width + listSpace;
+                        }
+                    }
                 }
             }
         }
@@ -157,40 +371,78 @@ namespace BongrimWallpaper
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image);
-
+            draw_base(ref g, image, lesson);
+            
             //현재 시간 및 과목 그리기
-            if (class_visible_check.Checked) {
-                Font main_font = toFont(class_main_font_box);
-                Font sub_font = toFont(class_sub_font_box);
-
-                SolidBrush main_sb = new SolidBrush(class_main_color.BackColor);
-                SolidBrush sub_sb = new SolidBrush(class_sub_color.BackColor);
-
+            Properties.Settings config = Properties.Settings.Default;
+            if (config.classVisible) {
                 Subject subject = get_timetable();
                 string time = $"{times[lesson * 2 - 1]} ~ {times[lesson * 2]}";
 
-                Size lesson_size = TextRenderer.MeasureText($"{lesson} 교시", sub_font);
-                Size name_size = TextRenderer.MeasureText(subject.name[lesson - 1], main_font);
-                Size teacher_size = TextRenderer.MeasureText(subject.teacher[lesson - 1], sub_font);
-                Size time_size = TextRenderer.MeasureText(time, sub_font);
+                SolidBrush mainSB = new SolidBrush(config.classMainColor);
+                SolidBrush subSB = new SolidBrush(config.classSubColor);
 
-                int center_x = class_x_bar.Value - (lesson_size.Width / 2);
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((lesson_size.Height + name_size.Height + time_size.Height) / 2);
+                SizeF baseSize = new SizeF(image.Width, image.Height);
 
-                g.DrawString($"{lesson} 교시", sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x = class_x_bar.Value - ((name_size.Width + teacher_size.Width + 10) / 2);
-                center_y += lesson_size.Height;
+                SizeF lessonSize = g.MeasureString($"{lesson} 교시", config.classSubFont, baseSize);
+                SizeF nameSize = g.MeasureString(subject.name[lesson - 1], config.classMainFont, baseSize, StringFormat.GenericTypographic);
+                SizeF teacherSize = g.MeasureString(subject.teacher[lesson - 1], config.classSubFont, baseSize, StringFormat.GenericTypographic);
+                SizeF timeSize = g.MeasureString(time, config.classSubFont, baseSize);
 
-                g.DrawString(subject.name[lesson - 1], main_font, main_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x += name_size.Width - 10;
-                center_y += name_size.Height - teacher_size.Height - 10;
+                if (config.classAlignment == 0) {
+                    float classX = config.classX;
+                    float classY = config.classY - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
 
-                g.DrawString(subject.teacher[lesson - 1], sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_y += teacher_size.Height + 10;
-                center_x = class_x_bar.Value - (time_size.Width / 2);
+                    g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classY += lessonSize.Height;
 
-                g.DrawString(time, sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
+                    g.DrawString(subject.name[lesson-1], config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX += nameSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(subject.teacher[lesson-1], config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = config.classX;
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else if (config.classAlignment == 1) {
+                    float classX = config.classX - (lessonSize.Width / 2);
+                    float classY = config.classY - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    
+                    g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = config.classX - ((nameSize.Width + teacherSize.Width + 10) / 2);
+                    classY += lessonSize.Height;
+
+                    g.DrawString(subject.name[lesson-1], config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX += nameSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(subject.teacher[lesson-1], config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = config.classX - (timeSize.Width / 2);
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else {
+                    float classX = config.classX - lessonSize.Width;
+                    float classY = config.classY - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = config.classX - nameSize.Width;
+                    classY += lessonSize.Height;
+
+                    g.DrawString(subject.name[lesson-1], config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX -= teacherSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(subject.teacher[lesson-1], config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = config.classX - timeSize.Width;
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                }
             }
 
             //저장 및 적용
@@ -204,18 +456,11 @@ namespace BongrimWallpaper
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image);
+            draw_base(ref g, image, lesson);
 
-            if (class_visible_check.Checked) {
-                string[] main_font_sp = class_main_font_box.Text.Split(',');
-                string[] sub_font_sp = class_sub_font_box.Text.Split(',');
+            Properties.Settings config = Properties.Settings.Default;
 
-                Font main_font = new Font(main_font_sp[0], float.Parse(main_font_sp[1]));
-                Font sub_font = new Font(sub_font_sp[0], float.Parse(sub_font_sp[1]));
-
-                SolidBrush main_sb = new SolidBrush(class_main_color.BackColor);
-                SolidBrush sub_sb = new SolidBrush(class_sub_color.BackColor);
-
+            if (config.classVisible) {
                 string title = "쉬는 시간";
                 switch (lesson) {
                     case 5:
@@ -225,26 +470,57 @@ namespace BongrimWallpaper
                         title = "청소 시간";
                         break;
                 }
-                string time = $"{times[lesson * 2 - 2]} ~ {times[lesson * 2 - 1]}";
 
                 Subject subject = get_timetable();
+                string time = $"{times[lesson * 2 - 2]} ~ {times[lesson * 2 - 1]}";
 
-                Size next_size = TextRenderer.MeasureText($"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})", sub_font);
-                Size title_size = TextRenderer.MeasureText(title, main_font);
-                Size time_size = TextRenderer.MeasureText(time, sub_font);
+                SolidBrush mainSB = new SolidBrush(config.classMainColor);
+                SolidBrush subSB = new SolidBrush(config.classSubColor);
 
-                int center_x = class_x_bar.Value - (next_size.Width / 2);
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - ((next_size.Height + title_size.Height + time_size.Height) / 2);
+                SizeF baseSize = new SizeF(image.Width, image.Height);
 
-                g.DrawString($"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})", sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x = class_x_bar.Value - (title_size.Width / 2);
-                center_y += next_size.Height;
+                SizeF nextSize = g.MeasureString($"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})", config.classSubFont, baseSize);
+                SizeF titleSize = g.MeasureString(title, config.classMainFont, baseSize, StringFormat.GenericTypographic);
+                SizeF timeSize = g.MeasureString(time, config.classSubFont, baseSize);
+                
+                if (config.classAlignment == 0) {
+                    float classX = config.classX;
+                    float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
-                g.DrawString(title, main_font, main_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
-                center_x = class_x_bar.Value - (time_size.Width / 2);
-                center_y += title_size.Height;
+                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classY += nextSize.Height;
 
-                g.DrawString(time, sub_font, sub_sb, new RectangleF(center_x, center_y, image.Width, image.Height));
+                    g.DrawString(title, config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else if (config.classAlignment == 1) {
+                    float classX = config.classX - (nextSize.Width / 2);
+                    float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = config.classX - (titleSize.Width / 2);
+                    classY += nextSize.Height;
+
+                    g.DrawString(title, config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = config.classX - (timeSize.Width / 2);
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else {
+                    float classX = config.classX - nextSize.Width;
+                    float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = config.classX - titleSize.Width;
+                    classY += nextSize.Height;
+
+                    g.DrawString(title, config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = config.classX - timeSize.Width;
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                }
             }
 
             //저장 및 적용
@@ -258,16 +534,22 @@ namespace BongrimWallpaper
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image);
+            draw_base(ref g, image, -1);
 
-            if (class_visible_check.Checked) {
-                string[] main_font_sp = class_main_font_box.Text.Split(',');
-                Font font = new Font(main_font_sp[0], float.Parse(main_font_sp[1]));
-                SolidBrush sb = new SolidBrush(class_main_color.BackColor);
-                int center_y = (class_y_bar.Maximum - class_y_bar.Value) - (TextRenderer.MeasureText(text, font).Height / 2);
-                int center_x = class_x_bar.Value - (TextRenderer.MeasureText(text, font).Width / 2);
+            Properties.Settings config = Properties.Settings.Default;
 
-                g.DrawString(text, font, sb, new RectangleF(center_x, center_y, image.Width, image.Height));
+            if (config.classVisible) {
+                SolidBrush sb = new SolidBrush(config.classMainColor);
+                SizeF textSize = g.MeasureString(text, config.classMainFont, new SizeF(image.Width, image.Height), StringFormat.GenericTypographic);
+                float classX = config.classX;
+                float classY = config.classY- (textSize.Height / 2); 
+                if (config.classAlignment == 1) {
+                    classX = config.classX - (textSize.Width / 2);
+                } else if (config.classAlignment == 2) {
+                    classX = config.classX - textSize.Width;
+                }
+
+                g.DrawString(text, config.classMainFont, sb, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
 
             //저장 및 적용
@@ -277,6 +559,10 @@ namespace BongrimWallpaper
             set_wallpaper(save_path);
         }
         
+        private void contextUpdate(bool state) {
+            contextMenuStrip1.Items[0].Enabled = !state;
+            contextMenuStrip1.Items[1].Enabled = state;
+        }
         private void start_btn_Click(object sender, EventArgs e)
         {
             if (start_btn.Text == "실행") {
@@ -287,11 +573,15 @@ namespace BongrimWallpaper
                 backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
                 checker.Start();
                 start_btn.Text = "중지";
+                contextMenuStrip1.Items[0].Enabled = false;
+                contextMenuStrip1.Items[1].Enabled = true;
+                contextUpdate(true);
             } else {
                 now_wallpaper = -2;
                 set_wallpaper(backup_wallpaper);
                 checker.Stop();
                 start_btn.Text = "실행";
+                contextUpdate(false);
             }
         }
 
@@ -301,17 +591,16 @@ namespace BongrimWallpaper
         }
 
         private void Main_Load(object sender, EventArgs e) {
-            // timetable_path_box.Text = settings.timetable_path;
-            // timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
-            // startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
+            timetable_path_box.Text = Properties.Settings.Default.timetablePath;
+            timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
+            startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
 
-            // background = (settings.background != "") ? settings.background : "";
-
-            // if (timetable_path_box.Text != "") {
-            //     backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-            //     checker.Start();
-            //     start_btn.Text = "중지";
-            // }
+            if (timetable_path_box.Text != "") {
+                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+                checker.Start();
+                start_btn.Text = "중지";
+                contextUpdate(true);
+            }
         }
 
         private void checker_Tick(object sender, EventArgs e) {
@@ -322,7 +611,8 @@ namespace BongrimWallpaper
                 now_wallpaper = -1;
             }
 
-            for (int i = 1; i <= ((now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14); i++) {
+            int loopCount = (now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14;
+            for (int i = 1; i <= loopCount; i++) {
                 if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && now_wallpaper != i) {
                     if (i % 2 == 1) set_break((i + 1) / 2);
                     else set_subject(i / 2);
@@ -341,9 +631,10 @@ namespace BongrimWallpaper
 
         private void main_wall_btn_Click(object sender, EventArgs e) {
             OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "JPG Files (*.jpg *.jpeg)|*.jpg;*.jpeg|PNG Files (*.png)|*.png|All files (*.*)|*.*";
+            fd.Filter = "Image Files (*.jpg *.jpeg *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
             if (fd.ShowDialog() == DialogResult.OK) {
-                background = fd.FileName;
+                Properties.Settings.Default.backgroundPath = fd.FileName;
+                Properties.Settings.Default.Save();
                 wallpaper_preview.ImageLocation = fd.FileName;
             }
         }
@@ -352,103 +643,6 @@ namespace BongrimWallpaper
             if (!force_exit) {
                 e.Cancel = true;
                 this.Hide();
-            }
-        }
-
-        private void date_font_btn_Click(object sender, EventArgs e) {
-            FontDialog fd = new FontDialog();
-            string[] font = date_font_box.Text.Split(',');
-            fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK) {
-                date_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
-            }
-        }
-
-        private void date_color_btn_Click(object sender, EventArgs e) {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                date_color.BackColor = cd.Color;
-            }
-        }
-
-        private void meal_main_font_btn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            string[] font = meal_main_font_box.Text.Split(',');
-            fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
-                meal_main_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
-            }
-        }
-
-        private void meal_main_color_btn_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK)
-            {
-                meal_main_color.BackColor = cd.Color;
-            }
-        }
-
-        private void meal_sub_font_btn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            string[] font = meal_sub_font_box.Text.Split(',');
-            fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK)
-            {
-                meal_sub_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
-            }
-        }
-
-        private void meal_sub_color_btn_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK)
-            {
-                meal_sub_color.BackColor = cd.Color;
-            }
-        }
-
-        private void class_main_font_btn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            string[] font = class_main_font_box.Text.Split(',');
-            fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK) {
-                class_main_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
-            }
-        }
-
-        private void class_main_color_btn_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                class_main_color.BackColor = cd.Color;
-            }
-        }
-
-        private void class_sub_font_btn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            string[] font = class_sub_font_box.Text.Split(',');
-            fd.Font = new Font(font[0], float.Parse(font[1]));
-            if (fd.ShowDialog() == DialogResult.OK) {
-                class_sub_font_box.Text = $"{fd.Font.Name},{fd.Font.Size}";
-            }
-        }
-
-        private void class_sub_color_btn_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = date_color.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                class_sub_color.BackColor = cd.Color;
             }
         }
 
@@ -484,6 +678,7 @@ namespace BongrimWallpaper
             if (ofd.ShowDialog() == DialogResult.OK) {
                 timetable_path_box.Text = ofd.FileName;
                 if (verify_json()) {
+                    Properties.Settings.Default.timetablePath = ofd.FileName;
                     MessageBox.Show("올바른 시간표 파일로 확인이 되었음!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 } else {
                     MessageBox.Show("내가 원하는 양식의 시간표가 아님..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -491,9 +686,52 @@ namespace BongrimWallpaper
                 }
             }
         }
+        private void openClassFormBtn_Click(object sender, EventArgs e)
+        {
+            ClassForm cf = new ClassForm();
+            cf.Show();
+        }
 
-        private void settings_save_btn_Click(object sender, EventArgs e) {
-        }   
+        private void openMealFormBtn_Click(object sender, EventArgs e)
+        {
+            MealForm mf = new MealForm();
+            mf.Show();
+        }
+
+        private void openDateFormBtn_Click(object sender, EventArgs e)
+        {
+            DateForm df = new DateForm();
+            df.Show();
+        }
+
+        private void openListFormBtn_Click(object sender, EventArgs e)
+        {
+            ListForm lf = new ListForm();
+            lf.Show();
+        }
+
+        private void 시작ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (timetable_path_box.Text == "") {
+                MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+            checker.Start();
+            start_btn.Text = "중지";
+            contextMenuStrip1.Items[0].Enabled = false;
+            contextMenuStrip1.Items[1].Enabled = true;
+            contextUpdate(true);
+        }
+
+        private void 중지ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            now_wallpaper = -2;
+            set_wallpaper(backup_wallpaper);
+            checker.Stop();
+            start_btn.Text = "실행";
+            contextUpdate(false);
+        }
     }
 
     public class Subject {

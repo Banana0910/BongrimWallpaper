@@ -62,6 +62,7 @@
             // 
             this.previewBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.previewBox.InitialImage = null;
             this.previewBox.Location = new System.Drawing.Point(38, 52);
             this.previewBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.previewBox.Name = "previewBox";

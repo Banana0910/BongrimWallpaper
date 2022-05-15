@@ -4,9 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.IO;
 using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Text;
 
 namespace BongrimWallpaper
 {
@@ -17,9 +20,303 @@ namespace BongrimWallpaper
             InitializeComponent();
         }
 
+        Font mainFont;
+        Font subFont;
+
+        private void refresh_preview() {
+            Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            Graphics g = Graphics.FromImage(image);
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            if (Properties.Settings.Default.backgroundPath.Length > 0) 
+                g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
+            else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
+
+            SolidBrush mainSB = new SolidBrush(mainColorBox.BackColor);
+            SolidBrush subSB = new SolidBrush(subColorBox.BackColor);
+
+            SizeF baseSize = new SizeF(image.Width, image.Height);
+
+            int lesson = 3;
+            string subjectName = "영어";
+            string teacher = "정주은";
+            string time = "12:34 ~ 56:78";
+
+            if (testCaseBox.SelectedIndex == 0) {
+                SizeF lessonSize = g.MeasureString($"{lesson} 교시", subFont, baseSize);
+                SizeF nameSize = g.MeasureString(subjectName, mainFont, baseSize, StringFormat.GenericTypographic);
+                SizeF teacherSize = g.MeasureString(teacher, subFont, baseSize, StringFormat.GenericTypographic);
+                SizeF timeSize = g.MeasureString(time, subFont, baseSize);
+                if (alignmentBox.SelectedIndex == 0) {
+                    float classX = xBar.Value;
+                    float classY = (yBar.Maximum - yBar.Value) - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classY += lessonSize.Height;
+
+                    g.DrawString(subjectName, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX += nameSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(teacher, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = xBar.Value;
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else if (alignmentBox.SelectedIndex == 1) {
+                    float classX = xBar.Value - (lessonSize.Width / 2);
+                    float classY = (yBar.Maximum - yBar.Value) - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    
+                    g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = xBar.Value - ((nameSize.Width + teacherSize.Width) / 2);
+                    classY += lessonSize.Height;
+
+                    g.DrawString(subjectName, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX += nameSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(teacher, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = xBar.Value - (timeSize.Width / 2);
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else {
+                    float classX = xBar.Value - lessonSize.Width;
+                    float classY = (yBar.Maximum - yBar.Value) - 
+                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = xBar.Value - nameSize.Width;
+                    classY += lessonSize.Height;
+
+                    g.DrawString(subjectName, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX -= teacherSize.Width + 20;
+                    classY += nameSize.Height - teacherSize.Height;
+
+                    g.DrawString(teacher, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = xBar.Value - timeSize.Width;
+                    classY += teacherSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                }
+            } else if (testCaseBox.SelectedIndex == 1) {
+                string title = "쉬는 시간";
+
+                SizeF nextSize = g.MeasureString($"Next {subjectName}({teacher})", subFont, baseSize);
+                SizeF titleSize = g.MeasureString(title, mainFont, baseSize, StringFormat.GenericTypographic);
+                SizeF timeSize = g.MeasureString(time, subFont, baseSize);
+                
+                if (alignmentBox.SelectedIndex == 0) {
+                    float classX = xBar.Value;
+                    float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"Next {subjectName}({teacher})", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classY += nextSize.Height;
+
+                    g.DrawString(title, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else if (alignmentBox.SelectedIndex == 1) {
+                    float classX = xBar.Value - (nextSize.Width / 2);
+                    float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"Next {subjectName}({teacher})", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = xBar.Value - (titleSize.Width / 2);
+                    classY += nextSize.Height;
+
+                    g.DrawString(title, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = xBar.Value - (timeSize.Width / 2);
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                } else {
+                    float classX = xBar.Value - nextSize.Width;
+                    float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
+
+                    g.DrawString($"Next {subjectName}({teacher})", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    classX = xBar.Value - titleSize.Width;
+                    classY += nextSize.Height;
+
+                    g.DrawString(title, mainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+                    classX = xBar.Value - timeSize.Width;
+                    classY += titleSize.Height;
+
+                    g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                }
+            } else {
+                string text = "종례 시간";
+                SolidBrush sb = new SolidBrush(mainColorBox.BackColor);
+                SizeF textSize = g.MeasureString(text, mainFont, baseSize, StringFormat.GenericTypographic);
+                float classX = xBar.Value;
+                float classY = (yBar.Maximum - yBar.Value) - (textSize.Height / 2); 
+                if (alignmentBox.SelectedIndex == 1) {
+                    classX = xBar.Value - (textSize.Width / 2);
+                } else if (alignmentBox.SelectedIndex == 2) {
+                    classX = xBar.Value - textSize.Width;
+                }
+
+                g.DrawString(text, mainFont, sb, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
+            }
+            image.Save(Path.Combine(Application.StartupPath, "classTest.png"), System.Drawing.Imaging.ImageFormat.Png);
+            previewBox.ImageLocation = Path.Combine(Application.StartupPath, "classTest.png");
+        }
+
         private void ClassForm_Load(object sender, EventArgs e)
         {
+            int screen_width = Screen.PrimaryScreen.Bounds.Width;
+            int screen_height = Screen.PrimaryScreen.Bounds.Height;
 
+            if (screen_width >= screen_height) {
+                int height = (screen_height*previewBox.Size.Width)/screen_width;
+                previewBox.Size = new Size(previewBox.Size.Width, height);
+                yBar.Height = height+25;
+                yCenterBtn.Location = new Point(yCenterBtn.Location.X, yBar.Height+40);
+            } else {
+                int width = (screen_width*previewBox.Size.Height)/screen_height;
+                previewBox.Size = new Size(width,previewBox.Size.Height);
+                xBar.Width = width+25;
+                xCenterBtn.Location = new Point(xBar.Width+40, xCenterBtn.Location.Y);
+            }
+
+            xBar.Maximum = screen_width;
+            yBar.Maximum = screen_height;
+            try {
+                xBar.Value = (int)Properties.Settings.Default.classX;
+                yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.classY;
+            } catch {
+                xBar.Value = 0;
+                yBar.Value = yBar.Maximum;
+            }
+
+            mainFont = Properties.Settings.Default.classMainFont;
+            subFont = Properties.Settings.Default.classSubFont;
+            mainColorBox.BackColor = Properties.Settings.Default.classMainColor;
+            subColorBox.BackColor = Properties.Settings.Default.classSubColor;
+            classVisibleCheck.Checked = Properties.Settings.Default.classVisible;
+            alignmentBox.SelectedIndex = Properties.Settings.Default.classAlignment;
+            testCaseBox.SelectedIndex = 0;
+
+            mainFontBox.Text = mainFont.Name;
+            mainSizeBox.Text = mainFont.Size.ToString();
+            subFontBox.Text = subFont.Name;
+            subSizeBox.Text = subFont.Size.ToString();
+
+            refresh_preview();
+        }
+
+        private void previewBox_Click(object sender, EventArgs e)
+        {
+            Process.Start(previewBox.ImageLocation);
+        }
+
+        private void mainColorBox_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = mainColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                mainColorBox.BackColor = cd.Color;
+            }
+        }
+
+        private void subColorBox_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = subColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                subColorBox.BackColor = cd.Color;
+            }
+        }
+
+        private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refresh_preview();
+        }
+
+        private void setMainFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = mainFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                if (subFont.Size > fd.Font.Size) {
+                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                mainFont = fd.Font;
+                mainFontBox.Text = fd.Font.Name;
+                mainSizeBox.Text = fd.Font.Size.ToString();
+                refresh_preview();
+            }
+        }
+
+        private void setSubFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = subFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                if (mainFont.Size < fd.Font.Size) {
+                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                subFont = fd.Font;
+                subFontBox.Text = fd.Font.Name;
+                subSizeBox.Text = fd.Font.Size.ToString();
+                refresh_preview();
+            }
+        }
+
+        private void xBar_Scroll(object sender, EventArgs e)
+        {
+            refresh_preview();
+        }
+
+        private void yBar_Scroll(object sender, EventArgs e)
+        {
+            refresh_preview();
+        }
+
+        private void xCenterBtn_Click(object sender, EventArgs e)
+        {
+            xBar.Value = xBar.Maximum / 2;
+            refresh_preview();
+        }
+
+        private void yCenterBtn_Click(object sender, EventArgs e)
+        {
+            yBar.Value = yBar.Maximum / 2;
+            refresh_preview();
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            if (classVisibleCheck.Checked) {
+                Properties.Settings.Default.classMainFont = mainFont;
+                Properties.Settings.Default.classMainColor = mainColorBox.BackColor;
+                Properties.Settings.Default.classSubFont = subFont;
+                Properties.Settings.Default.classSubColor = subColorBox.BackColor;
+                Properties.Settings.Default.classAlignment = alignmentBox.SelectedIndex;
+                Properties.Settings.Default.classY = yBar.Maximum - yBar.Value;
+                Properties.Settings.Default.classX = xBar.Value;
+                Properties.Settings.Default.classVisible = true;
+            } else {
+                Properties.Settings.Default.classVisible = false;
+            }
+            Properties.Settings.Default.Save();
+            MessageBox.Show("저장 되었습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information); 
+        }
+
+        private void classVisibleCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            fontGroup.Enabled = classVisibleCheck.Checked;
+            layoutGroup.Enabled = classVisibleCheck.Checked;
+        }
+
+        private void testCaseBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refresh_preview();
         }
     }
 }

@@ -61,9 +61,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int dateX {
+        public float dateX {
             get {
-                return ((int)(this["dateX"]));
+                return ((float)(this["dateX"]));
             }
             set {
                 this["dateX"] = value;
@@ -73,9 +73,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int dateY {
+        public float dateY {
             get {
-                return ((int)(this["dateY"]));
+                return ((float)(this["dateY"]));
             }
             set {
                 this["dateY"] = value;
@@ -121,9 +121,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int mealContentSpace {
+        public float mealContentSpace {
             get {
-                return ((int)(this["mealContentSpace"]));
+                return ((float)(this["mealContentSpace"]));
             }
             set {
                 this["mealContentSpace"] = value;
@@ -154,10 +154,10 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Near")]
-        public global::System.Drawing.StringAlignment mealAlignment {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mealAlignment {
             get {
-                return ((global::System.Drawing.StringAlignment)(this["mealAlignment"]));
+                return ((int)(this["mealAlignment"]));
             }
             set {
                 this["mealAlignment"] = value;
@@ -179,9 +179,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int mealX {
+        public float mealX {
             get {
-                return ((int)(this["mealX"]));
+                return ((float)(this["mealX"]));
             }
             set {
                 this["mealX"] = value;
@@ -191,9 +191,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int mealY {
+        public float mealY {
             get {
-                return ((int)(this["mealY"]));
+                return ((float)(this["mealY"]));
             }
             set {
                 this["mealY"] = value;
@@ -214,6 +214,7 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 72pt")]
         public global::System.Drawing.Font classMainFont {
             get {
                 return ((global::System.Drawing.Font)(this["classMainFont"]));
@@ -225,6 +226,7 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 50pt")]
         public global::System.Drawing.Font classSubFont {
             get {
                 return ((global::System.Drawing.Font)(this["classSubFont"]));
@@ -258,10 +260,10 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Near")]
-        public global::System.Drawing.StringAlignment classAlignment {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int classAlignment {
             get {
-                return ((global::System.Drawing.StringAlignment)(this["classAlignment"]));
+                return ((int)(this["classAlignment"]));
             }
             set {
                 this["classAlignment"] = value;
@@ -271,9 +273,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int classX {
+        public float classX {
             get {
-                return ((int)(this["classX"]));
+                return ((float)(this["classX"]));
             }
             set {
                 this["classX"] = value;
@@ -283,9 +285,9 @@ namespace BongrimWallpaper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int classY {
+        public float classY {
             get {
-                return ((int)(this["classY"]));
+                return ((float)(this["classY"]));
             }
             set {
                 this["classY"] = value;
@@ -325,6 +327,158 @@ namespace BongrimWallpaper.Properties {
             }
             set {
                 this["timetablePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public float mealSpace {
+            get {
+                return ((float)(this["mealSpace"]));
+            }
+            set {
+                this["mealSpace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 32pt")]
+        public global::System.Drawing.Font listSubjectFont {
+            get {
+                return ((global::System.Drawing.Font)(this["listSubjectFont"]));
+            }
+            set {
+                this["listSubjectFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 25pt")]
+        public global::System.Drawing.Font listTeacherFont {
+            get {
+                return ((global::System.Drawing.Font)(this["listTeacherFont"]));
+            }
+            set {
+                this["listTeacherFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color listSubjectColor {
+            get {
+                return ((global::System.Drawing.Color)(this["listSubjectColor"]));
+            }
+            set {
+                this["listSubjectColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color listSubjectAccentColor {
+            get {
+                return ((global::System.Drawing.Color)(this["listSubjectAccentColor"]));
+            }
+            set {
+                this["listSubjectAccentColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color listTeacherColor {
+            get {
+                return ((global::System.Drawing.Color)(this["listTeacherColor"]));
+            }
+            set {
+                this["listTeacherColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color listTeacherAccentColor {
+            get {
+                return ((global::System.Drawing.Color)(this["listTeacherAccentColor"]));
+            }
+            set {
+                this["listTeacherAccentColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int listLayout {
+            get {
+                return ((int)(this["listLayout"]));
+            }
+            set {
+                this["listLayout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool listVisible {
+            get {
+                return ((bool)(this["listVisible"]));
+            }
+            set {
+                this["listVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float listX {
+            get {
+                return ((float)(this["listX"]));
+            }
+            set {
+                this["listX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float listY {
+            get {
+                return ((float)(this["listY"]));
+            }
+            set {
+                this["listY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float listSpace {
+            get {
+                return ((float)(this["listSpace"]));
+            }
+            set {
+                this["listSpace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool listTeacherVisible {
+            get {
+                return ((bool)(this["listTeacherVisible"]));
+            }
+            set {
+                this["listTeacherVisible"] = value;
             }
         }
     }

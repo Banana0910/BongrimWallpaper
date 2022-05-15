@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing.Text;
 
 namespace BongrimWallpaper
 {
@@ -26,16 +27,17 @@ namespace BongrimWallpaper
             Graphics g = Graphics.FromImage(image);
 
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
             if (Properties.Settings.Default.backgroundPath.Length > 0) 
                 g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
 
             string today = DateTime.Now.ToString(dateFormatBox.Text);
-            Size date_size = TextRenderer.MeasureText(today,font);
-            int date_x = xBar.Value - (date_size.Width / 2);
-            int date_y = (yBar.Maximum - yBar.Value) - (date_size.Height / 2);
+            SizeF dateSize = g.MeasureString(today, font, new SizeF(image.Width, image.Height), StringFormat.GenericTypographic);
+            float dateX = xBar.Value - (dateSize.Width / 2);
+            float dateY = (yBar.Maximum - yBar.Value) - (dateSize.Height / 2);
 
-            g.DrawString(today, font, new SolidBrush(colorBox.BackColor), new Rectangle(date_x, date_y, image.Width, image.Height));
+            g.DrawString(today, font, new SolidBrush(colorBox.BackColor), new RectangleF(dateX, dateY, image.Width, image.Height), StringFormat.GenericTypographic);
             image.Save(Path.Combine(Application.StartupPath, "dateTest.png"), System.Drawing.Imaging.ImageFormat.Png);
             previewBox.ImageLocation = Path.Combine(Application.StartupPath, "dateTest.png");
         }
@@ -73,8 +75,8 @@ namespace BongrimWallpaper
             xBar.Maximum = screen_width;
             yBar.Maximum = screen_height;
             try {
-                xBar.Value = Properties.Settings.Default.dateX;
-                yBar.Value = yBar.Maximum - Properties.Settings.Default.dateY;
+                xBar.Value = (int)Properties.Settings.Default.dateX;
+                yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.dateY;
             } catch {
                 xBar.Value = 0;
                 yBar.Value = yBar.Maximum;
@@ -105,6 +107,8 @@ namespace BongrimWallpaper
                 settings.dateFont = font;
                 settings.dateFormat = dateFormatBox.Text;
                 settings.dateColor = colorBox.BackColor;
+                settings.dateX = xBar.Value;
+                settings.dateY = (yBar.Maximum - yBar.Value);
                 settings.dateVisible = true;
             } else {
                 settings.dateVisible = false;

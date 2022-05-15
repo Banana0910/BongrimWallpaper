@@ -13,7 +13,7 @@ namespace BongrimWallpaper
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MealForm());
+            Application.Run(new Main());
         }
     }
 }

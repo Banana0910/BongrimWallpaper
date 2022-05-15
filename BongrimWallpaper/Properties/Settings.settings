@@ -11,10 +11,10 @@
     <Setting Name="dateColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="dateX" Type="System.Int32" Scope="User">
+    <Setting Name="dateX" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="dateY" Type="System.Int32" Scope="User">
+    <Setting Name="dateY" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="dateVisible" Type="System.Boolean" Scope="User">
@@ -26,7 +26,7 @@
     <Setting Name="mealContentFont" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)">맑은 고딕, 22pt</Value>
     </Setting>
-    <Setting Name="mealContentSpace" Type="System.Int32" Scope="User">
+    <Setting Name="mealContentSpace" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="mealTitleColor" Type="System.Drawing.Color" Scope="User">
@@ -35,26 +35,26 @@
     <Setting Name="mealContentColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="mealAlignment" Type="System.Drawing.StringAlignment" Scope="User">
-      <Value Profile="(Default)">Near</Value>
+    <Setting Name="mealAlignment" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="mealLayout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="mealX" Type="System.Int32" Scope="User">
+    <Setting Name="mealX" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="mealY" Type="System.Int32" Scope="User">
+    <Setting Name="mealY" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="mealVisible" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="classMainFont" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">맑은 고딕, 72pt</Value>
     </Setting>
     <Setting Name="classSubFont" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">맑은 고딕, 50pt</Value>
     </Setting>
     <Setting Name="classMainColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
@@ -62,13 +62,13 @@
     <Setting Name="classSubColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="classAlignment" Type="System.Drawing.StringAlignment" Scope="User">
-      <Value Profile="(Default)">Near</Value>
-    </Setting>
-    <Setting Name="classX" Type="System.Int32" Scope="User">
+    <Setting Name="classAlignment" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="classY" Type="System.Int32" Scope="User">
+    <Setting Name="classX" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="classY" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="classVisible" Type="System.Boolean" Scope="User">
@@ -79,6 +79,45 @@
     </Setting>
     <Setting Name="timetablePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="mealSpace" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="listSubjectFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">맑은 고딕, 32pt</Value>
+    </Setting>
+    <Setting Name="listTeacherFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">맑은 고딕, 25pt</Value>
+    </Setting>
+    <Setting Name="listSubjectColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="listSubjectAccentColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="listTeacherColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="listTeacherAccentColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="listLayout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="listVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="listX" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="listY" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="listSpace" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="listTeacherVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
