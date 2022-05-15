@@ -64,7 +64,7 @@ namespace BongrimWallpaper
         private Subject get_timetable() {
             string jsonString = File.ReadAllText(timetable_path_box.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-            return timetable.weekday[3];
+            return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
 
        private List<string[]> get_meal() {
@@ -72,7 +72,7 @@ namespace BongrimWallpaper
                 List<string[]> output = new List<string[]>();
                 WebClient wc = new WebClient();
                 wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
-                wc.QueryString.Add("dietDate", /* DateTime.Now.ToString("yyyy/MM/dd") */ "2022/05/12");
+                wc.QueryString.Add("dietDate",DateTime.Now.ToString("yyyy/MM/dd"));
                 wc.Encoding = Encoding.UTF8;
                 string html = wc.DownloadString("http://bongrim-h.gne.go.kr/bongrim-h/dv/dietView/selectDietDetailView.do");
 
