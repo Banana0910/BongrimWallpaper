@@ -481,5 +481,63 @@ namespace BongrimWallpaper.Properties {
                 this["listTeacherVisible"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("맑은 고딕, 32pt")]
+        public global::System.Drawing.Font weekFont {
+            get {
+                return ((global::System.Drawing.Font)(this["weekFont"]));
+            }
+            set {
+                this["weekFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color weekColor {
+            get {
+                return ((global::System.Drawing.Color)(this["weekColor"]));
+            }
+            set {
+                this["weekColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float weekX {
+            get {
+                return ((float)(this["weekX"]));
+            }
+            set {
+                this["weekX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float weekY {
+            get {
+                return ((float)(this["weekY"]));
+            }
+            set {
+                this["weekY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection students {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["students"]));
+            }
+            set {
+                this["students"] = value;
+            }
+        }
     }
 }

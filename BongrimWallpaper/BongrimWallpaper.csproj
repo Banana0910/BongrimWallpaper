@@ -246,6 +246,12 @@
     <Compile Include="ListForm.Designer.cs">
       <DependentUpon>ListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WeekForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WeekForm.Designer.cs">
+      <DependentUpon>WeekForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ClassForm.resx">
       <DependentUpon>ClassForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,6 +276,9 @@
     </Compile>
     <EmbeddedResource Include="ListForm.resx">
       <DependentUpon>ListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WeekForm.resx">
+      <DependentUpon>WeekForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
