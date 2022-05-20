@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Drawing.Text;
+using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Windows.Forms;
 
@@ -19,6 +22,26 @@ namespace BongrimWallpaper
         }
         
         Font font;
+
+        private void refresh_preview() {
+            Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            Graphics g = Graphics.FromImage(image);
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            if (Properties.Settings.Default.backgroundPath.Length > 0) 
+                g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
+            else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
+
+            SolidBrush sb = new SolidBrush(colorBox.BackColor);
+
+            SizeF baseSize = new SizeF(image.Width, image.Height);
+            SizeF strSize = g.MeasureString("", font, baseSize, StringFormat.GenericTypographic);
+            float weekX = xBar.Value - (strSize.Width / 2);
+            float weekY = yBar.Value - (strSize.Height / 2);
+            g.DrawString("", font, sb, weekX, weekY, StringFormat.GenericTypographic);
+            previewBox.Image = image;
+        }
 
         private void studentAddBtn_Click(object sender, EventArgs e)
         {
@@ -85,32 +108,37 @@ namespace BongrimWallpaper
 
         private void colorBox_Click(object sender, EventArgs e)
         {
-
+            ColorDialog cd = new ColorDialog() { Color = colorBox.BackColor };
+            if (cd.ShowDialog() == DialogResult.OK) {
+                colorBox.BackColor = cd.Color;
+            }
         }
 
         private void xCenterBtn_Click(object sender, EventArgs e)
         {
-
+            xBar.Value = xBar.Maximum / 2;
         }
 
         private void yCenterBtn_Click(object sender, EventArgs e)
         {
-
+            yBar.Value = yBar.Maximum / 2;
         }
 
         private void yBar_Scroll(object sender, EventArgs e)
         {
-
+            refresh_preview();
         }
 
         private void xBar_Scroll(object sender, EventArgs e)
         {
-
+            refresh_preview();
         }
 
         private void previewBox_Click(object sender, EventArgs e)
         {
-
+            string path = Path.Combine(Application.StartupPath, "weekTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
         }
 
         private void WeekForm_Load(object sender, EventArgs e)
@@ -142,7 +170,66 @@ namespace BongrimWallpaper
 
             font = Properties.Settings.Default.weekFont;
             colorBox.BackColor = Properties.Settings.Default.weekColor;
-            Properties.Settings.Default.students.Add("s"); //this is broke :<
+            var list = Properties.Settings.Default.students;
+            foreach (string s in list) {
+                studentList.Items.Add(s);
+            }
+
+            fontBox.Text = font.Name;
+            sizeBox.Text = font.Size.ToString();
+
+            refresh_preview();
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            if (weekVisibleCheck.Checked) {
+                StringCollection sc = new StringCollection();
+                foreach (string name in studentList.Items) {
+                    sc.Add(name);
+                }
+                Properties.Settings.Default.students = sc;
+                Properties.Settings.Default.weekFont = font;
+                Properties.Settings.Default.weekColor = colorBox.BackColor;
+                Properties.Settings.Default.weekX = xBar.Value;
+                Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
+                Properties.Settings.Default.weekVisible = true;
+            } else {
+                Properties.Settings.Default.weekVisible = false;
+            }
+            Properties.Settings.Default.Save();
+            MessageBox.Show("저장 되었습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void WeekForm_FormClosed(object sender, FormClosedEventArgs e) {
+            string path = Path.Combine(Application.StartupPath, "weekTest.png");
+            if (File.Exists(path)) {
+                File.Delete(path);
+            }
+        }
+
+        private void weekVisibleCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            weekGroup.Enabled = weekVisibleCheck.Checked;
+            fontGroup.Enabled = weekVisibleCheck.Checked;
+        }
+
+        private void nextWeekBtn_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void backWeekBtn_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void weekCountBox_ValueChanged(object sender, EventArgs e)
+        {
+            if ((int)weekCountBox.Value > studentList.Items.Count) {
+                weekCountBox.Value--;
+                MessageBox.Show("주번의 수는 학생의 수보다 클 수 없습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

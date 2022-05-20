@@ -29,16 +29,21 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WeekForm));
-            this.dateVisibleCheck = new System.Windows.Forms.CheckBox();
+            this.weekVisibleCheck = new System.Windows.Forms.CheckBox();
             this.saveBtn = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.studentDownBtn = new System.Windows.Forms.Button();
-            this.studentUpBtn = new System.Windows.Forms.Button();
-            this.studentDelBtn = new System.Windows.Forms.Button();
+            this.weekGroup = new System.Windows.Forms.GroupBox();
+            this.backWeekBtn = new System.Windows.Forms.Button();
+            this.nextWeekBtn = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.studentBox = new System.Windows.Forms.TextBox();
             this.studentAddBtn = new System.Windows.Forms.Button();
+            this.studentDelBtn = new System.Windows.Forms.Button();
+            this.studentDownBtn = new System.Windows.Forms.Button();
+            this.studentUpBtn = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.weekCountBox = new System.Windows.Forms.NumericUpDown();
             this.studentList = new System.Windows.Forms.ListBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.fontGroup = new System.Windows.Forms.GroupBox();
             this.colorBox = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,25 +57,28 @@
             this.xBar = new System.Windows.Forms.TrackBar();
             this.yCenterBtn = new System.Windows.Forms.Button();
             this.yBar = new System.Windows.Forms.TrackBar();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.weekGroup.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.weekCountBox)).BeginInit();
+            this.fontGroup.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             this.SuspendLayout();
             // 
-            // dateVisibleCheck
+            // weekVisibleCheck
             // 
-            this.dateVisibleCheck.AutoSize = true;
-            this.dateVisibleCheck.Checked = true;
-            this.dateVisibleCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dateVisibleCheck.Location = new System.Drawing.Point(450, 10);
-            this.dateVisibleCheck.Name = "dateVisibleCheck";
-            this.dateVisibleCheck.Size = new System.Drawing.Size(90, 19);
-            this.dateVisibleCheck.TabIndex = 19;
-            this.dateVisibleCheck.Text = "주번 활성화";
-            this.dateVisibleCheck.UseVisualStyleBackColor = true;
+            this.weekVisibleCheck.AutoSize = true;
+            this.weekVisibleCheck.Checked = true;
+            this.weekVisibleCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.weekVisibleCheck.Location = new System.Drawing.Point(450, 10);
+            this.weekVisibleCheck.Name = "weekVisibleCheck";
+            this.weekVisibleCheck.Size = new System.Drawing.Size(90, 19);
+            this.weekVisibleCheck.TabIndex = 19;
+            this.weekVisibleCheck.Text = "주번 활성화";
+            this.weekVisibleCheck.UseVisualStyleBackColor = true;
+            this.weekVisibleCheck.CheckedChanged += new System.EventHandler(this.weekVisibleCheck_CheckedChanged);
             // 
             // saveBtn
             // 
@@ -80,25 +88,89 @@
             this.saveBtn.TabIndex = 15;
             this.saveBtn.Text = "설정 저장";
             this.saveBtn.UseVisualStyleBackColor = true;
+            this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
-            // groupBox3
+            // weekGroup
             // 
-            this.groupBox3.Controls.Add(this.studentDownBtn);
-            this.groupBox3.Controls.Add(this.studentUpBtn);
-            this.groupBox3.Controls.Add(this.studentDelBtn);
-            this.groupBox3.Controls.Add(this.studentBox);
-            this.groupBox3.Controls.Add(this.studentAddBtn);
-            this.groupBox3.Controls.Add(this.studentList);
-            this.groupBox3.Location = new System.Drawing.Point(450, 127);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(272, 204);
-            this.groupBox3.TabIndex = 18;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "주번";
+            this.weekGroup.Controls.Add(this.backWeekBtn);
+            this.weekGroup.Controls.Add(this.nextWeekBtn);
+            this.weekGroup.Controls.Add(this.groupBox4);
+            this.weekGroup.Controls.Add(this.label3);
+            this.weekGroup.Controls.Add(this.weekCountBox);
+            this.weekGroup.Controls.Add(this.studentList);
+            this.weekGroup.Location = new System.Drawing.Point(450, 127);
+            this.weekGroup.Name = "weekGroup";
+            this.weekGroup.Size = new System.Drawing.Size(272, 204);
+            this.weekGroup.TabIndex = 18;
+            this.weekGroup.TabStop = false;
+            this.weekGroup.Text = "주번";
+            // 
+            // backWeekBtn
+            // 
+            this.backWeekBtn.Location = new System.Drawing.Point(132, 169);
+            this.backWeekBtn.Name = "backWeekBtn";
+            this.backWeekBtn.Size = new System.Drawing.Size(134, 23);
+            this.backWeekBtn.TabIndex = 24;
+            this.backWeekBtn.Text = "저번 주 주번";
+            this.backWeekBtn.UseVisualStyleBackColor = true;
+            this.backWeekBtn.Click += new System.EventHandler(this.backWeekBtn_Click);
+            // 
+            // nextWeekBtn
+            // 
+            this.nextWeekBtn.Location = new System.Drawing.Point(132, 140);
+            this.nextWeekBtn.Name = "nextWeekBtn";
+            this.nextWeekBtn.Size = new System.Drawing.Size(134, 23);
+            this.nextWeekBtn.TabIndex = 23;
+            this.nextWeekBtn.Text = "다음 주 주번";
+            this.nextWeekBtn.UseVisualStyleBackColor = true;
+            this.nextWeekBtn.Click += new System.EventHandler(this.nextWeekBtn_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.studentBox);
+            this.groupBox4.Controls.Add(this.studentAddBtn);
+            this.groupBox4.Controls.Add(this.studentDelBtn);
+            this.groupBox4.Controls.Add(this.studentDownBtn);
+            this.groupBox4.Controls.Add(this.studentUpBtn);
+            this.groupBox4.Location = new System.Drawing.Point(132, 14);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(134, 73);
+            this.groupBox4.TabIndex = 22;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "학생 관리";
+            // 
+            // studentBox
+            // 
+            this.studentBox.BackColor = System.Drawing.Color.White;
+            this.studentBox.Location = new System.Drawing.Point(3, 15);
+            this.studentBox.Name = "studentBox";
+            this.studentBox.Size = new System.Drawing.Size(79, 23);
+            this.studentBox.TabIndex = 16;
+            this.studentBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.studentBox_KeyPress);
+            // 
+            // studentAddBtn
+            // 
+            this.studentAddBtn.Location = new System.Drawing.Point(88, 15);
+            this.studentAddBtn.Name = "studentAddBtn";
+            this.studentAddBtn.Size = new System.Drawing.Size(40, 23);
+            this.studentAddBtn.TabIndex = 1;
+            this.studentAddBtn.Text = "추가";
+            this.studentAddBtn.UseVisualStyleBackColor = true;
+            this.studentAddBtn.Click += new System.EventHandler(this.studentAddBtn_Click);
+            // 
+            // studentDelBtn
+            // 
+            this.studentDelBtn.Location = new System.Drawing.Point(3, 44);
+            this.studentDelBtn.Name = "studentDelBtn";
+            this.studentDelBtn.Size = new System.Drawing.Size(79, 23);
+            this.studentDelBtn.TabIndex = 17;
+            this.studentDelBtn.Text = "삭제";
+            this.studentDelBtn.UseVisualStyleBackColor = true;
+            this.studentDelBtn.Click += new System.EventHandler(this.studentDelBtn_Click);
             // 
             // studentDownBtn
             // 
-            this.studentDownBtn.Location = new System.Drawing.Point(250, 51);
+            this.studentDownBtn.Location = new System.Drawing.Point(112, 44);
             this.studentDownBtn.Name = "studentDownBtn";
             this.studentDownBtn.Size = new System.Drawing.Size(16, 23);
             this.studentDownBtn.TabIndex = 19;
@@ -108,7 +180,7 @@
             // 
             // studentUpBtn
             // 
-            this.studentUpBtn.Location = new System.Drawing.Point(226, 51);
+            this.studentUpBtn.Location = new System.Drawing.Point(88, 44);
             this.studentUpBtn.Name = "studentUpBtn";
             this.studentUpBtn.Size = new System.Drawing.Size(18, 23);
             this.studentUpBtn.TabIndex = 18;
@@ -116,34 +188,23 @@
             this.studentUpBtn.UseVisualStyleBackColor = true;
             this.studentUpBtn.Click += new System.EventHandler(this.studentUpBtn_Click);
             // 
-            // studentDelBtn
+            // label3
             // 
-            this.studentDelBtn.Location = new System.Drawing.Point(132, 51);
-            this.studentDelBtn.Name = "studentDelBtn";
-            this.studentDelBtn.Size = new System.Drawing.Size(88, 23);
-            this.studentDelBtn.TabIndex = 17;
-            this.studentDelBtn.Text = "삭제";
-            this.studentDelBtn.UseVisualStyleBackColor = true;
-            this.studentDelBtn.Click += new System.EventHandler(this.studentDelBtn_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(132, 109);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "주번 수";
             // 
-            // studentBox
+            // weekCountBox
             // 
-            this.studentBox.BackColor = System.Drawing.Color.White;
-            this.studentBox.Location = new System.Drawing.Point(132, 22);
-            this.studentBox.Name = "studentBox";
-            this.studentBox.Size = new System.Drawing.Size(88, 23);
-            this.studentBox.TabIndex = 16;
-            this.studentBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.studentBox_KeyPress);
-            // 
-            // studentAddBtn
-            // 
-            this.studentAddBtn.Location = new System.Drawing.Point(226, 22);
-            this.studentAddBtn.Name = "studentAddBtn";
-            this.studentAddBtn.Size = new System.Drawing.Size(40, 23);
-            this.studentAddBtn.TabIndex = 1;
-            this.studentAddBtn.Text = "추가";
-            this.studentAddBtn.UseVisualStyleBackColor = true;
-            this.studentAddBtn.Click += new System.EventHandler(this.studentAddBtn_Click);
+            this.weekCountBox.Location = new System.Drawing.Point(185, 107);
+            this.weekCountBox.Name = "weekCountBox";
+            this.weekCountBox.Size = new System.Drawing.Size(81, 23);
+            this.weekCountBox.TabIndex = 20;
+            this.weekCountBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.weekCountBox.ValueChanged += new System.EventHandler(this.weekCountBox_ValueChanged);
             // 
             // studentList
             // 
@@ -154,21 +215,21 @@
             this.studentList.Size = new System.Drawing.Size(120, 169);
             this.studentList.TabIndex = 0;
             // 
-            // groupBox2
+            // fontGroup
             // 
-            this.groupBox2.Controls.Add(this.colorBox);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.sizeBox);
-            this.groupBox2.Controls.Add(this.setFontBtn);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.fontBox);
-            this.groupBox2.Location = new System.Drawing.Point(450, 31);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(272, 90);
-            this.groupBox2.TabIndex = 17;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "글꼴";
+            this.fontGroup.Controls.Add(this.colorBox);
+            this.fontGroup.Controls.Add(this.label7);
+            this.fontGroup.Controls.Add(this.label1);
+            this.fontGroup.Controls.Add(this.sizeBox);
+            this.fontGroup.Controls.Add(this.setFontBtn);
+            this.fontGroup.Controls.Add(this.label2);
+            this.fontGroup.Controls.Add(this.fontBox);
+            this.fontGroup.Location = new System.Drawing.Point(450, 31);
+            this.fontGroup.Name = "fontGroup";
+            this.fontGroup.Size = new System.Drawing.Size(272, 90);
+            this.fontGroup.TabIndex = 17;
+            this.fontGroup.TabStop = false;
+            this.fontGroup.Text = "글꼴";
             // 
             // colorBox
             // 
@@ -309,22 +370,28 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(730, 372);
-            this.Controls.Add(this.dateVisibleCheck);
+            this.Controls.Add(this.weekVisibleCheck);
             this.Controls.Add(this.saveBtn);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.weekGroup);
+            this.Controls.Add(this.fontGroup);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "WeekForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "봉림고 바탕화면";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WeekForm_FormClosed);
             this.Load += new System.EventHandler(this.WeekForm_Load);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.weekGroup.ResumeLayout(false);
+            this.weekGroup.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.weekCountBox)).EndInit();
+            this.fontGroup.ResumeLayout(false);
+            this.fontGroup.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
@@ -337,16 +404,16 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox dateVisibleCheck;
+        private System.Windows.Forms.CheckBox weekVisibleCheck;
         private System.Windows.Forms.Button saveBtn;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox weekGroup;
         private System.Windows.Forms.Button studentDownBtn;
         private System.Windows.Forms.Button studentUpBtn;
         private System.Windows.Forms.Button studentDelBtn;
         private System.Windows.Forms.TextBox studentBox;
         private System.Windows.Forms.Button studentAddBtn;
         private System.Windows.Forms.ListBox studentList;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox fontGroup;
         private System.Windows.Forms.Panel colorBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label1;
@@ -360,5 +427,10 @@
         private System.Windows.Forms.TrackBar xBar;
         private System.Windows.Forms.Button yCenterBtn;
         private System.Windows.Forms.TrackBar yBar;
+        private System.Windows.Forms.Button backWeekBtn;
+        private System.Windows.Forms.Button nextWeekBtn;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown weekCountBox;
     }
 }
