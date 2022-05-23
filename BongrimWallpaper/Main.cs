@@ -366,6 +366,15 @@ namespace BongrimWallpaper
                     }
                 }
             }
+            if (config.weekVisible) {
+                if (config.weekLastDate - DateTime.Now)
+                string text = "주번 : ";
+                foreach (int i in config.lastNums)
+                    text += $"{config.students[i]} ";
+                SolidBrush sb = new SolidBrush(config.weekColor);
+
+                g.DrawString(text, config.weekFont, sb, config.weekX, config.weekY, StringFormat.GenericTypographic);
+            }
         }
         private void set_subject(int lesson) {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);

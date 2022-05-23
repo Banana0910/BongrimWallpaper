@@ -22,6 +22,7 @@ namespace BongrimWallpaper
         }
         
         Font font;
+        int[] nums;
 
         private void refresh_preview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
@@ -32,14 +33,16 @@ namespace BongrimWallpaper
             if (Properties.Settings.Default.backgroundPath.Length > 0) 
                 g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
-
+            string text = "주번 : ";
+            foreach (int i in nums)
+                text += $"{studentList.Items[i]} ";
             SolidBrush sb = new SolidBrush(colorBox.BackColor);
 
             SizeF baseSize = new SizeF(image.Width, image.Height);
-            SizeF strSize = g.MeasureString("", font, baseSize, StringFormat.GenericTypographic);
-            float weekX = xBar.Value - (strSize.Width / 2);
-            float weekY = yBar.Value - (strSize.Height / 2);
-            g.DrawString("", font, sb, weekX, weekY, StringFormat.GenericTypographic);
+            SizeF strSize = g.MeasureString(text, font, baseSize, StringFormat.GenericTypographic);
+            float weekX = xBar.Value;
+            float weekY = (yBar.Maximum - yBar.Value);
+            g.DrawString(text, font, sb, weekX, weekY, StringFormat.GenericTypographic);
             previewBox.Image = image;
         }
 
@@ -61,9 +64,14 @@ namespace BongrimWallpaper
 
         private void studentDelBtn_Click(object sender, EventArgs e)
         {
+            if (studentList.Items.Count-1 < (int)weekCountBox.Value) {
+                MessageBox.Show("주번의 수보다 학생 수가 적을 수 없습니다!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (studentList.SelectedIndex > 0) {
                 studentList.Items.RemoveAt(studentList.SelectedIndex);
             }
+            refresh_preview();
         }
 
         private void studentUpBtn_Click(object sender, EventArgs e)
@@ -75,6 +83,7 @@ namespace BongrimWallpaper
                 studentList.Items[selectedIndex] = temp; 
                 studentList.SelectedIndex = selectedIndex - 1;
             }
+            refresh_preview();
         }
 
         private void studentDownBtn_Click(object sender, EventArgs e)
@@ -86,6 +95,7 @@ namespace BongrimWallpaper
                 studentList.Items[selectedIndex] = temp; 
                 studentList.SelectedIndex = selectedIndex + 1;
             }
+            refresh_preview();
         }
 
         private void studentBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -117,11 +127,13 @@ namespace BongrimWallpaper
         private void xCenterBtn_Click(object sender, EventArgs e)
         {
             xBar.Value = xBar.Maximum / 2;
+            refresh_preview();
         }
 
         private void yCenterBtn_Click(object sender, EventArgs e)
         {
             yBar.Value = yBar.Maximum / 2;
+            refresh_preview();
         }
 
         private void yBar_Scroll(object sender, EventArgs e)
@@ -170,10 +182,12 @@ namespace BongrimWallpaper
 
             font = Properties.Settings.Default.weekFont;
             colorBox.BackColor = Properties.Settings.Default.weekColor;
+            nums = Properties.Settings.Default.weekLastNums;
             var list = Properties.Settings.Default.students;
             foreach (string s in list) {
                 studentList.Items.Add(s);
             }
+            weekCountBox.Value = nums.Length;
 
             fontBox.Text = font.Name;
             sizeBox.Text = font.Size.ToString();
@@ -194,6 +208,8 @@ namespace BongrimWallpaper
                 Properties.Settings.Default.weekX = xBar.Value;
                 Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
                 Properties.Settings.Default.weekVisible = true;
+                Properties.Settings.Default.weekLastNums = nums;
+                Properties.Settings.Default.weekLastDate = DateTime.Now;
             } else {
                 Properties.Settings.Default.weekVisible = false;
             }
@@ -216,12 +232,18 @@ namespace BongrimWallpaper
 
         private void nextWeekBtn_Click(object sender, EventArgs e)
         {
-            
+            for (int i = 0; i < nums.Length; i++) {
+                nums[i] = (nums[i] + nums.Length) % studentList.Items.Count;
+            }
+            refresh_preview();
         }
 
         private void backWeekBtn_Click(object sender, EventArgs e)
         {
-            
+            for (int i = 0; i < nums.Length; i++) {
+                nums[i] = (studentList.Items.Count + (nums[i] - nums.Length)) % studentList.Items.Count;
+            }
+            refresh_preview();
         }
 
         private void weekCountBox_ValueChanged(object sender, EventArgs e)
@@ -229,7 +251,15 @@ namespace BongrimWallpaper
             if ((int)weekCountBox.Value > studentList.Items.Count) {
                 weekCountBox.Value--;
                 MessageBox.Show("주번의 수는 학생의 수보다 클 수 없습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+            nums = new int[(int)weekCountBox.Value];
+            for (int i = 0; i < nums.Length; i++) {
+                nums[i] = i;
+            }
+
+            refresh_preview();
         }
     }
 }
