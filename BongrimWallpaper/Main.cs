@@ -367,9 +367,15 @@ namespace BongrimWallpaper
                 }
             }
             if (config.weekVisible) {
-                if (config.weekLastDate - DateTime.Now)
+                DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                if ((config.weekLastDate - now).Days >= 1 && now.DayOfWeek == DayOfWeek.Monday) {
+                    for (int i = 0; i < config.weekLastNums.Length; i++)
+                        config.weekLastNums[i] = (config.weekLastNums[i] + config.weekLastNums.Length) % config.students.Count;
+                    config.weekLastDate = now;
+                    config.Save();
+                }
                 string text = "주번 : ";
-                foreach (int i in config.lastNums)
+                foreach (int i in config.weekLastNums)
                     text += $"{config.students[i]} ";
                 SolidBrush sb = new SolidBrush(config.weekColor);
 
@@ -667,6 +673,7 @@ namespace BongrimWallpaper
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e) {
             this.Show();    
+            this.Activate();
         }
 
         private void 종료ToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -740,6 +747,12 @@ namespace BongrimWallpaper
             checker.Stop();
             start_btn.Text = "실행";
             contextUpdate(false);
+        }
+
+        private void openWeekFormBtn_Click(object sender, EventArgs e)
+        {
+            WeekForm wf = new WeekForm();
+            wf.Show();
         }
     }
 

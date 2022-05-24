@@ -37,6 +37,8 @@
             this.startup_check = new System.Windows.Forms.CheckBox();
             this.notifyicon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.시작ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.중지ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.종료ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timetable_path_box = new System.Windows.Forms.TextBox();
             this.timetable_path_btn = new System.Windows.Forms.Button();
@@ -45,8 +47,7 @@
             this.openMealFormBtn = new System.Windows.Forms.Button();
             this.openDateFormBtn = new System.Windows.Forms.Button();
             this.openListFormBtn = new System.Windows.Forms.Button();
-            this.중지ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.시작ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openWeekFormBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.wallpaper_preview)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -119,12 +120,26 @@
             this.contextMenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 70);
+            // 
+            // 시작ToolStripMenuItem
+            // 
+            this.시작ToolStripMenuItem.Name = "시작ToolStripMenuItem";
+            this.시작ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.시작ToolStripMenuItem.Text = "시작";
+            this.시작ToolStripMenuItem.Click += new System.EventHandler(this.시작ToolStripMenuItem_Click);
+            // 
+            // 중지ToolStripMenuItem
+            // 
+            this.중지ToolStripMenuItem.Name = "중지ToolStripMenuItem";
+            this.중지ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.중지ToolStripMenuItem.Text = "중지";
+            this.중지ToolStripMenuItem.Click += new System.EventHandler(this.중지ToolStripMenuItem_Click);
             // 
             // 종료ToolStripMenuItem
             // 
             this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
-            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.종료ToolStripMenuItem.Text = "종료";
             this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
             // 
@@ -196,25 +211,22 @@
             this.openListFormBtn.UseVisualStyleBackColor = true;
             this.openListFormBtn.Click += new System.EventHandler(this.openListFormBtn_Click);
             // 
-            // 중지ToolStripMenuItem
+            // openWeekFormBtn
             // 
-            this.중지ToolStripMenuItem.Name = "중지ToolStripMenuItem";
-            this.중지ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.중지ToolStripMenuItem.Text = "중지";
-            this.중지ToolStripMenuItem.Click += new System.EventHandler(this.중지ToolStripMenuItem_Click);
-            // 
-            // 시작ToolStripMenuItem
-            // 
-            this.시작ToolStripMenuItem.Name = "시작ToolStripMenuItem";
-            this.시작ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.시작ToolStripMenuItem.Text = "시작";
-            this.시작ToolStripMenuItem.Click += new System.EventHandler(this.시작ToolStripMenuItem_Click);
+            this.openWeekFormBtn.Location = new System.Drawing.Point(498, 227);
+            this.openWeekFormBtn.Name = "openWeekFormBtn";
+            this.openWeekFormBtn.Size = new System.Drawing.Size(139, 23);
+            this.openWeekFormBtn.TabIndex = 19;
+            this.openWeekFormBtn.Text = "주번 관련 설정";
+            this.openWeekFormBtn.UseVisualStyleBackColor = true;
+            this.openWeekFormBtn.Click += new System.EventHandler(this.openWeekFormBtn_Click);
             // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(644, 375);
+            this.Controls.Add(this.openWeekFormBtn);
             this.Controls.Add(this.openListFormBtn);
             this.Controls.Add(this.openDateFormBtn);
             this.Controls.Add(this.openMealFormBtn);
@@ -261,6 +273,7 @@
         private System.Windows.Forms.Button openListFormBtn;
         private System.Windows.Forms.ToolStripMenuItem 중지ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 시작ToolStripMenuItem;
+        private System.Windows.Forms.Button openWeekFormBtn;
     }
 }
 

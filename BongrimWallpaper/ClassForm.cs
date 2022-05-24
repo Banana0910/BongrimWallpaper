@@ -220,6 +220,7 @@ namespace BongrimWallpaper
             cd.Color = mainColorBox.BackColor;
             if (cd.ShowDialog() == DialogResult.OK) {
                 mainColorBox.BackColor = cd.Color;
+                refresh_preview();
             }
         }
 
@@ -229,6 +230,7 @@ namespace BongrimWallpaper
             cd.Color = subColorBox.BackColor;
             if (cd.ShowDialog() == DialogResult.OK) {
                 subColorBox.BackColor = cd.Color;
+                refresh_preview();
             }
         }
 

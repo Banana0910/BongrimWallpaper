@@ -209,7 +209,7 @@ namespace BongrimWallpaper
                 Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
                 Properties.Settings.Default.weekVisible = true;
                 Properties.Settings.Default.weekLastNums = nums;
-                Properties.Settings.Default.weekLastDate = DateTime.Now;
+                Properties.Settings.Default.weekLastDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             } else {
                 Properties.Settings.Default.weekVisible = false;
             }
