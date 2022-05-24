@@ -135,6 +135,7 @@
             this.중지ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.중지ToolStripMenuItem.Text = "중지";
             this.중지ToolStripMenuItem.Click += new System.EventHandler(this.중지ToolStripMenuItem_Click);
+            this.중지ToolStripMenuItem.Enabled = false;
             // 
             // 종료ToolStripMenuItem
             // 
