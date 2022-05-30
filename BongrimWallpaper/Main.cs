@@ -368,7 +368,7 @@ namespace BongrimWallpaper
             }
             if (config.weekVisible) {
                 DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                if ((config.weekLastDate - now).Days >= 1 && now.DayOfWeek == DayOfWeek.Monday) {
+                if ((now - config.weekLastDate).Days > 1 && now.DayOfWeek == DayOfWeek.Monday) {
                     for (int i = 0; i < config.weekLastNums.Length; i++)
                         config.weekLastNums[i] = (config.weekLastNums[i] + config.weekLastNums.Length) % config.students.Count;
                     config.weekLastDate = now;

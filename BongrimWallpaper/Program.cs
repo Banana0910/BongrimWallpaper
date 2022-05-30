@@ -25,7 +25,6 @@ namespace BongrimWallpaper
             Process[] p = Process.GetProcessesByName("BongrimWallpaper");
             if (p.Length > 1 ) {
                 IntPtr hWnd = FindWindow(null, "봉림고 바탕화면");
-                MessageBox.Show(hWnd.ToString());
                 if (!hWnd.Equals(IntPtr.Zero)){
                     ShowWindowAsync(hWnd, 1);
                 }

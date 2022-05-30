@@ -96,7 +96,7 @@
             this.startup_check.AutoSize = true;
             this.startup_check.Location = new System.Drawing.Point(531, 12);
             this.startup_check.Name = "startup_check";
-            this.startup_check.Size = new System.Drawing.Size(106, 19);
+            this.startup_check.Size = new System.Drawing.Size(158, 29);
             this.startup_check.TabIndex = 10;
             this.startup_check.Text = "컴터 킬때 실행";
             this.startup_check.UseVisualStyleBackColor = true;
@@ -106,7 +106,7 @@
             // 
             this.notifyicon.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyicon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyicon.Icon")));
-            this.notifyicon.Text = "SchoolWallpaper";
+            this.notifyicon.Text = "봉림고 바탕화면";
             this.notifyicon.Visible = true;
             this.notifyicon.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
@@ -120,27 +120,27 @@
             this.contextMenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 100);
             // 
             // 시작ToolStripMenuItem
             // 
             this.시작ToolStripMenuItem.Name = "시작ToolStripMenuItem";
-            this.시작ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.시작ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
             this.시작ToolStripMenuItem.Text = "시작";
             this.시작ToolStripMenuItem.Click += new System.EventHandler(this.시작ToolStripMenuItem_Click);
             // 
             // 중지ToolStripMenuItem
             // 
+            this.중지ToolStripMenuItem.Enabled = false;
             this.중지ToolStripMenuItem.Name = "중지ToolStripMenuItem";
-            this.중지ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.중지ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
             this.중지ToolStripMenuItem.Text = "중지";
             this.중지ToolStripMenuItem.Click += new System.EventHandler(this.중지ToolStripMenuItem_Click);
-            this.중지ToolStripMenuItem.Enabled = false;
             // 
             // 종료ToolStripMenuItem
             // 
             this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
-            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
             this.종료ToolStripMenuItem.Text = "종료";
             this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
             // 
@@ -150,7 +150,7 @@
             this.timetable_path_box.Location = new System.Drawing.Point(89, 10);
             this.timetable_path_box.Name = "timetable_path_box";
             this.timetable_path_box.ReadOnly = true;
-            this.timetable_path_box.Size = new System.Drawing.Size(316, 23);
+            this.timetable_path_box.Size = new System.Drawing.Size(316, 31);
             this.timetable_path_box.TabIndex = 12;
             // 
             // timetable_path_btn
@@ -168,7 +168,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 15);
+            this.label1.Size = new System.Drawing.Size(108, 25);
             this.label1.TabIndex = 14;
             this.label1.Text = "시간표 파일";
             // 
