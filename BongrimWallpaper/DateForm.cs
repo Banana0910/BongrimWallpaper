@@ -127,13 +127,8 @@ namespace BongrimWallpaper
 
         private void dateVisibleCheck_CheckedChanged(object sender, EventArgs e)
         {
-            if (dateVisibleCheck.Checked) {
-                groupBox2.Enabled = true;
-                groupBox3.Enabled = true;
-            } else {
-                groupBox2.Enabled = false;
-                groupBox3.Enabled = false;
-            }
+            fontGroup.Enabled = dateVisibleCheck.Checked;
+            dateGroup.Enabled = dateVisibleCheck.Checked;
         }
 
         private void xBar_Scroll(object sender, EventArgs e)

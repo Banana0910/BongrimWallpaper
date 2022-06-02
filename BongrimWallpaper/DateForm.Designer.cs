@@ -40,10 +40,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.sizeBox = new System.Windows.Forms.TextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.fontGroup = new System.Windows.Forms.GroupBox();
             this.colorBox = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.dateGroup = new System.Windows.Forms.GroupBox();
             this.dateOutputLbl = new System.Windows.Forms.Label();
             this.testBtn = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,8 +54,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.fontGroup.SuspendLayout();
+            this.dateGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // previewBox
@@ -173,21 +173,21 @@
             this.sizeBox.Size = new System.Drawing.Size(41, 23);
             this.sizeBox.TabIndex = 11;
             // 
-            // groupBox2
+            // fontGroup
             // 
-            this.groupBox2.Controls.Add(this.colorBox);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.sizeBox);
-            this.groupBox2.Controls.Add(this.setFontBtn);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.fontBox);
-            this.groupBox2.Location = new System.Drawing.Point(448, 33);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(272, 90);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "글꼴";
+            this.fontGroup.Controls.Add(this.colorBox);
+            this.fontGroup.Controls.Add(this.label7);
+            this.fontGroup.Controls.Add(this.label1);
+            this.fontGroup.Controls.Add(this.sizeBox);
+            this.fontGroup.Controls.Add(this.setFontBtn);
+            this.fontGroup.Controls.Add(this.label2);
+            this.fontGroup.Controls.Add(this.fontBox);
+            this.fontGroup.Location = new System.Drawing.Point(448, 33);
+            this.fontGroup.Name = "fontGroup";
+            this.fontGroup.Size = new System.Drawing.Size(272, 90);
+            this.fontGroup.TabIndex = 12;
+            this.fontGroup.TabStop = false;
+            this.fontGroup.Text = "글꼴";
             // 
             // colorBox
             // 
@@ -207,18 +207,18 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "색";
             // 
-            // groupBox3
+            // dateGroup
             // 
-            this.groupBox3.Controls.Add(this.dateOutputLbl);
-            this.groupBox3.Controls.Add(this.testBtn);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.dateFormatBox);
-            this.groupBox3.Location = new System.Drawing.Point(448, 129);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(272, 99);
-            this.groupBox3.TabIndex = 13;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "날짜 유형";
+            this.dateGroup.Controls.Add(this.dateOutputLbl);
+            this.dateGroup.Controls.Add(this.testBtn);
+            this.dateGroup.Controls.Add(this.label3);
+            this.dateGroup.Controls.Add(this.dateFormatBox);
+            this.dateGroup.Location = new System.Drawing.Point(448, 129);
+            this.dateGroup.Name = "dateGroup";
+            this.dateGroup.Size = new System.Drawing.Size(272, 99);
+            this.dateGroup.TabIndex = 13;
+            this.dateGroup.TabStop = false;
+            this.dateGroup.Text = "날짜 유형";
             // 
             // dateOutputLbl
             // 
@@ -286,8 +286,8 @@
             this.ClientSize = new System.Drawing.Size(725, 362);
             this.Controls.Add(this.dateVisibleCheck);
             this.Controls.Add(this.saveBtn);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.dateGroup);
+            this.Controls.Add(this.fontGroup);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -304,10 +304,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.fontGroup.ResumeLayout(false);
+            this.fontGroup.PerformLayout();
+            this.dateGroup.ResumeLayout(false);
+            this.dateGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,8 +326,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox sizeBox;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox fontGroup;
+        private System.Windows.Forms.GroupBox dateGroup;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox dateFormatBox;
         private System.Windows.Forms.Button saveBtn;

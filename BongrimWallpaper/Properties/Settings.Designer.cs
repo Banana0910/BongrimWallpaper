@@ -12,7 +12,7 @@ namespace BongrimWallpaper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -544,12 +544,13 @@ namespace BongrimWallpaper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.DateTime weekLastDate {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int weekLastWeek {
             get {
-                return ((global::System.DateTime)(this["weekLastDate"]));
+                return ((int)(this["weekLastWeek"]));
             }
             set {
-                this["weekLastDate"] = value;
+                this["weekLastWeek"] = value;
             }
         }
         

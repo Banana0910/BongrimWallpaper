@@ -367,11 +367,11 @@ namespace BongrimWallpaper
                 }
             }
             if (config.weekVisible) {
-                DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                if ((now - config.weekLastDate).Days > 1 && now.DayOfWeek == DayOfWeek.Monday) {
+                int dayOfYear = DateTime.Now.DayOfYear;
+                if (dayOfYear != config.weekLastWeek) {
                     for (int i = 0; i < config.weekLastNums.Length; i++)
                         config.weekLastNums[i] = (config.weekLastNums[i] + config.weekLastNums.Length) % config.students.Count;
-                    config.weekLastDate = now;
+                    config.weekLastWeek = dayOfYear;
                     config.Save();
                 }
                 string text = "주번 : ";

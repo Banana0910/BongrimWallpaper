@@ -54,6 +54,7 @@ namespace BongrimWallpaper
             
             studentList.Items.Add(studentBox.Text);
             studentBox.Clear();
+            refresh_preview();
         }
 
         private void studentDelBtn_Click(object sender, EventArgs e)
@@ -97,6 +98,7 @@ namespace BongrimWallpaper
             if (e.KeyChar == (char)Keys.Enter) {
                 e.Handled = true;
                 studentAddBtn_Click(sender, e);
+                refresh_preview();
             }
         }
 
@@ -107,6 +109,7 @@ namespace BongrimWallpaper
                 font = fd.Font;
                 fontBox.Text = fd.Font.Name;
                 sizeBox.Text = fd.Font.Size.ToString();
+                refresh_preview();
             }
         }
 
@@ -115,6 +118,7 @@ namespace BongrimWallpaper
             ColorDialog cd = new ColorDialog() { Color = colorBox.BackColor };
             if (cd.ShowDialog() == DialogResult.OK) {
                 colorBox.BackColor = cd.Color;
+                refresh_preview();
             }
         }
 
@@ -176,11 +180,11 @@ namespace BongrimWallpaper
 
             font = Properties.Settings.Default.weekFont;
             colorBox.BackColor = Properties.Settings.Default.weekColor;
-            nums = Properties.Settings.Default.weekLastNums;
             var list = Properties.Settings.Default.students;
             foreach (string s in list) {
                 studentList.Items.Add(s);
             }
+            nums = Properties.Settings.Default.weekLastNums;
             weekCountBox.Value = nums.Length;
 
             fontBox.Text = font.Name;
@@ -203,7 +207,7 @@ namespace BongrimWallpaper
                 Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
                 Properties.Settings.Default.weekVisible = true;
                 Properties.Settings.Default.weekLastNums = nums;
-                Properties.Settings.Default.weekLastDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                Properties.Settings.Default.weekLastWeek = DateTime.Now.DayOfYear;
             } else {
                 Properties.Settings.Default.weekVisible = false;
             }
@@ -248,9 +252,10 @@ namespace BongrimWallpaper
                 return;
             }
 
+            int startNum = nums[0];
             nums = new int[(int)weekCountBox.Value];
             for (int i = 0; i < nums.Length; i++) {
-                nums[i] = i;
+                nums[i] = (startNum + i) % studentList.Items.Count;
             }
 
             refresh_preview();

@@ -135,8 +135,8 @@
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" /&gt;</Value>
     </Setting>
-    <Setting Name="weekLastDate" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="weekLastWeek" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="weekVisible" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
