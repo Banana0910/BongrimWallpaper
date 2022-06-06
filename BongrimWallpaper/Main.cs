@@ -66,8 +66,19 @@ namespace BongrimWallpaper
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
             return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
+        
+        private int getNowWeekCount() {
+            int weekCount = 0;
+            DateTime today = DateTime.Today;
+            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
+                DateTime d = new DateTime(today.Year, today.Month, i);
+                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
+                if (d == today) return weekCount;  
+            } 
+            return -1;
+        }
 
-       private List<string[]> get_meal() {
+        private List<string[]> get_meal() {
             try {
                 List<string[]> output = new List<string[]>();
                 WebClient wc = new WebClient();
@@ -367,11 +378,11 @@ namespace BongrimWallpaper
                 }
             }
             if (config.weekVisible) {
-                int dayOfYear = DateTime.Now.DayOfYear;
-                if (dayOfYear != config.weekLastWeek) {
+                int weekCount = getNowWeekCount();
+                if (weekCount != config.weekLastWeek) {
                     for (int i = 0; i < config.weekLastNums.Length; i++)
                         config.weekLastNums[i] = (config.weekLastNums[i] + config.weekLastNums.Length) % config.students.Count;
-                    config.weekLastWeek = dayOfYear;
+                    config.weekLastWeek = weekCount;
                     config.Save();
                 }
                 string text = "주번 : ";

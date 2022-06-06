@@ -40,6 +40,17 @@ namespace BongrimWallpaper
             previewBox.Image = image;
         }
 
+        private int getNowWeekCount() {
+            int weekCount = 0;
+            DateTime today = DateTime.Today;
+            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
+                DateTime d = new DateTime(today.Year, today.Month, i);
+                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
+                if (d == today) return weekCount;  
+            } 
+            return -1;
+        }
+
         private void studentAddBtn_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(studentBox.Text)) {
@@ -207,7 +218,7 @@ namespace BongrimWallpaper
                 Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
                 Properties.Settings.Default.weekVisible = true;
                 Properties.Settings.Default.weekLastNums = nums;
-                Properties.Settings.Default.weekLastWeek = DateTime.Now.DayOfYear;
+                Properties.Settings.Default.weekLastWeek = getNowWeekCount();
             } else {
                 Properties.Settings.Default.weekVisible = false;
             }
@@ -252,7 +263,7 @@ namespace BongrimWallpaper
                 return;
             }
 
-            int startNum = nums[0];
+            int startNum = (nums.Length > 0) ? nums[0] : 0;
             nums = new int[(int)weekCountBox.Value];
             for (int i = 0; i < nums.Length; i++) {
                 nums[i] = (startNum + i) % studentList.Items.Count;
