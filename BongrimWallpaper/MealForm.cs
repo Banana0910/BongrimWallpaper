@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Net;
 using System.Drawing.Text;
 using System.Text;
-using hap = HtmlAgilityPack;
+using System.Xml;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
@@ -23,34 +23,33 @@ namespace BongrimWallpaper
             InitializeComponent();
         }
 
+        private string[] trimMeal(string target) {
+            string[] output = Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br/>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n');
+            int outputLength = output.Length;
+            for (int i = 0; i < outputLength; i++) output[i] = output[i].Trim();
+            return output;
+        }
+
         private List<string[]> get_meal() {
             try {
                 List<string[]> output = new List<string[]>();
-                WebClient wc = new WebClient();
-                wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
-                wc.QueryString.Add("dietDate", DateTime.Now.ToString("yyyy/MM/dd"));
-                wc.Encoding = Encoding.UTF8;
-                string html = wc.DownloadString("http://bongrim-h.gne.go.kr/bongrim-h/dv/dietView/selectDietDetailView.do");
+                WebClient wc = new WebClient() {
+                    QueryString = new System.Collections.Specialized.NameValueCollection() {
+                        { "KEY", "f0491ec9a1784e2cb92d2a4070f1392b" },
+                        { "ATPT_OFCDC_SC_CODE", "S10" },
+                        { "SD_SCHUL_CODE", "9010277" },
+                        { "MLSV_YMD", DateTime.Today.ToString("yyyyMMdd") }
+                    },
+                    Encoding = Encoding.UTF8
+                };     
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(wc.DownloadString("https://open.neis.go.kr/hub/mealServiceDietInfo"));
+                if (xmlDoc.GetElementsByTagName("head").Count == 0) return null;
 
-                hap.HtmlDocument htmlDoc = new hap.HtmlDocument();
-                htmlDoc.LoadHtml(html);
+                XmlNodeList meals = xmlDoc.GetElementsByTagName("row");
+                output.Add(trimMeal(meals[0]["DDISH_NM"].InnerText));
+                if (meals.Count > 1) output.Add(trimMeal(meals[1]["DDISH_NM"].InnerText));
 
-                hap.HtmlNode lunch = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='subContent']/div/div[3]/div[2]/table/tbody/tr[2]/td");
-                hap.HtmlNode dinner = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='subContent']/div/div[3]/div[3]/table/tbody/tr[2]/td");
-
-                if (string.IsNullOrWhiteSpace(lunch.InnerHtml.Trim())) {
-                    return null;
-                }
-                output.Add(Regex.Replace(lunch.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n'));
-                for(int i = 0; i < output[0].Length; i++) {
-                    output[0][i] = output[0][i].Trim();
-                }
-                if (dinner != null) {
-                    output.Add(Regex.Replace(dinner.InnerHtml.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n'));
-                    for(int i = 0; i < output[1].Length; i++) {
-                        output[1][i] = output[1][i].Trim();
-                }
-                }
                 return output;
             }
             catch {
