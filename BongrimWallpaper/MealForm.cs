@@ -14,14 +14,11 @@ namespace BongrimWallpaper
 {
     public partial class MealForm : Form
     {
-        Font titleFont;
-        Font contentFont;
-        List<Meal> meals;
-
-        public MealForm()
-        {
-            InitializeComponent();
-        }
+        public MealForm() { InitializeComponent(); }
+        
+        private Font titleFont;
+        private Font contentFont;
+        private List<Meal> meals;
 
         private string[] trimMeal(string target) {
             string[] output = Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br/>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n');
@@ -31,8 +28,8 @@ namespace BongrimWallpaper
         }
 
         private List<Meal> get_meal() {
+            List<Meal> output = new List<Meal>();
             try {
-                List<Meal> output = new List<Meal>();
                 WebClient wc = new WebClient() {
                     QueryString = new System.Collections.Specialized.NameValueCollection() {
                         { "KEY", "f0491ec9a1784e2cb92d2a4070f1392b" },
@@ -44,16 +41,13 @@ namespace BongrimWallpaper
                 };     
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(wc.DownloadString("https://open.neis.go.kr/hub/mealServiceDietInfo"));
-                if (xmlDoc.GetElementsByTagName("head").Count == 0) return null;
+                if (xmlDoc.GetElementsByTagName("head").Count == 0) return output;
 
                 XmlNodeList meals = xmlDoc.GetElementsByTagName("row");
                 foreach (XmlNode meal in meals)
                     output.Add(new Meal(meal["MMEAL_SC_NM"].InnerText, trimMeal(meal["DDISH_NM"].InnerText), meal["CAL_INFO"].InnerText));
                 return output;
-            }
-            catch {
-                return null;
-            }
+            } catch { return output; }
         }
 
         private void refresh_preview() {
@@ -73,148 +67,121 @@ namespace BongrimWallpaper
 
             float mealX = xBar.Value;
             float mealY = (yBar.Maximum - yBar.Value);
-            float contentSpace = (float)contentSpaceBox.Value;
 
-            if (verticalBtn.Checked) {
-                if (alignmentBox.SelectedIndex == 0) {
-                    foreach (Meal meal in meals) {
-                        g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                        foreach (string content in meal.content) {
-                            g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+            if (meals.Count > 0) {
+                float contentSpace = (float)contentSpaceBox.Value;
+                float mealSpace = (float)mealSpaceBox.Value;
+
+                if (verticalBtn.Checked) {
+                    if (alignmentBox.SelectedIndex == 0) {
+                        foreach (Meal meal in meals) {
+                            g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
+                            foreach (string content in meal.content) {
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
+                            }
+                            mealY += mealSpace;
                         }
-                        mealY += (float)mealSpaceBox.Value;
+                    } else if (alignmentBox.SelectedIndex == 1) {
+                        foreach (Meal meal in meals) {
+                            SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
+                            mealX = xBar.Value - (titleSize.Width / 2);
+                            g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX,mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += titleSize.Height;
+                            foreach (string content in meal.content) {
+                                SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
+                                mealX = xBar.Value - (contentSize.Width / 2);
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += contentSize.Height + contentSpace;
+                            }
+                            mealY += mealSpace;
+                        }
+                    } else if (alignmentBox.SelectedIndex == 2) {
+                        foreach (Meal meal in meals) {
+                            SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
+                            mealX = xBar.Value - titleSize.Width;
+                            g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += titleSize.Height;
+                            foreach (string content in meal.content) {
+                                SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
+                                mealX = xBar.Value - contentSize.Width;
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += contentSize.Height + contentSpace;
+                            }
+                            mealY += mealSpace;
+                        }
                     }
-                } else if (alignmentBox.SelectedIndex == 1) {
-                    foreach (Meal meal in meals) {
-                        SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
-                        mealX = xBar.Value - (titleSize.Width / 2);
-                        g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX,mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += titleSize.Height;
-                        foreach (string content in meal.content) {
-                            SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
-                            mealX = xBar.Value - (contentSize.Width / 2);
-                            g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY = contentSize.Height = contentSpace;
+                } else {
+                    if (alignmentBox.SelectedIndex == 0) {
+                        foreach (Meal meal in meals) {
+                            SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
+                            g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += titleSize.Height;
+                            float maxWidth = titleSize.Width;
+                            foreach (string content in meal.content) {
+                                SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += contentSize.Height + contentSpace;
+                                if (contentSize.Width > maxWidth) maxWidth = contentSize.Width;
+                            }
+                            mealX += maxWidth + mealSpace;
+                            mealY = yBar.Maximum - yBar.Value;
                         }
-                        mealY += (float)mealSpaceBox.Value;
-                    }
-                } else if (alignmentBox.SelectedIndex == 2) {
-                    foreach (Meal meal in meals) {
-                        SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
-                        mealX = xBar.Value - titleSize.Width;
-                        g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += titleSize.Height;
-                        foreach (string content in meal.content) {
-                            SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
-                            mealX = xBar.Value - contentSize.Width;
-                            g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += contentSize.Height + contentSpace;
+                    } else if (alignmentBox.SelectedIndex == 1) {
+                        float allWidth = 0f;
+                        int mealCount = meals.Count;
+                        float[] maxWidths = new float[mealCount];
+                        for (int i = 0; i < mealCount; i++) {
+                            maxWidths[i] = g.MeasureString($"{meals[i].title} [{meals[i].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
+                            foreach (string content in meals[i].content) {
+                                float width = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic).Width;
+                                if (width > maxWidths[i]) maxWidths[i] = width;
+                            }
+                            allWidth += maxWidths[i];
                         }
-                        mealY += (float)mealSpaceBox.Value;
+
+                        allWidth += mealSpace * (mealCount - 1);
+                        mealX = xBar.Value - (allWidth / 2);
+
+                        for (int i = 0; i < mealCount; i++) {
+                            SizeF titleSize = g.MeasureString($"{meals[i].title} [{meals[i].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
+                            float pivot = mealX + (maxWidths[i] / 2);
+                            mealX = pivot - (titleSize.Width / 2);
+                            g.DrawString($"{meals[i].title} [{meals[i].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += titleSize.Height;
+                            foreach (string content in meals[i].content) {
+                                SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericDefault);
+                                mealX = pivot - (contentSize.Width / 2);
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += contentSize.Height + contentSpace;
+                            }
+                            mealX = mealSpace + pivot + (titleSize.Width / 2);
+                            mealY = yBar.Maximum - yBar.Value;
+                        }
+                    } else {
+                        foreach (Meal meal in meals) {
+                            SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", titleFont, baseSize, StringFormat.GenericTypographic);
+                            float startX = mealX;
+                            float maxWidth = titleSize.Width;
+                            mealX = startX - titleSize.Width;
+                            g.DrawString($"{meal.title} [{meal.calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                            mealY += titleSize.Height;
+                            foreach (string content in meal.content) {
+                                SizeF contentSize = g.MeasureString(content, contentFont, baseSize, StringFormat.GenericTypographic);
+                                mealX = startX - contentSize.Width;
+                                g.DrawString(content, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += contentSize.Height + contentSpace;
+                                if (contentSize.Width > maxWidth) maxWidth = contentSize.Width;
+                            }
+                            mealX = startX - (maxWidth + mealSpace);
+                            mealY = yBar.Maximum - yBar.Value;
+                        }
                     }
                 }
             } else {
-                if (alignmentBox.SelectedIndex == 0) {
-                    int[] maxs = new int[3];
-                    foreach (Meal meal in meals) {
-                        
-                    }
-                    if (meals.Count >= 1) {
-                        g.DrawString($"{meals[0].title} [{meals[0].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                        foreach(string meal in meals[0].content) {
-                            g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                        }
-
-                        if (meals.Count == 2) {
-                            float maxWidth = g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                            foreach (string meal in meals[0].content) { 
-                                float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                                if (maxWidth < width) maxWidth = width;
-                            }
-                            mealX = xBar.Value + maxWidth + (float)mealSpaceBox.Value;
-                            mealY = yBar.Maximum - yBar.Value;
-                            g.DrawString($"{meals[1].title} [{meals[1].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                            foreach (string meal in meals[1].content) {
-                                g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                                mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                            }
-                        }
-                    } else {
-                        g.DrawString("급식이 없습니다..", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
-                    }
-                } else if (alignmentBox.SelectedIndex == 1) {
-                    if (meals.Count >= 1) {
-                        float halfMealSpace = (float)mealSpaceBox.Value / 2;
-                        float maxWidth = g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                        foreach (string meal in meals[0].content) {
-                            float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                            if (maxWidth < width) maxWidth = width;
-                        }
-                        mealX = xBar.Value - (halfMealSpace + (maxWidth / 2) + g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width / 2);
-                        g.DrawString($"{meals[0].title} [{meals[0].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                        foreach(string meal in meals[0].content) {
-                            mealX = xBar.Value - (halfMealSpace + (maxWidth / 2) + g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width / 2);
-                            g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                        }
-                        if (meals.Count == 2) {
-                            maxWidth = g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                            foreach (string meal in meals[1].content) {
-                                float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                                if (maxWidth < width) maxWidth = width;
-                            }
-                            mealY = yBar.Maximum - yBar.Value;
-                            mealX = xBar.Value + (halfMealSpace + (maxWidth / 2) - (g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width / 2));
-                            g.DrawString($"{meals[1].title} [{meals[1].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                            foreach (string meal in meals[1].content) {
-                                mealX = xBar.Value + (halfMealSpace + (maxWidth / 2) - (g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width / 2));
-                                g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                                mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                            }
-                        }
-                    } else {
-                        g.DrawString("급식이 없습니다..", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
-                    }
-                } else {
-                    if (meals.Count >= 1) {
-                        mealX = xBar.Value - g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                        g.DrawString($"{meals[0].title} [{meals[0].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        mealY += g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                        foreach(string meal in meals[0].content) {
-                            mealX = xBar.Value - g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                            g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                        }
-                        if (meals.Count == 2) {
-                            float maxWidth = g.MeasureString($"{meals[0].title} [{meals[0].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                            foreach (string meal in meals[0].content) {
-                                float width = g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                                if (maxWidth< width) maxWidth = width;
-                            }
-                            float space = maxWidth + (float)mealSpaceBox.Value;
-                            mealY = yBar.Maximum - yBar.Value;
-                            mealX = xBar.Value - space - g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Width;
-                            g.DrawString($"{meals[1].title} [{meals[1].calorie}]", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            mealY += g.MeasureString($"{meals[1].title} [{meals[1].calorie}]", titleFont, baseSize, StringFormat.GenericTypographic).Height;
-                            foreach (string meal in meals[1].content) {
-                                mealX = xBar.Value - space - g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Width;
-                                g.DrawString(meal, contentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                                mealY += g.MeasureString(meal, contentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
-                            }
-                        }
-                    } else {
-                        g.DrawString("급식이 없습니다..", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height));
-                    }
-                }
+                g.DrawString("급식이 없습니다", titleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
-
             previewBox.Image = image;
         }
 

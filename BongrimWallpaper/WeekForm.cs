@@ -10,13 +10,10 @@ namespace BongrimWallpaper
 {
     public partial class WeekForm : Form
     {
-        public WeekForm()
-        {
-            InitializeComponent();
-        }
+        public WeekForm() { InitializeComponent(); }
         
-        Font font;
-        int[] nums;
+        private Font font;
+        private int[] nums;
 
         private void refresh_preview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);

@@ -11,10 +11,7 @@ namespace BongrimWallpaper
     {
         private Font font;
 
-        public DateForm()
-        {
-            InitializeComponent();
-        }
+        public DateForm() { InitializeComponent(); }
 
         private void refresh_preview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);

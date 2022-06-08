@@ -9,10 +9,7 @@ namespace BongrimWallpaper
 {
     public partial class ClassForm : Form
     {
-        public ClassForm()
-        {
-            InitializeComponent();
-        }
+        public ClassForm() { InitializeComponent(); }
 
         Font mainFont;
         Font subFont;
