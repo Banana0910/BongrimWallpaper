@@ -34,7 +34,6 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.contentColorBox = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
-            this.contentSpaceBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.contentSizeBox = new System.Windows.Forms.TextBox();
@@ -56,6 +55,7 @@
             this.yBar = new System.Windows.Forms.TrackBar();
             this.xBar = new System.Windows.Forms.TrackBar();
             this.layoutGroup = new System.Windows.Forms.GroupBox();
+            this.mealSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -67,7 +67,7 @@
             this.alignmentBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.mealVisibleCheck = new System.Windows.Forms.CheckBox();
-            this.mealSpaceBox = new System.Windows.Forms.NumericUpDown();
+            this.contentSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.fontGroup.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -77,6 +77,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
             this.layoutGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mealSpaceBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contentSpaceBox)).BeginInit();
             this.SuspendLayout();
             // 
             // saveBtn
@@ -102,9 +103,9 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.contentSpaceBox);
             this.groupBox4.Controls.Add(this.contentColorBox);
             this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Controls.Add(this.contentSpaceBox);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.contentSizeBox);
@@ -135,14 +136,6 @@
             this.label8.Size = new System.Drawing.Size(19, 15);
             this.label8.TabIndex = 14;
             this.label8.Text = "색";
-            // 
-            // contentSpaceBox
-            // 
-            this.contentSpaceBox.BackColor = System.Drawing.Color.White;
-            this.contentSpaceBox.Location = new System.Drawing.Point(59, 56);
-            this.contentSpaceBox.Name = "contentSpaceBox";
-            this.contentSpaceBox.Size = new System.Drawing.Size(41, 23);
-            this.contentSpaceBox.TabIndex = 12;
             // 
             // label6
             // 
@@ -368,6 +361,20 @@
             this.layoutGroup.TabStop = false;
             this.layoutGroup.Text = "레이아웃";
             // 
+            // mealSpaceBox
+            // 
+            this.mealSpaceBox.Location = new System.Drawing.Point(227, 71);
+            this.mealSpaceBox.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.mealSpaceBox.Name = "mealSpaceBox";
+            this.mealSpaceBox.Size = new System.Drawing.Size(55, 23);
+            this.mealSpaceBox.TabIndex = 18;
+            this.mealSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.mealSpaceBox.ValueChanged += new System.EventHandler(this.mealSpaceBox_ValueChanged);
+            // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Gray;
@@ -473,19 +480,13 @@
             this.mealVisibleCheck.UseVisualStyleBackColor = true;
             this.mealVisibleCheck.CheckedChanged += new System.EventHandler(this.mealVisibleCheck_CheckedChanged);
             // 
-            // mealSpaceBox
+            // contentSpaceBox
             // 
-            this.mealSpaceBox.Location = new System.Drawing.Point(227, 71);
-            this.mealSpaceBox.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.mealSpaceBox.Name = "mealSpaceBox";
-            this.mealSpaceBox.Size = new System.Drawing.Size(55, 23);
-            this.mealSpaceBox.TabIndex = 18;
-            this.mealSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.mealSpaceBox.ValueChanged += new System.EventHandler(this.mealSpaceBox_ValueChanged);
+            this.contentSpaceBox.Location = new System.Drawing.Point(59, 57);
+            this.contentSpaceBox.Name = "contentSpaceBox";
+            this.contentSpaceBox.Size = new System.Drawing.Size(69, 23);
+            this.contentSpaceBox.TabIndex = 16;
+            this.contentSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // MealForm
             // 
@@ -521,6 +522,7 @@
             this.layoutGroup.ResumeLayout(false);
             this.layoutGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mealSpaceBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contentSpaceBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -537,7 +539,6 @@
         private System.Windows.Forms.TextBox titleFontBox;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox contentSpaceBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox contentSizeBox;
@@ -567,5 +568,6 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.CheckBox mealVisibleCheck;
         private System.Windows.Forms.NumericUpDown mealSpaceBox;
+        private System.Windows.Forms.NumericUpDown contentSpaceBox;
     }
 }
