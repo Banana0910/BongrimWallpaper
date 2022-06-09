@@ -583,6 +583,7 @@ namespace BongrimWallpaper
                 if (verifyTimeTable()) {
                     Properties.Settings.Default.timetablePath = ofd.FileName;
                     MessageBox.Show("올바른 시간표 파일로 확인이 되었음!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Properties.Settings.Default.Save();
                 } else {
                     MessageBox.Show("내가 원하는 양식의 시간표가 아님..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     timetablePathBox.Clear();
