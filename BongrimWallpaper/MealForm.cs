@@ -27,7 +27,7 @@ namespace BongrimWallpaper
             return output;
         }
 
-        private List<Meal> get_meal() {
+        private List<Meal> getMeal() {
             List<Meal> output = new List<Meal>();
             try {
                 WebClient wc = new WebClient() {
@@ -50,7 +50,7 @@ namespace BongrimWallpaper
             } catch { return output; }
         }
 
-        private void refresh_preview() {
+        private void refreshPreview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
@@ -187,23 +187,24 @@ namespace BongrimWallpaper
 
         private void MealForm_Load(object sender, EventArgs e)
         {
-            int screen_width = Screen.PrimaryScreen.Bounds.Width;
-            int screen_height = Screen.PrimaryScreen.Bounds.Height;
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            int screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
-            if (screen_width >= screen_height) {
-                int height = (screen_height*previewBox.Size.Width)/screen_width;
+            if (screenWidth >= screenHeight) {
+                int height = (screenHeight*previewBox.Size.Width)/screenWidth;
                 previewBox.Size = new Size(previewBox.Size.Width, height);
                 yBar.Height = height+25;
                 yCenterBtn.Location = new Point(yCenterBtn.Location.X, yBar.Height+40);
             } else {
-                int width = (screen_width*previewBox.Size.Height)/screen_height;
+                int width = (screenWidth*previewBox.Size.Height)/screenHeight;
                 previewBox.Size = new Size(width,previewBox.Size.Height);
                 xBar.Width = width+25;
                 xCenterBtn.Location = new Point(xBar.Width+40, xCenterBtn.Location.Y);
             }
 
-            xBar.Maximum = screen_width;
-            yBar.Maximum = screen_height;
+            xBar.Maximum = screenWidth;
+            yBar.Maximum = screenHeight;
+
             try {
                 xBar.Value = (int)Properties.Settings.Default.mealX;
                 yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.mealY;
@@ -212,7 +213,7 @@ namespace BongrimWallpaper
                 yBar.Value = yBar.Maximum;
             }
 
-            meals = get_meal();
+            meals = getMeal();
             titleFont = Properties.Settings.Default.mealTitleFont;
             contentFont = Properties.Settings.Default.mealContentFont;
             titleColorBox.BackColor = Properties.Settings.Default.mealTitleColor;
@@ -229,83 +230,7 @@ namespace BongrimWallpaper
             contentFontBox.Text = contentFont.Name;
             contentSizeBox.Text = contentFont.Size.ToString();
 
-            refresh_preview();
-        }
-
-        private void xCenterBtn_Click(object sender, EventArgs e)
-        {
-            xBar.Value = xBar.Maximum / 2;
-            refresh_preview();
-        }
-
-        private void yCenterBtn_Click(object sender, EventArgs e)
-        {
-            yBar.Value = yBar.Maximum / 2;
-            refresh_preview();
-        }
-
-        private void yBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void xBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void titleColorBox_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = titleColorBox.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                titleColorBox.BackColor = cd.Color;
-                refresh_preview();
-            }
-        }
-
-        private void contentColorBox_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = contentColorBox.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                contentColorBox.BackColor = cd.Color;
-                refresh_preview();
-            }
-        }
-
-        private void setContentFontBtn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            fd.Font = contentFont;
-            if (fd.ShowDialog() == DialogResult.OK) {
-                contentFont = fd.Font;
-                contentFontBox.Text = fd.Font.Name;
-                contentSizeBox.Text = fd.Font.Size.ToString();
-                refresh_preview();
-            }
-        }
-
-        private void setTitleFontBtn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            fd.Font = titleFont;
-            if (fd.ShowDialog() == DialogResult.OK) {
-                titleFont = fd.Font;
-                titleFontBox.Text = fd.Font.Name;
-                titleSizeBox.Text = fd.Font.Size.ToString();
-                refresh_preview();
-            }
-        }
-
-        private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void verticalBtn_CheckedChanged(object sender, EventArgs e)
-        {
-            refresh_preview();
+            refreshPreview();
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -330,6 +255,12 @@ namespace BongrimWallpaper
             MessageBox.Show("저장 되었습니다!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void MealForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string path = Path.Combine(Application.StartupPath, "mealTest.png");
+            if (File.Exists(path)) File.Delete(path);
+        }
+
         private void previewBox_Click(object sender, EventArgs e)
         {
             string path = Path.Combine(Application.StartupPath, "mealTest.png");
@@ -337,22 +268,77 @@ namespace BongrimWallpaper
             Process.Start(path);
         }
 
+        // Change Value Events
+        private void yBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e) { refreshPreview(); }
+
+        private void mealSpaceBox_ValueChanged(object sender, EventArgs e) { refreshPreview(); }
+
+        private void verticalBtn_CheckedChanged(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xCenterBtn_Click(object sender, EventArgs e)
+        {
+            xBar.Value = xBar.Maximum / 2;
+            refreshPreview();
+        }
+
+        private void yCenterBtn_Click(object sender, EventArgs e)
+        {
+            yBar.Value = yBar.Maximum / 2;
+            refreshPreview();
+        }
+
+        private void titleColorBox_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = titleColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                titleColorBox.BackColor = cd.Color;
+                refreshPreview();
+            }
+        }
+
+        private void contentColorBox_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            cd.Color = contentColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                contentColorBox.BackColor = cd.Color;
+                refreshPreview();
+            }
+        }
+
+        private void setContentFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = contentFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                contentFont = fd.Font;
+                contentFontBox.Text = fd.Font.Name;
+                contentSizeBox.Text = fd.Font.Size.ToString();
+                refreshPreview();
+            }
+        }
+
+        private void setTitleFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = titleFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                titleFont = fd.Font;
+                titleFontBox.Text = fd.Font.Name;
+                titleSizeBox.Text = fd.Font.Size.ToString();
+                refreshPreview();
+            }
+        }
+
         private void mealVisibleCheck_CheckedChanged(object sender, EventArgs e)
         {
             fontGroup.Enabled = mealVisibleCheck.Checked;
             layoutGroup.Enabled = mealVisibleCheck.Checked;
-        }
-
-        private void mealSpaceBox_ValueChanged(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void MealForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (File.Exists(Path.Combine(Application.StartupPath, "mealTest.png"))) {
-                File.Delete(Path.Combine(Application.StartupPath, "mealTest.png"));
-            }
         }
     }
 }

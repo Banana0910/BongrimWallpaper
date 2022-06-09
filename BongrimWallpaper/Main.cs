@@ -11,7 +11,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using System.Drawing.Text;
 
@@ -31,39 +30,32 @@ namespace BongrimWallpaper
             "15:20", "15:35", 
             "16:25"
         };
-        private bool force_exit = false;
-        private string backup_wallpaper = "";
-        private int now_wallpaper = -2;
+        private bool forceExit = false;
+        private string backupWallpaper = "";
+        private int nowWallpaper = -2;
 
-        //배경설정 메서드
+        // Methods
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-        public static void set_wallpaper(string path) { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }
+        public static void setWallpaper(string path) { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }
 
-        //json 관련 메서드
-        private bool verify_json() {
-            if (timetable_path_box.Text == "") return false;
-            string jsonString = File.ReadAllText(timetable_path_box.Text);
+        private bool verifyTimeTable() {
+            if (timetablePathBox.Text == "") return false;
+            string jsonString = File.ReadAllText(timetablePathBox.Text);
             try {
                 TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
                 if (timetable.weekday.Count == 5) {
                     for (int i = 0; i < 5; i++) {
-                        if (i != 2) {
-                            if (timetable.weekday[i].name.Length != 7 || timetable.weekday[i].teacher.Length != 7)
-                                return false;
-                        } else {
-                            if (timetable.weekday[i].name.Length != 6 || timetable.weekday[i].teacher.Length != 6)
-                                return false;
-                        }
+                        if (i != 2) { if (timetable.weekday[i].name.Length != 7 || timetable.weekday[i].teacher.Length != 7) return false; } 
+                        else { if (timetable.weekday[i].name.Length != 6 || timetable.weekday[i].teacher.Length != 6) return false; }
                     }
                 } else { return false; }
                 return true;
-            } catch {
-                return false;
-            }
+            } catch { return false; }
         }
-        private Subject get_timetable() {
-            string jsonString = File.ReadAllText(timetable_path_box.Text);
+
+        private Subject getTimeTable() {
+            string jsonString = File.ReadAllText(timetablePathBox.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
             return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
@@ -86,7 +78,7 @@ namespace BongrimWallpaper
             return output;
         }
 
-        private List<Meal> get_meal() {
+        private List<Meal> getMeal() {
             List<Meal> output = new List<Meal>();
             try {
                 WebClient wc = new WebClient() {
@@ -109,15 +101,35 @@ namespace BongrimWallpaper
             } catch { return output; }
         }
 
-        private void draw_base(ref Graphics g, Bitmap image, int lesson)
-        {
+        private void updateState(bool state) {
+            startBtn.Text = (state) ? "중지" : "시작";
+            menu.Items[0].Enabled = !state;
+            menu.Items[1].Enabled = state;
+            if (state) {
+                if (string.IsNullOrWhiteSpace(timetablePathBox.Text)) {
+                    MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                backupWallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
+                checker.Start();   
+            } else {
+                nowWallpaper = -2;
+                setWallpaper(backupWallpaper);
+                checker.Stop();
+            }
+        }
+
+        // Draw Methods
+        private void drawBase(Properties.Settings config, ref Graphics g, Bitmap image, int lesson) {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            if (Properties.Settings.Default.backgroundPath.Length > 0) g.DrawImage(Image.FromFile(Properties.Settings.Default.backgroundPath), 0, 0, image.Width, image.Height);
+
+            string backgroundPath = config.backgroundPath;
+            if (backgroundPath.Length > 0) g.DrawImage(Image.FromFile(backgroundPath), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
 
             SizeF baseSize = new SizeF(image.Width, image.Height);
-            Properties.Settings config = Properties.Settings.Default;
+            
             if (config.dateVisible) {
                 string today = DateTime.Now.ToString(config.dateFormat);
                 SizeF dateSize = g.MeasureString(today, config.dateFont, baseSize, StringFormat.GenericTypographic);
@@ -131,7 +143,7 @@ namespace BongrimWallpaper
                 SolidBrush mealTitleSB = new SolidBrush(config.mealTitleColor);
                 SolidBrush mealContentSB = new SolidBrush(config.mealContentColor);
 
-                List<Meal> meals = get_meal();
+                List<Meal> meals = getMeal();
                 float mealX = config.mealX;
                 float mealY = config.mealY;
 
@@ -139,22 +151,24 @@ namespace BongrimWallpaper
                     float contentSpace = config.mealContentSpace;
                     float mealSpace = config.mealSpace;
 
-                    if (config.mealLayout == 0) {
-                        if (config.mealAlignment == 0) {
+                    if (config.mealLayout == 0) { // Vertical
+                        if (config.mealAlignment == 0) { // Left Alignmet
                             foreach (Meal meal in meals) {
-                                g.DrawString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
-                                mealY += g.MeasureString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
+                                string title = $"{meal.title} [{meal.calorie}]";
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                mealY += g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic).Height;
                                 foreach (string content in meal.content) {
                                     g.DrawString(content, config.mealContentFont, mealContentSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                     mealY += g.MeasureString(content, config.mealContentFont, baseSize, StringFormat.GenericTypographic).Height + contentSpace;
                                 }
                                 mealY += mealSpace;
                             }
-                        } else if (config.mealAlignment == 1) {
+                        } else if (config.mealAlignment == 1) { // Center Alignment
                             foreach (Meal meal in meals) {
-                                SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
+                                string title = $"{meal.title} [{meal.calorie}]";
+                                SizeF titleSize = g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
                                 mealX = config.mealX- (titleSize.Width / 2);
-                                g.DrawString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX,mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX,mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                 mealY += titleSize.Height;
                                 foreach (string content in meal.content) {
                                     SizeF contentSize = g.MeasureString(content, config.mealContentFont, baseSize, StringFormat.GenericTypographic);
@@ -164,11 +178,12 @@ namespace BongrimWallpaper
                                 }
                                 mealY += mealSpace;
                             }
-                        } else if (config.mealAlignment == 2) {
+                        } else if (config.mealAlignment == 2) { // Right Alignment
                             foreach (Meal meal in meals) {
-                                SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
+                                string title = $"{meal.title} [{meal.calorie}]";
+                                SizeF titleSize = g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
                                 mealX = config.mealX- titleSize.Width;
-                                g.DrawString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                 mealY += titleSize.Height;
                                 foreach (string content in meal.content) {
                                     SizeF contentSize = g.MeasureString(content, config.mealContentFont, baseSize, StringFormat.GenericTypographic);
@@ -179,11 +194,12 @@ namespace BongrimWallpaper
                                 mealY += mealSpace;
                             }
                         }
-                    } else {
-                        if (config.mealAlignment == 0) {
+                    } else { // Horizontal
+                        if (config.mealAlignment == 0) { // Left Alignment
                             foreach (Meal meal in meals) {
-                                SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
-                                g.DrawString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                string title = $"{meal.title} [{meal.calorie}]";
+                                SizeF titleSize = g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                 mealY += titleSize.Height;
                                 float maxWidth = titleSize.Width;
                                 foreach (string content in meal.content) {
@@ -195,7 +211,7 @@ namespace BongrimWallpaper
                                 mealX += maxWidth + mealSpace;
                                 mealY = config.mealY;
                             }
-                        } else if (config.mealAlignment == 1) {
+                        } else if (config.mealAlignment == 1) { // Center Alignment
                             float allWidth = 0f;
                             int mealCount = meals.Count;
                             float[] maxWidths = new float[mealCount];
@@ -209,13 +225,14 @@ namespace BongrimWallpaper
                             }
 
                             allWidth += mealSpace * (mealCount - 1);
-                            mealX = config.mealX- (allWidth / 2);
+                            mealX = config.mealX - (allWidth / 2);
 
                             for (int i = 0; i < mealCount; i++) {
-                                SizeF titleSize = g.MeasureString($"{meals[i].title} [{meals[i].calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
+                                string title = $"{meals[i].title} [{meals[i].calorie}]";
+                                SizeF titleSize = g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
                                 float pivot = mealX + (maxWidths[i] / 2);
                                 mealX = pivot - (titleSize.Width / 2);
-                                g.DrawString($"{meals[i].title} [{meals[i].calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                 mealY += titleSize.Height;
                                 foreach (string content in meals[i].content) {
                                     SizeF contentSize = g.MeasureString(content, config.mealContentFont, baseSize, StringFormat.GenericDefault);
@@ -226,13 +243,14 @@ namespace BongrimWallpaper
                                 mealX = mealSpace + pivot + (titleSize.Width / 2);
                                 mealY = config.mealY;
                             }
-                        } else {
+                        } else if (config.mealAlignment == 2) { // Right Alignment
                             foreach (Meal meal in meals) {
-                                SizeF titleSize = g.MeasureString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
+                                string title = $"{meal.title} [{meal.calorie}]";
+                                SizeF titleSize = g.MeasureString(title, config.mealTitleFont, baseSize, StringFormat.GenericTypographic);
                                 float startX = mealX;
                                 float maxWidth = titleSize.Width;
                                 mealX = startX - titleSize.Width;
-                                g.DrawString($"{meal.title} [{meal.calorie}]", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
+                                g.DrawString(title, config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                                 mealY += titleSize.Height;
                                 foreach (string content in meal.content) {
                                     SizeF contentSize = g.MeasureString(content, config.mealContentFont, baseSize, StringFormat.GenericTypographic);
@@ -250,8 +268,9 @@ namespace BongrimWallpaper
                     g.DrawString("급식이 없습니다", config.mealTitleFont, mealTitleSB, new RectangleF(mealX, mealY, image.Width, image.Height), StringFormat.GenericTypographic);
                 }
             }
+            
             if (config.listVisible) {
-                Subject subject = get_timetable();
+                Subject subject = getTimeTable();
                 int subjectCount = subject.name.Length;
                 List<SizeF> subjectSizes = new List<SizeF>();
 
@@ -300,7 +319,7 @@ namespace BongrimWallpaper
                     }
                 } else {
                     foreach (string s in subject.name) subjectSizes.Add(g.MeasureString(s, config.listSubjectFont, baseSize, StringFormat.GenericTypographic));
-                    if (config.mealLayout == 0) {
+                    if (config.listLayout == 0) {
                         float allHeight = subjectSizes.Sum(s => s.Height);
                         float listX = config.listX;
                         float listY = config.listY - ((allHeight + (subjectCount - 1) * listSpace) / 2);
@@ -319,6 +338,7 @@ namespace BongrimWallpaper
                     }
                 }
             }
+
             if (config.weekVisible) {
                 int weekCount = getNowWeekCount();
                 if (weekCount != config.weekLastWeek) {
@@ -335,16 +355,15 @@ namespace BongrimWallpaper
                 g.DrawString(text, config.weekFont, sb, config.weekX, config.weekY, StringFormat.GenericTypographic);
             }
         }
-        private void set_subject(int lesson) {
+
+        private void drawSubject(int lesson) {
+            Properties.Settings config = Properties.Settings.Default;
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image, lesson);
-            
-            //현재 시간 및 과목 그리기
-            Properties.Settings config = Properties.Settings.Default;
+            drawBase(config, ref g, image, lesson);
             if (config.classVisible) {
-                Subject subject = get_timetable();
+                Subject subject = getTimeTable();
                 string time = $"{times[lesson * 2 - 1]} ~ {times[lesson * 2]}";
 
                 SolidBrush mainSB = new SolidBrush(config.classMainColor);
@@ -357,10 +376,9 @@ namespace BongrimWallpaper
                 SizeF teacherSize = g.MeasureString(subject.teacher[lesson - 1], config.classSubFont, baseSize, StringFormat.GenericTypographic);
                 SizeF timeSize = g.MeasureString(time, config.classSubFont, baseSize);
 
-                if (config.classAlignment == 0) {
+                if (config.classAlignment == 0) { // Left Alignment
                     float classX = config.classX;
-                    float classY = config.classY - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    float classY = config.classY - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
 
                     g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classY += lessonSize.Height;
@@ -374,11 +392,10 @@ namespace BongrimWallpaper
                     classY += teacherSize.Height;
 
                     g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else if (config.classAlignment == 1) {
+                } else if (config.classAlignment == 1) { // Center Alignment
                     float classX = config.classX - (lessonSize.Width / 2);
-                    float classY = config.classY - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
-                    
+                    float classY = config.classY - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+
                     g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = config.classX - ((nameSize.Width + teacherSize.Width + 10) / 2);
                     classY += lessonSize.Height;
@@ -392,11 +409,9 @@ namespace BongrimWallpaper
                     classY += teacherSize.Height;
 
                     g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else {
+                } else { // Right Alignment
                     float classX = config.classX - lessonSize.Width;
-                    float classY = config.classY - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
-
+                    float classY = config.classY - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
                     g.DrawString($"{lesson} 교시", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = config.classX - nameSize.Width;
                     classY += lessonSize.Height;
@@ -412,34 +427,23 @@ namespace BongrimWallpaper
                     g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                 }
             }
-
             //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            wallpaper_preview.ImageLocation = save_path;
-            set_wallpaper(save_path);
+            wallpaperPreview.ImageLocation = save_path;
+            setWallpaper(save_path);
         }
 
-        private void set_break(int lesson) {
+        private void drawBreak(int lesson) {
+            Properties.Settings config = Properties.Settings.Default;
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image, lesson);
-
-            Properties.Settings config = Properties.Settings.Default;
-
+            drawBase(config, ref g, image, lesson);
             if (config.classVisible) {
-                string title = "쉬는 시간";
-                switch (lesson) {
-                    case 5:
-                        title = "점심 시간";
-                        break;
-                    case 7:
-                        title = "청소 시간";
-                        break;
-                }
+                string title = (lesson == 7) ? "청소 시간" : (lesson == 5) ? "점심 시간" : "쉬는 시간";
 
-                Subject subject = get_timetable();
+                Subject subject = getTimeTable();
                 string time = $"{times[lesson * 2 - 2]} ~ {times[lesson * 2 - 1]}";
 
                 SolidBrush mainSB = new SolidBrush(config.classMainColor);
@@ -490,220 +494,135 @@ namespace BongrimWallpaper
                     g.DrawString(time, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                 }
             }
-
-            //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            wallpaper_preview.ImageLocation = save_path;
-            set_wallpaper(save_path);
+            wallpaperPreview.ImageLocation = save_path;
+            setWallpaper(save_path);
         }
 
-        private void set_event(string text) {
+        private void drawEvent(string text) {
+            Properties.Settings config = Properties.Settings.Default;
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
-            draw_base(ref g, image, -1);
-
-            Properties.Settings config = Properties.Settings.Default;
-
+            drawBase(config, ref g, image, -1);
             if (config.classVisible) {
                 SolidBrush sb = new SolidBrush(config.classMainColor);
                 SizeF textSize = g.MeasureString(text, config.classMainFont, new SizeF(image.Width, image.Height), StringFormat.GenericTypographic);
-                float classX = config.classX;
+                int alignment = config.classAlignment;
+                float classX = (alignment == 1) ? config.classX - (textSize.Width / 2) : ((alignment== 2) ? config.classX - textSize.Width : config.classX);
                 float classY = config.classY- (textSize.Height / 2); 
-                if (config.classAlignment == 1) {
-                    classX = config.classX - (textSize.Width / 2);
-                } else if (config.classAlignment == 2) {
-                    classX = config.classX - textSize.Width;
-                }
-
                 g.DrawString(text, config.classMainFont, sb, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
-
-            //저장 및 적용
             string save_path = Path.Combine(Application.StartupPath, "wallpaper.png");
             image.Save(save_path, System.Drawing.Imaging.ImageFormat.Png);
-            wallpaper_preview.ImageLocation = save_path;
-            set_wallpaper(save_path);
-        }
-        
-        private void contextUpdate(bool state) {
-            contextMenuStrip1.Items[0].Enabled = !state;
-            contextMenuStrip1.Items[1].Enabled = state;
-        }
-        private void start_btn_Click(object sender, EventArgs e)
-        {
-            if (start_btn.Text == "실행") {
-                if (timetable_path_box.Text == "") {
-                    MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-                checker.Start();
-                start_btn.Text = "중지";
-                contextMenuStrip1.Items[0].Enabled = false;
-                contextMenuStrip1.Items[1].Enabled = true;
-                contextUpdate(true);
-            } else {
-                now_wallpaper = -2;
-                set_wallpaper(backup_wallpaper);
-                checker.Stop();
-                start_btn.Text = "실행";
-                contextUpdate(false);
-            }
+            wallpaperPreview.ImageLocation = save_path;
+            setWallpaper(save_path);
         }
 
-        private void wallpaper_preview_Click(object sender, EventArgs e) {
-            ProcessStartInfo psi = new ProcessStartInfo(wallpaper_preview.ImageLocation);
-            Process.Start(psi);
-        }
-
+        //Interaction Methods
         private void Main_Load(object sender, EventArgs e) {
-            timetable_path_box.Text = Properties.Settings.Default.timetablePath;
-            timetable_path_box.Text = (verify_json()) ? timetable_path_box.Text : "";
-            startup_check.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
+            timetablePathBox.Text = Properties.Settings.Default.timetablePath;
+            timetablePathBox.Text = (verifyTimeTable()) ? timetablePathBox.Text : "";
+            startupCheck.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
+            if (!string.IsNullOrEmpty(timetablePathBox.Text)) updateState(true);
+        }
 
-            if (timetable_path_box.Text != "") {
-                backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-                checker.Start();
-                start_btn.Text = "중지";
-                contextUpdate(true);
+        private void Main_FormClosing(object sender, FormClosingEventArgs e) {
+            if (!forceExit) {
+                e.Cancel = true;
+                this.Hide();
             }
         }
 
         private void checker_Tick(object sender, EventArgs e) {
             DateTime now = DateTime.Now;
 
-            if (DateTime.Parse("08:30:00") > now && now_wallpaper != -1) {
-                set_event("조례 및 아침 시간");
-                now_wallpaper = -1;
+            if (DateTime.Parse("08:30:00") > now && nowWallpaper != -1) {
+                drawEvent("조례 시간");
+                nowWallpaper = -1;
             }
 
             int loopCount = (now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14;
             for (int i = 1; i <= loopCount; i++) {
-                if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && now_wallpaper != i) {
-                    if (i % 2 == 1) set_break((i + 1) / 2);
-                    else set_subject(i / 2);
-                    now_wallpaper = i;
+                if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && nowWallpaper != i) {
+                    if (i % 2 == 1) drawBreak((i + 1) / 2);
+                    else drawSubject(i / 2);
+                    nowWallpaper = i;
                     return;
                 }
             }
 
             bool condition = (DateTime.Parse(times[12]) <= now && now.DayOfWeek == DayOfWeek.Wednesday) ||
-                (DateTime.Parse(times[14]) <= now && now.DayOfWeek != DayOfWeek.Wednesday) && now_wallpaper != 15;
+                (DateTime.Parse(times[14]) <= now && now.DayOfWeek != DayOfWeek.Wednesday) && nowWallpaper != 15;
             if (condition) {
-                set_event("종례 시간");
-                now_wallpaper = 15;
+                drawEvent("종례 시간");
+                nowWallpaper = 15;
             }
         }
 
-        private void main_wall_btn_Click(object sender, EventArgs e) {
+        private void mainWallpaperBtn_Click(object sender, EventArgs e) {
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "Image Files (*.jpg *.jpeg *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
             if (fd.ShowDialog() == DialogResult.OK) {
                 Properties.Settings.Default.backgroundPath = fd.FileName;
                 Properties.Settings.Default.Save();
-                wallpaper_preview.ImageLocation = fd.FileName;
+                wallpaperPreview.ImageLocation = fd.FileName;
             }
         }
 
-        private void Main_FormClosing(object sender, FormClosingEventArgs e) {
-            if (!force_exit) {
-                e.Cancel = true;
-                this.Hide();
-            }
-        }
-
-        private void startup_check_CheckedChanged(object sender, EventArgs e)
-        {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (startup_check.Checked) {
-                key.SetValue(this.Text, Application.ExecutablePath);
-            } else {
-                key.DeleteValue(this.Text);
-            }
-        }
-
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e) {
-            this.Show();    
-            this.Activate();
-        }
-
-        private void 종료ToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (backup_wallpaper.Length > 0) set_wallpaper(backup_wallpaper);
-            force_exit = true;
-            Application.Exit();
-        }
-
-        private void timetable_path_btn_Click(object sender, EventArgs e)
+        private void timetablePathBtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog() {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                FileName = (timetable_path_box.Text != "") ? timetable_path_box.Text : Application.StartupPath
+                FileName = (string.IsNullOrWhiteSpace(timetablePathBox.Text)) ? Application.StartupPath : timetablePathBox.Text
             };
 
             if (ofd.ShowDialog() == DialogResult.OK) {
-                timetable_path_box.Text = ofd.FileName;
-                if (verify_json()) {
+                timetablePathBox.Text = ofd.FileName;
+                if (verifyTimeTable()) {
                     Properties.Settings.Default.timetablePath = ofd.FileName;
                     MessageBox.Show("올바른 시간표 파일로 확인이 되었음!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 } else {
                     MessageBox.Show("내가 원하는 양식의 시간표가 아님..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    timetable_path_box.Text = "";
+                    timetablePathBox.Clear();
                 }
             }
         }
-        private void openClassFormBtn_Click(object sender, EventArgs e)
+
+        private void startupCheck_CheckedChanged(object sender, EventArgs e)
         {
-            ClassForm cf = new ClassForm();
-            cf.Show();
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (startupCheck.Checked) key.SetValue(this.Text, Application.ExecutablePath);
+            else key.DeleteValue(this.Text);
         }
 
-        private void openMealFormBtn_Click(object sender, EventArgs e)
-        {
-            MealForm mf = new MealForm();
-            mf.Show();
+        private void wallpaperPreview_Click(object sender, EventArgs e) {
+            ProcessStartInfo psi = new ProcessStartInfo(wallpaperPreview.ImageLocation);
+            Process.Start(psi);
         }
 
-        private void openDateFormBtn_Click(object sender, EventArgs e)
-        {
-            DateForm df = new DateForm();
-            df.Show();
+        private void notifyIcon_DoubleClick(object sender, EventArgs e) {
+            this.Show();    
+            this.Activate();
         }
 
-        private void openListFormBtn_Click(object sender, EventArgs e)
-        {
-            ListForm lf = new ListForm();
-            lf.Show();
-        }
+        private void startBtn_Click(object sender, EventArgs e) { updateState((startBtn.Text == "실행")); }
 
-        private void 시작ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (timetable_path_box.Text == "") {
-                MessageBox.Show("먼저 시간표 파일을 선택해주셈", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            backup_wallpaper = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop").GetValue("WallPaper").ToString();
-            checker.Start();
-            start_btn.Text = "중지";
-            contextMenuStrip1.Items[0].Enabled = false;
-            contextMenuStrip1.Items[1].Enabled = true;
-            contextUpdate(true);
-        }
+        // Option Form Open Events
+        private void openClassFormBtn_Click(object sender, EventArgs e) { (new ClassForm()).Show(); }
+        private void openMealFormBtn_Click(object sender, EventArgs e) { (new MealForm()).Show(); }
+        private void openDateFormBtn_Click(object sender, EventArgs e) { (new DateForm()).Show(); }
+        private void openListFormBtn_Click(object sender, EventArgs e) { (new ListForm()).Show(); }
+        private void openWeekFormBtn_Click(object sender, EventArgs e) { (new WeekForm()).Show(); }
 
-        private void 중지ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            now_wallpaper = -2;
-            set_wallpaper(backup_wallpaper);
-            checker.Stop();
-            start_btn.Text = "실행";
-            contextUpdate(false);
-        }
-
-        private void openWeekFormBtn_Click(object sender, EventArgs e)
-        {
-            WeekForm wf = new WeekForm();
-            wf.Show();
+        // Menu Click Events
+        private void menuStart_Click(object sender, EventArgs e) { updateState(true); }
+        private void menuStop_Click(object sender, EventArgs e) { updateState(false); }
+        private void menuClose_Click(object sender, EventArgs e) {
+            if (backupWallpaper.Length > 0) setWallpaper(backupWallpaper);
+            forceExit = true;
+            Application.Exit();
         }
     }
 

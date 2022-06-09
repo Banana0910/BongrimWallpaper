@@ -30,145 +30,149 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.wallpaper_preview = new System.Windows.Forms.PictureBox();
-            this.start_btn = new System.Windows.Forms.Button();
+            this.wallpaperPreview = new System.Windows.Forms.PictureBox();
+            this.startBtn = new System.Windows.Forms.Button();
             this.checker = new System.Windows.Forms.Timer(this.components);
-            this.main_wall_btn = new System.Windows.Forms.Button();
-            this.startup_check = new System.Windows.Forms.CheckBox();
+            this.mainWallpaperBtn = new System.Windows.Forms.Button();
+            this.startupCheck = new System.Windows.Forms.CheckBox();
             this.notifyicon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.시작ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.중지ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.종료ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timetable_path_box = new System.Windows.Forms.TextBox();
-            this.timetable_path_btn = new System.Windows.Forms.Button();
+            this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.timetablePathBox = new System.Windows.Forms.TextBox();
+            this.timetablePathBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.openClassFormBtn = new System.Windows.Forms.Button();
             this.openMealFormBtn = new System.Windows.Forms.Button();
             this.openDateFormBtn = new System.Windows.Forms.Button();
             this.openListFormBtn = new System.Windows.Forms.Button();
             this.openWeekFormBtn = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.wallpaper_preview)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wallpaperPreview)).BeginInit();
+            this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // wallpaper_preview
+            // wallpaperPreview
             // 
-            this.wallpaper_preview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.wallpaper_preview.InitialImage = null;
-            this.wallpaper_preview.Location = new System.Drawing.Point(14, 39);
-            this.wallpaper_preview.Name = "wallpaper_preview";
-            this.wallpaper_preview.Size = new System.Drawing.Size(480, 270);
-            this.wallpaper_preview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.wallpaper_preview.TabIndex = 0;
-            this.wallpaper_preview.TabStop = false;
-            this.wallpaper_preview.Click += new System.EventHandler(this.wallpaper_preview_Click);
+            this.wallpaperPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.wallpaperPreview.InitialImage = null;
+            this.wallpaperPreview.Location = new System.Drawing.Point(14, 39);
+            this.wallpaperPreview.Name = "wallpaperPreview";
+            this.wallpaperPreview.Size = new System.Drawing.Size(480, 270);
+            this.wallpaperPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.wallpaperPreview.TabIndex = 0;
+            this.wallpaperPreview.TabStop = false;
+            this.wallpaperPreview.Click += new System.EventHandler(this.wallpaperPreview_Click);
             // 
-            // start_btn
+            // startBtn
             // 
-            this.start_btn.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.start_btn.Location = new System.Drawing.Point(14, 315);
-            this.start_btn.Name = "start_btn";
-            this.start_btn.Size = new System.Drawing.Size(480, 23);
-            this.start_btn.TabIndex = 1;
-            this.start_btn.Text = "실행";
-            this.start_btn.UseVisualStyleBackColor = true;
-            this.start_btn.Click += new System.EventHandler(this.start_btn_Click);
+            this.startBtn.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.startBtn.Location = new System.Drawing.Point(14, 315);
+            this.startBtn.Name = "startBtn";
+            this.startBtn.Size = new System.Drawing.Size(480, 23);
+            this.startBtn.TabIndex = 1;
+            this.startBtn.Text = "실행";
+            this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
             // checker
             // 
             this.checker.Interval = 1000;
             this.checker.Tick += new System.EventHandler(this.checker_Tick);
             // 
-            // main_wall_btn
+            // mainWallpaperBtn
             // 
-            this.main_wall_btn.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            this.main_wall_btn.Location = new System.Drawing.Point(14, 344);
-            this.main_wall_btn.Name = "main_wall_btn";
-            this.main_wall_btn.Size = new System.Drawing.Size(480, 23);
-            this.main_wall_btn.TabIndex = 7;
-            this.main_wall_btn.Text = "뒷 배경";
-            this.main_wall_btn.UseVisualStyleBackColor = true;
-            this.main_wall_btn.Click += new System.EventHandler(this.main_wall_btn_Click);
+            this.mainWallpaperBtn.Font = new System.Drawing.Font("맑은 고딕", 9F);
+            this.mainWallpaperBtn.Location = new System.Drawing.Point(14, 344);
+            this.mainWallpaperBtn.Name = "mainWallpaperBtn";
+            this.mainWallpaperBtn.Size = new System.Drawing.Size(480, 23);
+            this.mainWallpaperBtn.TabIndex = 7;
+            this.mainWallpaperBtn.Text = "뒷 배경";
+            this.mainWallpaperBtn.UseVisualStyleBackColor = true;
+            this.mainWallpaperBtn.Click += new System.EventHandler(this.mainWallpaperBtn_Click);
             // 
-            // startup_check
+            // startupCheck
             // 
-            this.startup_check.AutoSize = true;
-            this.startup_check.Location = new System.Drawing.Point(531, 12);
-            this.startup_check.Name = "startup_check";
-            this.startup_check.Size = new System.Drawing.Size(158, 29);
-            this.startup_check.TabIndex = 10;
-            this.startup_check.Text = "컴터 킬때 실행";
-            this.startup_check.UseVisualStyleBackColor = true;
-            this.startup_check.CheckedChanged += new System.EventHandler(this.startup_check_CheckedChanged);
+            this.startupCheck.AutoSize = true;
+            this.startupCheck.Location = new System.Drawing.Point(531, 12);
+            this.startupCheck.Name = "startupCheck";
+            this.startupCheck.Size = new System.Drawing.Size(106, 19);
+            this.startupCheck.TabIndex = 10;
+            this.startupCheck.Text = "컴터 킬때 실행";
+            this.startupCheck.UseVisualStyleBackColor = true;
+            this.startupCheck.CheckedChanged += new System.EventHandler(this.startupCheck_CheckedChanged);
             // 
             // notifyicon
             // 
-            this.notifyicon.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyicon.ContextMenuStrip = this.menu;
             this.notifyicon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyicon.Icon")));
             this.notifyicon.Text = "봉림고 바탕화면";
             this.notifyicon.Visible = true;
-            this.notifyicon.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            this.notifyicon.DoubleClick += new System.EventHandler(this.notifyIcon_DoubleClick);
             // 
-            // contextMenuStrip1
+            // menu
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.시작ToolStripMenuItem,
-            this.중지ToolStripMenuItem,
-            this.종료ToolStripMenuItem});
-            this.contextMenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 100);
+            this.menu.BackColor = System.Drawing.Color.White;
+            this.menu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStart,
+            this.menuStop,
+            this.menuClose});
+            this.menu.Name = "contextMenuStrip1";
+            this.menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.menu.Size = new System.Drawing.Size(181, 92);
             // 
-            // 시작ToolStripMenuItem
+            // menuStart
             // 
-            this.시작ToolStripMenuItem.Name = "시작ToolStripMenuItem";
-            this.시작ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
-            this.시작ToolStripMenuItem.Text = "시작";
-            this.시작ToolStripMenuItem.Click += new System.EventHandler(this.시작ToolStripMenuItem_Click);
+            this.menuStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.menuStart.Name = "menuStart";
+            this.menuStart.Size = new System.Drawing.Size(180, 22);
+            this.menuStart.Text = "시작";
+            this.menuStart.Click += new System.EventHandler(this.menuStart_Click);
             // 
-            // 중지ToolStripMenuItem
+            // menuStop
             // 
-            this.중지ToolStripMenuItem.Enabled = false;
-            this.중지ToolStripMenuItem.Name = "중지ToolStripMenuItem";
-            this.중지ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
-            this.중지ToolStripMenuItem.Text = "중지";
-            this.중지ToolStripMenuItem.Click += new System.EventHandler(this.중지ToolStripMenuItem_Click);
+            this.menuStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.menuStop.Enabled = false;
+            this.menuStop.Name = "menuStop";
+            this.menuStop.Size = new System.Drawing.Size(180, 22);
+            this.menuStop.Text = "중지";
+            this.menuStop.Click += new System.EventHandler(this.menuStop_Click);
             // 
-            // 종료ToolStripMenuItem
+            // menuClose
             // 
-            this.종료ToolStripMenuItem.Name = "종료ToolStripMenuItem";
-            this.종료ToolStripMenuItem.Size = new System.Drawing.Size(120, 32);
-            this.종료ToolStripMenuItem.Text = "종료";
-            this.종료ToolStripMenuItem.Click += new System.EventHandler(this.종료ToolStripMenuItem_Click);
+            this.menuClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.menuClose.Name = "menuClose";
+            this.menuClose.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.menuClose.Size = new System.Drawing.Size(180, 22);
+            this.menuClose.Text = "종료";
+            this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
             // 
-            // timetable_path_box
+            // timetablePathBox
             // 
-            this.timetable_path_box.BackColor = System.Drawing.Color.White;
-            this.timetable_path_box.Location = new System.Drawing.Point(89, 10);
-            this.timetable_path_box.Name = "timetable_path_box";
-            this.timetable_path_box.ReadOnly = true;
-            this.timetable_path_box.Size = new System.Drawing.Size(316, 31);
-            this.timetable_path_box.TabIndex = 12;
+            this.timetablePathBox.BackColor = System.Drawing.Color.White;
+            this.timetablePathBox.Location = new System.Drawing.Point(89, 10);
+            this.timetablePathBox.Name = "timetablePathBox";
+            this.timetablePathBox.ReadOnly = true;
+            this.timetablePathBox.Size = new System.Drawing.Size(316, 23);
+            this.timetablePathBox.TabIndex = 12;
             // 
-            // timetable_path_btn
+            // timetablePathBtn
             // 
-            this.timetable_path_btn.Location = new System.Drawing.Point(419, 10);
-            this.timetable_path_btn.Name = "timetable_path_btn";
-            this.timetable_path_btn.Size = new System.Drawing.Size(75, 23);
-            this.timetable_path_btn.TabIndex = 13;
-            this.timetable_path_btn.Text = "경로";
-            this.timetable_path_btn.UseVisualStyleBackColor = true;
-            this.timetable_path_btn.Click += new System.EventHandler(this.timetable_path_btn_Click);
+            this.timetablePathBtn.Location = new System.Drawing.Point(419, 10);
+            this.timetablePathBtn.Name = "timetablePathBtn";
+            this.timetablePathBtn.Size = new System.Drawing.Size(75, 23);
+            this.timetablePathBtn.TabIndex = 13;
+            this.timetablePathBtn.Text = "경로";
+            this.timetablePathBtn.UseVisualStyleBackColor = true;
+            this.timetablePathBtn.Click += new System.EventHandler(this.timetablePathBtn_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(108, 25);
+            this.label1.Size = new System.Drawing.Size(71, 15);
             this.label1.TabIndex = 14;
             this.label1.Text = "시간표 파일";
             // 
@@ -233,12 +237,12 @@
             this.Controls.Add(this.openMealFormBtn);
             this.Controls.Add(this.openClassFormBtn);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.timetable_path_btn);
-            this.Controls.Add(this.timetable_path_box);
-            this.Controls.Add(this.startup_check);
-            this.Controls.Add(this.main_wall_btn);
-            this.Controls.Add(this.wallpaper_preview);
-            this.Controls.Add(this.start_btn);
+            this.Controls.Add(this.timetablePathBtn);
+            this.Controls.Add(this.timetablePathBox);
+            this.Controls.Add(this.startupCheck);
+            this.Controls.Add(this.mainWallpaperBtn);
+            this.Controls.Add(this.wallpaperPreview);
+            this.Controls.Add(this.startBtn);
             this.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -248,8 +252,8 @@
             this.Text = "봉림고 바탕화면";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.wallpaper_preview)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.wallpaperPreview)).EndInit();
+            this.menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,23 +261,23 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox wallpaper_preview;
-        private System.Windows.Forms.Button start_btn;
+        private System.Windows.Forms.PictureBox wallpaperPreview;
+        private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Timer checker;
-        private System.Windows.Forms.Button main_wall_btn;
-        private System.Windows.Forms.CheckBox startup_check;
+        private System.Windows.Forms.Button mainWallpaperBtn;
+        private System.Windows.Forms.CheckBox startupCheck;
         private System.Windows.Forms.NotifyIcon notifyicon;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 종료ToolStripMenuItem;
-        private System.Windows.Forms.TextBox timetable_path_box;
-        private System.Windows.Forms.Button timetable_path_btn;
+        private System.Windows.Forms.ContextMenuStrip menu;
+        private System.Windows.Forms.ToolStripMenuItem menuClose;
+        private System.Windows.Forms.TextBox timetablePathBox;
+        private System.Windows.Forms.Button timetablePathBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button openClassFormBtn;
         private System.Windows.Forms.Button openMealFormBtn;
         private System.Windows.Forms.Button openDateFormBtn;
         private System.Windows.Forms.Button openListFormBtn;
-        private System.Windows.Forms.ToolStripMenuItem 중지ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 시작ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuStop;
+        private System.Windows.Forms.ToolStripMenuItem menuStart;
         private System.Windows.Forms.Button openWeekFormBtn;
     }
 }

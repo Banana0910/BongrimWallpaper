@@ -11,10 +11,10 @@ namespace BongrimWallpaper
     {
         public ClassForm() { InitializeComponent(); }
 
-        Font mainFont;
-        Font subFont;
+        private Font mainFont;
+        private Font subFont;
 
-        private void refresh_preview() {
+        private void refreshPreview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
@@ -29,20 +29,20 @@ namespace BongrimWallpaper
 
             SizeF baseSize = new SizeF(image.Width, image.Height);
 
+            // Example Values
             int lesson = 3;
             string subjectName = "영어";
             string teacher = "정주은";
             string time = "12:34 ~ 56:78";
 
-            if (testCaseBox.SelectedIndex == 0) {
+            if (testCaseBox.SelectedIndex == 0) { // drawSubject
                 SizeF lessonSize = g.MeasureString($"{lesson} 교시", subFont, baseSize);
                 SizeF nameSize = g.MeasureString(subjectName, mainFont, baseSize, StringFormat.GenericTypographic);
                 SizeF teacherSize = g.MeasureString(teacher, subFont, baseSize, StringFormat.GenericTypographic);
                 SizeF timeSize = g.MeasureString(time, subFont, baseSize);
-                if (alignmentBox.SelectedIndex == 0) {
+                if (alignmentBox.SelectedIndex == 0) { // Left Alignment
                     float classX = xBar.Value;
-                    float classY = (yBar.Maximum - yBar.Value) - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    float classY = (yBar.Maximum - yBar.Value) - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
 
                     g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classY += lessonSize.Height;
@@ -56,10 +56,9 @@ namespace BongrimWallpaper
                     classY += teacherSize.Height;
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else if (alignmentBox.SelectedIndex == 1) {
+                } else if (alignmentBox.SelectedIndex == 1) { // Center Alignment
                     float classX = xBar.Value - (lessonSize.Width / 2);
-                    float classY = (yBar.Maximum - yBar.Value) - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    float classY = (yBar.Maximum - yBar.Value) - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
                     
                     g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = xBar.Value - ((nameSize.Width + teacherSize.Width) / 2);
@@ -74,10 +73,9 @@ namespace BongrimWallpaper
                     classY += teacherSize.Height;
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else {
+                } else if (alignmentBox.SelectedIndex == 2) { // Right Alignment
                     float classX = xBar.Value - lessonSize.Width;
-                    float classY = (yBar.Maximum - yBar.Value) - 
-                        ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
+                    float classY = (yBar.Maximum - yBar.Value) - ((lessonSize.Height + nameSize.Height + timeSize.Height) / 2);
 
                     g.DrawString($"{lesson} 교시", subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = xBar.Value - nameSize.Width;
@@ -93,14 +91,14 @@ namespace BongrimWallpaper
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                 }
-            } else if (testCaseBox.SelectedIndex == 1) {
+            } else if (testCaseBox.SelectedIndex == 1) { // darwBreak
                 string title = "쉬는 시간";
 
                 SizeF nextSize = g.MeasureString($"Next {subjectName}({teacher})", subFont, baseSize);
                 SizeF titleSize = g.MeasureString(title, mainFont, baseSize, StringFormat.GenericTypographic);
                 SizeF timeSize = g.MeasureString(time, subFont, baseSize);
                 
-                if (alignmentBox.SelectedIndex == 0) {
+                if (alignmentBox.SelectedIndex == 0) { // Left Alignment
                     float classX = xBar.Value;
                     float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
@@ -111,7 +109,7 @@ namespace BongrimWallpaper
                     classY += titleSize.Height;
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else if (alignmentBox.SelectedIndex == 1) {
+                } else if (alignmentBox.SelectedIndex == 1) { // Center Alignment
                     float classX = xBar.Value - (nextSize.Width / 2);
                     float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
@@ -124,7 +122,7 @@ namespace BongrimWallpaper
                     classY += titleSize.Height;
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
-                } else {
+                } else if (alignmentBox.SelectedIndex == 2) { // Right Alignment
                     float classX = xBar.Value - nextSize.Width;
                     float classY = (yBar.Maximum - yBar.Value) - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
@@ -138,42 +136,37 @@ namespace BongrimWallpaper
 
                     g.DrawString(time, subFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                 }
-            } else {
+            } else if (testCaseBox.SelectedIndex == 2) { // drawEvent
                 string text = "종례 시간";
                 SolidBrush sb = new SolidBrush(mainColorBox.BackColor);
                 SizeF textSize = g.MeasureString(text, mainFont, baseSize, StringFormat.GenericTypographic);
-                float classX = xBar.Value;
+                int alignment = alignmentBox.SelectedIndex;
+                float classX = (alignment == 1) ? xBar.Value - (textSize.Width / 2) : ((alignment== 2) ? xBar.Value - textSize.Width : xBar.Value);
                 float classY = (yBar.Maximum - yBar.Value) - (textSize.Height / 2); 
-                if (alignmentBox.SelectedIndex == 1) {
-                    classX = xBar.Value - (textSize.Width / 2);
-                } else if (alignmentBox.SelectedIndex == 2) {
-                    classX = xBar.Value - textSize.Width;
-                }
-
                 g.DrawString(text, mainFont, sb, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
             }
             previewBox.Image = image;
         }
 
-        private void ClassForm_Load(object sender, EventArgs e)
-        {
-            int screen_width = Screen.PrimaryScreen.Bounds.Width;
-            int screen_height = Screen.PrimaryScreen.Bounds.Height;
+        private void ClassForm_Load(object sender, EventArgs e) {
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            int screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
-            if (screen_width >= screen_height) {
-                int height = (screen_height*previewBox.Size.Width)/screen_width;
+            if (screenWidth >= screenHeight) {
+                int height = (screenHeight*previewBox.Size.Width)/screenWidth;
                 previewBox.Size = new Size(previewBox.Size.Width, height);
                 yBar.Height = height+25;
                 yCenterBtn.Location = new Point(yCenterBtn.Location.X, yBar.Height+40);
             } else {
-                int width = (screen_width*previewBox.Size.Height)/screen_height;
+                int width = (screenWidth*previewBox.Size.Height)/screenHeight;
                 previewBox.Size = new Size(width,previewBox.Size.Height);
                 xBar.Width = width+25;
                 xCenterBtn.Location = new Point(xBar.Width+40, xCenterBtn.Location.Y);
             }
 
-            xBar.Maximum = screen_width;
-            yBar.Maximum = screen_height;
+            xBar.Maximum = screenWidth;
+            yBar.Maximum = screenHeight;
+
             try {
                 xBar.Value = (int)Properties.Settings.Default.classX;
                 yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.classY;
@@ -195,7 +188,7 @@ namespace BongrimWallpaper
             subFontBox.Text = subFont.Name;
             subSizeBox.Text = subFont.Size.ToString();
 
-            refresh_preview();
+            refreshPreview();
         }
 
         private void previewBox_Click(object sender, EventArgs e)
@@ -203,85 +196,6 @@ namespace BongrimWallpaper
             string path = Path.Combine(Application.StartupPath, "classTest.png");
             previewBox.Image.Save(path);
             Process.Start(path);
-        }
-
-        private void mainColorBox_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = mainColorBox.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                mainColorBox.BackColor = cd.Color;
-                refresh_preview();
-            }
-        }
-
-        private void subColorBox_Click(object sender, EventArgs e)
-        {
-            ColorDialog cd = new ColorDialog();
-            cd.Color = subColorBox.BackColor;
-            if (cd.ShowDialog() == DialogResult.OK) {
-                subColorBox.BackColor = cd.Color;
-                refresh_preview();
-            }
-        }
-
-        private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void setMainFontBtn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            fd.Font = mainFont;
-            if (fd.ShowDialog() == DialogResult.OK) {
-                if (subFont.Size > fd.Font.Size) {
-                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                mainFont = fd.Font;
-                mainFontBox.Text = fd.Font.Name;
-                mainSizeBox.Text = fd.Font.Size.ToString();
-                refresh_preview();
-            }
-        }
-
-        private void setSubFontBtn_Click(object sender, EventArgs e)
-        {
-            FontDialog fd = new FontDialog();
-            fd.Font = subFont;
-            if (fd.ShowDialog() == DialogResult.OK) {
-                if (mainFont.Size < fd.Font.Size) {
-                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                subFont = fd.Font;
-                subFontBox.Text = fd.Font.Name;
-                subSizeBox.Text = fd.Font.Size.ToString();
-                refresh_preview();
-            }
-        }
-
-        private void xBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void yBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void xCenterBtn_Click(object sender, EventArgs e)
-        {
-            xBar.Value = xBar.Maximum / 2;
-            refresh_preview();
-        }
-
-        private void yCenterBtn_Click(object sender, EventArgs e)
-        {
-            yBar.Value = yBar.Maximum / 2;
-            refresh_preview();
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -301,6 +215,33 @@ namespace BongrimWallpaper
             Properties.Settings.Default.Save();
             MessageBox.Show("저장 되었습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information); 
         }
+        
+        private void ClassForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string path = Path.Combine(Application.StartupPath, "classTest.png");
+            if (File.Exists(path)) File.Delete(path);
+        }
+
+        // Change Value Events
+        private void testCaseBox_SelectedIndexChanged(object sender, EventArgs e) { refreshPreview(); }
+
+        private void alignmentBox_SelectedIndexChanged(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void yBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xCenterBtn_Click(object sender, EventArgs e)
+        {
+            xBar.Value = xBar.Maximum / 2;
+            refreshPreview();
+        }
+
+        private void yCenterBtn_Click(object sender, EventArgs e)
+        {
+            yBar.Value = yBar.Maximum / 2;
+            refreshPreview();
+        }
 
         private void classVisibleCheck_CheckedChanged(object sender, EventArgs e)
         {
@@ -308,15 +249,55 @@ namespace BongrimWallpaper
             layoutGroup.Enabled = classVisibleCheck.Checked;
         }
 
-        private void testCaseBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void mainColorBox_Click(object sender, EventArgs e)
         {
-            refresh_preview();
+            ColorDialog cd = new ColorDialog();
+            cd.Color = mainColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                mainColorBox.BackColor = cd.Color;
+                refreshPreview();
+            }
         }
 
-        private void ClassForm_FormClosed(object sender, FormClosedEventArgs e)
+        private void subColorBox_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Path.Combine(Application.StartupPath, "classTest.png"))) {
-                File.Delete(Path.Combine(Application.StartupPath, "classTest.png"));
+            ColorDialog cd = new ColorDialog();
+            cd.Color = subColorBox.BackColor;
+            if (cd.ShowDialog() == DialogResult.OK) {
+                subColorBox.BackColor = cd.Color;
+                refreshPreview();
+            }
+        }
+
+        private void setMainFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = mainFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                if (subFont.Size > fd.Font.Size) {
+                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                mainFont = fd.Font;
+                mainFontBox.Text = fd.Font.Name;
+                mainSizeBox.Text = fd.Font.Size.ToString();
+                refreshPreview();
+            }
+        }
+
+        private void setSubFontBtn_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            fd.Font = subFont;
+            if (fd.ShowDialog() == DialogResult.OK) {
+                if (mainFont.Size < fd.Font.Size) {
+                    MessageBox.Show("메인 폰트 크기가 절대 나머지 폰트 크기보다 클 수 없어요!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                subFont = fd.Font;
+                subFontBox.Text = fd.Font.Name;
+                subSizeBox.Text = fd.Font.Size.ToString();
+                refreshPreview();
             }
         }
     }

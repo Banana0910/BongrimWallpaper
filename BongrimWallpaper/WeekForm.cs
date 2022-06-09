@@ -15,7 +15,18 @@ namespace BongrimWallpaper
         private Font font;
         private int[] nums;
 
-        private void refresh_preview() {
+        private int getNowWeekCount() {
+            int weekCount = 0;
+            DateTime today = DateTime.Today;
+            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
+                DateTime d = new DateTime(today.Year, today.Month, i);
+                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
+                if (d == today) return weekCount;  
+            } 
+            return -1;
+        }
+
+        private void refreshPreview() {
             Bitmap image = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             Graphics g = Graphics.FromImage(image);
 
@@ -37,15 +48,126 @@ namespace BongrimWallpaper
             previewBox.Image = image;
         }
 
-        private int getNowWeekCount() {
-            int weekCount = 0;
-            DateTime today = DateTime.Today;
-            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
-                DateTime d = new DateTime(today.Year, today.Month, i);
-                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
-                if (d == today) return weekCount;  
-            } 
-            return -1;
+        private void WeekForm_Load(object sender, EventArgs e)
+        {
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+
+            if (screenWidth >= screenHeight) {
+                int height = (screenHeight*previewBox.Size.Width)/screenWidth;
+                previewBox.Size = new Size(previewBox.Size.Width, height);
+                yBar.Height = height+25;
+                yCenterBtn.Location = new Point(yCenterBtn.Location.X, yBar.Height+40);
+            } else {
+                int width = (screenWidth*previewBox.Size.Height)/screenHeight;
+                previewBox.Size = new Size(width,previewBox.Size.Height);
+                xBar.Width = width+25;
+                xCenterBtn.Location = new Point(xBar.Width+40, xCenterBtn.Location.Y);
+            }
+
+            xBar.Maximum = screenWidth;
+            yBar.Maximum = screenHeight;
+
+            try {
+                xBar.Value = (int)Properties.Settings.Default.weekX;
+                yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.weekY;
+            } catch {
+                xBar.Value = 0;
+                yBar.Value = yBar.Maximum;
+            }
+
+            font = Properties.Settings.Default.weekFont;
+            colorBox.BackColor = Properties.Settings.Default.weekColor;
+            var list = Properties.Settings.Default.students;
+            foreach (string s in list) studentList.Items.Add(s);
+            nums = Properties.Settings.Default.weekLastNums;
+            weekCountBox.Value = nums.Length;
+
+            fontBox.Text = font.Name;
+            sizeBox.Text = font.Size.ToString();
+
+            refreshPreview();
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            if (weekVisibleCheck.Checked) {
+                StringCollection sc = new StringCollection();
+                foreach (string name in studentList.Items) sc.Add(name);
+                Properties.Settings.Default.students = sc;
+                Properties.Settings.Default.weekFont = font;
+                Properties.Settings.Default.weekColor = colorBox.BackColor;
+                Properties.Settings.Default.weekX = xBar.Value;
+                Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
+                Properties.Settings.Default.weekVisible = true;
+                Properties.Settings.Default.weekLastNums = nums;
+                Properties.Settings.Default.weekLastWeek = getNowWeekCount();
+            } else { Properties.Settings.Default.weekVisible = false; }
+            Properties.Settings.Default.Save();
+            MessageBox.Show("저장 되었습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void WeekForm_FormClosed(object sender, FormClosedEventArgs e) {
+            string path = Path.Combine(Application.StartupPath, "weekTest.png");
+            if (File.Exists(path)) File.Delete(path);
+        }
+
+        private void previewBox_Click(object sender, EventArgs e) {
+            string path = Path.Combine(Application.StartupPath, "weekTest.png");
+            previewBox.Image.Save(path);
+            Process.Start(path);
+        }
+
+        // Change Values Events
+        // Students
+        private void studentUpBtn_Click(object sender, EventArgs e)
+        {
+            if (studentList.SelectedIndex > 0) {
+                int selectedIndex = studentList.SelectedIndex;
+                string temp = studentList.Items[selectedIndex-1].ToString();
+                studentList.Items[selectedIndex-1] = studentList.Items[selectedIndex];
+                studentList.Items[selectedIndex] = temp; 
+                studentList.SelectedIndex = selectedIndex - 1;
+            }
+            refreshPreview();
+        }
+
+        private void studentDownBtn_Click(object sender, EventArgs e)
+        {
+            if (studentList.SelectedIndex < studentList.Items.Count-1) {
+                int selectedIndex = studentList.SelectedIndex;
+                string temp = studentList.Items[selectedIndex+1].ToString();
+                studentList.Items[selectedIndex+1] = studentList.Items[selectedIndex];
+                studentList.Items[selectedIndex] = temp; 
+                studentList.SelectedIndex = selectedIndex + 1;
+            }
+            refreshPreview();
+        }
+
+        private void nextWeekBtn_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < nums.Length; i++) nums[i] = (nums[i] + nums.Length) % studentList.Items.Count;
+            refreshPreview();
+        }
+
+        private void backWeekBtn_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < nums.Length; i++) nums[i] = (studentList.Items.Count + (nums[i] - nums.Length)) % studentList.Items.Count;
+            refreshPreview();
+        }
+
+        private void weekCountBox_ValueChanged(object sender, EventArgs e)
+        {
+            if ((int)weekCountBox.Value > studentList.Items.Count) {
+                weekCountBox.Value--;
+                MessageBox.Show("주번의 수는 학생의 수보다 클 수 없습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int startNum = (nums.Length > 0) ? nums[0] : 0;
+            nums = new int[(int)weekCountBox.Value];
+            for (int i = 0; i < nums.Length; i++) nums[i] = (startNum + i) % studentList.Items.Count;
+            refreshPreview();
         }
 
         private void studentAddBtn_Click(object sender, EventArgs e)
@@ -62,7 +184,7 @@ namespace BongrimWallpaper
             
             studentList.Items.Add(studentBox.Text);
             studentBox.Clear();
-            refresh_preview();
+            refreshPreview();
         }
 
         private void studentDelBtn_Click(object sender, EventArgs e)
@@ -71,34 +193,8 @@ namespace BongrimWallpaper
                 MessageBox.Show("주번의 수보다 학생 수가 적을 수 없습니다!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (studentList.SelectedIndex > 0) {
-                studentList.Items.RemoveAt(studentList.SelectedIndex);
-            }
-            refresh_preview();
-        }
-
-        private void studentUpBtn_Click(object sender, EventArgs e)
-        {
-            if (studentList.SelectedIndex > 0) {
-                int selectedIndex = studentList.SelectedIndex;
-                string temp = studentList.Items[selectedIndex-1].ToString();
-                studentList.Items[selectedIndex-1] = studentList.Items[selectedIndex];
-                studentList.Items[selectedIndex] = temp; 
-                studentList.SelectedIndex = selectedIndex - 1;
-            }
-            refresh_preview();
-        }
-
-        private void studentDownBtn_Click(object sender, EventArgs e)
-        {
-            if (studentList.SelectedIndex < studentList.Items.Count-1) {
-                int selectedIndex = studentList.SelectedIndex;
-                string temp = studentList.Items[selectedIndex+1].ToString();
-                studentList.Items[selectedIndex+1] = studentList.Items[selectedIndex];
-                studentList.Items[selectedIndex] = temp; 
-                studentList.SelectedIndex = selectedIndex + 1;
-            }
-            refresh_preview();
+            if (studentList.SelectedIndex > 0) studentList.Items.RemoveAt(studentList.SelectedIndex);
+            refreshPreview();
         }
 
         private void studentBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -106,8 +202,30 @@ namespace BongrimWallpaper
             if (e.KeyChar == (char)Keys.Enter) {
                 e.Handled = true;
                 studentAddBtn_Click(sender, e);
-                refresh_preview();
             }
+        }
+
+        // Other
+        private void yBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xBar_Scroll(object sender, EventArgs e) { refreshPreview(); }
+
+        private void xCenterBtn_Click(object sender, EventArgs e)
+        {
+            xBar.Value = xBar.Maximum / 2;
+            refreshPreview();
+        }
+
+        private void yCenterBtn_Click(object sender, EventArgs e)
+        {
+            yBar.Value = yBar.Maximum / 2;
+            refreshPreview();
+        }
+
+        private void weekVisibleCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            weekGroup.Enabled = weekVisibleCheck.Checked;
+            fontGroup.Enabled = weekVisibleCheck.Checked;
         }
 
         private void setFontBtn_Click(object sender, EventArgs e)
@@ -117,7 +235,7 @@ namespace BongrimWallpaper
                 font = fd.Font;
                 fontBox.Text = fd.Font.Name;
                 sizeBox.Text = fd.Font.Size.ToString();
-                refresh_preview();
+                refreshPreview();
             }
         }
 
@@ -126,147 +244,8 @@ namespace BongrimWallpaper
             ColorDialog cd = new ColorDialog() { Color = colorBox.BackColor };
             if (cd.ShowDialog() == DialogResult.OK) {
                 colorBox.BackColor = cd.Color;
-                refresh_preview();
+                refreshPreview();
             }
-        }
-
-        private void xCenterBtn_Click(object sender, EventArgs e)
-        {
-            xBar.Value = xBar.Maximum / 2;
-            refresh_preview();
-        }
-
-        private void yCenterBtn_Click(object sender, EventArgs e)
-        {
-            yBar.Value = yBar.Maximum / 2;
-            refresh_preview();
-        }
-
-        private void yBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void xBar_Scroll(object sender, EventArgs e)
-        {
-            refresh_preview();
-        }
-
-        private void previewBox_Click(object sender, EventArgs e)
-        {
-            string path = Path.Combine(Application.StartupPath, "weekTest.png");
-            previewBox.Image.Save(path);
-            Process.Start(path);
-        }
-
-        private void WeekForm_Load(object sender, EventArgs e)
-        {
-            int screen_width = Screen.PrimaryScreen.Bounds.Width;
-            int screen_height = Screen.PrimaryScreen.Bounds.Height;
-
-            if (screen_width >= screen_height) {
-                int height = (screen_height*previewBox.Size.Width)/screen_width;
-                previewBox.Size = new Size(previewBox.Size.Width, height);
-                yBar.Height = height+25;
-                yCenterBtn.Location = new Point(yCenterBtn.Location.X, yBar.Height+40);
-            } else {
-                int width = (screen_width*previewBox.Size.Height)/screen_height;
-                previewBox.Size = new Size(width,previewBox.Size.Height);
-                xBar.Width = width+25;
-                xCenterBtn.Location = new Point(xBar.Width+40, xCenterBtn.Location.Y);
-            }
-
-            xBar.Maximum = screen_width;
-            yBar.Maximum = screen_height;
-            try {
-                xBar.Value = (int)Properties.Settings.Default.weekX;
-                yBar.Value = yBar.Maximum - (int)Properties.Settings.Default.weekY;
-            } catch {
-                xBar.Value = 0;
-                yBar.Value = yBar.Maximum;
-            }
-
-            font = Properties.Settings.Default.weekFont;
-            colorBox.BackColor = Properties.Settings.Default.weekColor;
-            var list = Properties.Settings.Default.students;
-            foreach (string s in list) {
-                studentList.Items.Add(s);
-            }
-            nums = Properties.Settings.Default.weekLastNums;
-            weekCountBox.Value = nums.Length;
-
-            fontBox.Text = font.Name;
-            sizeBox.Text = font.Size.ToString();
-
-            refresh_preview();
-        }
-
-        private void saveBtn_Click(object sender, EventArgs e)
-        {
-            if (weekVisibleCheck.Checked) {
-                StringCollection sc = new StringCollection();
-                foreach (string name in studentList.Items) {
-                    sc.Add(name);
-                }
-                Properties.Settings.Default.students = sc;
-                Properties.Settings.Default.weekFont = font;
-                Properties.Settings.Default.weekColor = colorBox.BackColor;
-                Properties.Settings.Default.weekX = xBar.Value;
-                Properties.Settings.Default.weekY = yBar.Maximum - yBar.Value;
-                Properties.Settings.Default.weekVisible = true;
-                Properties.Settings.Default.weekLastNums = nums;
-                Properties.Settings.Default.weekLastWeek = getNowWeekCount();
-            } else {
-                Properties.Settings.Default.weekVisible = false;
-            }
-            Properties.Settings.Default.Save();
-            MessageBox.Show("저장 되었습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void WeekForm_FormClosed(object sender, FormClosedEventArgs e) {
-            string path = Path.Combine(Application.StartupPath, "weekTest.png");
-            if (File.Exists(path)) {
-                File.Delete(path);
-            }
-        }
-
-        private void weekVisibleCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            weekGroup.Enabled = weekVisibleCheck.Checked;
-            fontGroup.Enabled = weekVisibleCheck.Checked;
-        }
-
-        private void nextWeekBtn_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < nums.Length; i++) {
-                nums[i] = (nums[i] + nums.Length) % studentList.Items.Count;
-            }
-            refresh_preview();
-        }
-
-        private void backWeekBtn_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < nums.Length; i++) {
-                nums[i] = (studentList.Items.Count + (nums[i] - nums.Length)) % studentList.Items.Count;
-            }
-            refresh_preview();
-        }
-
-        private void weekCountBox_ValueChanged(object sender, EventArgs e)
-        {
-            if ((int)weekCountBox.Value > studentList.Items.Count) {
-                weekCountBox.Value--;
-                MessageBox.Show("주번의 수는 학생의 수보다 클 수 없습니다", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            int startNum = (nums.Length > 0) ? nums[0] : 0;
-            nums = new int[(int)weekCountBox.Value];
-            for (int i = 0; i < nums.Length; i++) {
-                nums[i] = (startNum + i) % studentList.Items.Count;
-            }
-
-            refresh_preview();
         }
     }
 }
