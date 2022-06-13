@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
+using HtmlAgilityPack;
 using System.Drawing.Text;
 using System.Text;
 using System.Xml;
@@ -21,13 +22,14 @@ namespace BongrimWallpaper
         private List<Meal> meals;
 
         private string[] trimMeal(string target) {
-            string[] output = Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", "").Replace("<br/>", "\n").Replace("&nbsp", " ").Replace("()", "").Split('\n');
+            string[] output = Regex.Replace(Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", ""), @"<br\s*/?>", "\n")
+                .Replace("&nbsp", " ").Replace("()", "").Split('\n');
             int outputLength = output.Length;
             for (int i = 0; i < outputLength; i++) output[i] = output[i].Trim();
             return output;
         }
 
-        private List<Meal> getMeal() {
+        private List<Meal> getMealNeis() {
             List<Meal> output = new List<Meal>();
             try {
                 WebClient wc = new WebClient() {
@@ -46,6 +48,32 @@ namespace BongrimWallpaper
                 XmlNodeList meals = xmlDoc.GetElementsByTagName("row");
                 foreach (XmlNode meal in meals)
                     output.Add(new Meal(meal["MMEAL_SC_NM"].InnerText, trimMeal(meal["DDISH_NM"].InnerText), meal["CAL_INFO"].InnerText));
+                return output;
+            } catch { return output; }
+        }
+
+        private List<Meal> getMealPage() {
+            List<Meal> output = new List<Meal>();
+            try {
+                WebClient wc = new WebClient() {
+                    QueryString = new System.Collections.Specialized.NameValueCollection() {
+                        { "dietDate", /* DateTime.Today.ToString("yyyyMMdd") */ "20220613"}
+                    },
+                    Encoding = Encoding.UTF8,
+                };
+                wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11";
+                HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+                htmlDoc.LoadHtml(wc.DownloadString("http://bongrim-h.gne.go.kr/bongrim-h/dv/dietView/selectDietDetailView.do"));
+
+                HtmlNodeCollection meals = htmlDoc.DocumentNode.SelectNodes("//*[@id='subContent']/div/div[3]/div[contains(@class, 'BD_table')]");
+                if (string.IsNullOrWhiteSpace(meals[0].SelectSingleNode(".//table/tbody/tr[1]/td").InnerText.Trim())) return output;
+                foreach (HtmlNode meal in meals) {
+                    output.Add(new Meal(
+                        meal.SelectSingleNode(".//table/tbody/tr[1]/td").InnerText.Trim(),
+                        trimMeal(meal.SelectSingleNode(".//table/tbody/tr[2]/td").InnerHtml.Trim()),
+                        meal.SelectSingleNode(".//table/tbody/tr[4]/td").InnerText.Trim()
+                    ));
+                }
                 return output;
             } catch { return output; }
         }
@@ -213,7 +241,8 @@ namespace BongrimWallpaper
                 yBar.Value = yBar.Maximum;
             }
 
-            meals = getMeal();
+            neisCheck.Checked = Properties.Settings.Default.isNeis;
+            meals = (neisCheck.Checked) ? getMealNeis() : getMealPage();
             titleFont = Properties.Settings.Default.mealTitleFont;
             contentFont = Properties.Settings.Default.mealContentFont;
             titleColorBox.BackColor = Properties.Settings.Default.mealTitleColor;
@@ -279,6 +308,16 @@ namespace BongrimWallpaper
 
         private void verticalBtn_CheckedChanged(object sender, EventArgs e) { refreshPreview(); }
 
+        private void neisCheck_CheckedChanged(object sender, EventArgs e) {
+            meals = getMealNeis();
+            refreshPreview();
+        }
+
+        private void hompageCheck_CheckedChanged(object sender, EventArgs e) {
+            meals = getMealPage();
+            refreshPreview(); 
+        }
+        
         private void xCenterBtn_Click(object sender, EventArgs e)
         {
             xBar.Value = xBar.Maximum / 2;
@@ -340,5 +379,6 @@ namespace BongrimWallpaper
             fontGroup.Enabled = mealVisibleCheck.Checked;
             layoutGroup.Enabled = mealVisibleCheck.Checked;
         }
+
     }
 }

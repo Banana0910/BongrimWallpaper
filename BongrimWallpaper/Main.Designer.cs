@@ -85,7 +85,7 @@
             this.mainWallpaperBtn.Font = new System.Drawing.Font("맑은 고딕", 9F);
             this.mainWallpaperBtn.Location = new System.Drawing.Point(14, 344);
             this.mainWallpaperBtn.Name = "mainWallpaperBtn";
-            this.mainWallpaperBtn.Size = new System.Drawing.Size(480, 23);
+            this.mainWallpaperBtn.Size = new System.Drawing.Size(478, 23);
             this.mainWallpaperBtn.TabIndex = 7;
             this.mainWallpaperBtn.Text = "뒷 배경";
             this.mainWallpaperBtn.UseVisualStyleBackColor = true;
@@ -120,13 +120,13 @@
             this.menuClose});
             this.menu.Name = "contextMenuStrip1";
             this.menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menu.Size = new System.Drawing.Size(181, 92);
+            this.menu.Size = new System.Drawing.Size(99, 70);
             // 
             // menuStart
             // 
             this.menuStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuStart.Name = "menuStart";
-            this.menuStart.Size = new System.Drawing.Size(180, 22);
+            this.menuStart.Size = new System.Drawing.Size(98, 22);
             this.menuStart.Text = "시작";
             this.menuStart.Click += new System.EventHandler(this.menuStart_Click);
             // 
@@ -135,7 +135,7 @@
             this.menuStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuStop.Enabled = false;
             this.menuStop.Name = "menuStop";
-            this.menuStop.Size = new System.Drawing.Size(180, 22);
+            this.menuStop.Size = new System.Drawing.Size(98, 22);
             this.menuStop.Text = "중지";
             this.menuStop.Click += new System.EventHandler(this.menuStop_Click);
             // 
@@ -144,7 +144,7 @@
             this.menuClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuClose.Name = "menuClose";
             this.menuClose.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.menuClose.Size = new System.Drawing.Size(180, 22);
+            this.menuClose.Size = new System.Drawing.Size(98, 22);
             this.menuClose.Text = "종료";
             this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
             // 
