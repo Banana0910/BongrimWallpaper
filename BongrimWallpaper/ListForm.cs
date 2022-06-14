@@ -140,8 +140,8 @@ namespace BongrimWallpaper
             listSpaceBox.Value = (decimal)config.listSpace;
             if (config.listLayout == 0) verticalBtn.Checked = true;
             else horizontalBtn.Checked = true;
-            listVisibleCheck.Checked = config.listVisible;
             teacherVisibleCheck.Checked = config.listTeacherVisible;
+            listVisibleCheck.Checked = config.listVisible;
 
             subjectFontBox.Text = subjectFont.Name;
             subjectSizeBox.Text = subjectFont.Size.ToString();

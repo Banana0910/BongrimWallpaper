@@ -93,7 +93,7 @@
             "조례"});
             this.testCaseBox.Location = new System.Drawing.Point(96, 50);
             this.testCaseBox.Name = "testCaseBox";
-            this.testCaseBox.Size = new System.Drawing.Size(186, 23);
+            this.testCaseBox.Size = new System.Drawing.Size(186, 33);
             this.testCaseBox.TabIndex = 3;
             this.testCaseBox.SelectedIndexChanged += new System.EventHandler(this.testCaseBox_SelectedIndexChanged);
             // 
@@ -102,7 +102,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(7, 53);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(83, 15);
+            this.label8.Size = new System.Drawing.Size(126, 25);
             this.label8.TabIndex = 2;
             this.label8.Text = "테스트 케이스";
             // 
@@ -117,7 +117,7 @@
             "오른쪽"});
             this.alignmentBox.Location = new System.Drawing.Point(96, 20);
             this.alignmentBox.Name = "alignmentBox";
-            this.alignmentBox.Size = new System.Drawing.Size(186, 23);
+            this.alignmentBox.Size = new System.Drawing.Size(186, 33);
             this.alignmentBox.TabIndex = 1;
             this.alignmentBox.SelectedIndexChanged += new System.EventHandler(this.alignmentBox_SelectedIndexChanged);
             // 
@@ -126,7 +126,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(31, 23);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(59, 15);
+            this.label5.Size = new System.Drawing.Size(90, 25);
             this.label5.TabIndex = 0;
             this.label5.Text = "글자 정렬";
             // 
@@ -181,7 +181,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(218, 30);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(19, 15);
+            this.label6.Size = new System.Drawing.Size(30, 25);
             this.label6.TabIndex = 16;
             this.label6.Text = "색";
             // 
@@ -190,7 +190,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 30);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(31, 15);
+            this.label3.Size = new System.Drawing.Size(48, 25);
             this.label3.TabIndex = 9;
             this.label3.Text = "폰트";
             // 
@@ -200,7 +200,7 @@
             this.subSizeBox.Location = new System.Drawing.Point(171, 25);
             this.subSizeBox.Name = "subSizeBox";
             this.subSizeBox.ReadOnly = true;
-            this.subSizeBox.Size = new System.Drawing.Size(41, 23);
+            this.subSizeBox.Size = new System.Drawing.Size(41, 31);
             this.subSizeBox.TabIndex = 11;
             // 
             // subFontBox
@@ -209,7 +209,7 @@
             this.subFontBox.Location = new System.Drawing.Point(39, 25);
             this.subFontBox.Name = "subFontBox";
             this.subFontBox.ReadOnly = true;
-            this.subFontBox.Size = new System.Drawing.Size(90, 23);
+            this.subFontBox.Size = new System.Drawing.Size(90, 31);
             this.subFontBox.TabIndex = 8;
             // 
             // setSubFontBtn
@@ -227,7 +227,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(135, 30);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 15);
+            this.label4.Size = new System.Drawing.Size(48, 25);
             this.label4.TabIndex = 10;
             this.label4.Text = "크기";
             // 
@@ -261,7 +261,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(218, 30);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(19, 15);
+            this.label7.Size = new System.Drawing.Size(30, 25);
             this.label7.TabIndex = 14;
             this.label7.Text = "색";
             // 
@@ -270,7 +270,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 15);
+            this.label1.Size = new System.Drawing.Size(48, 25);
             this.label1.TabIndex = 9;
             this.label1.Text = "폰트";
             // 
@@ -280,7 +280,7 @@
             this.mainSizeBox.Location = new System.Drawing.Point(171, 25);
             this.mainSizeBox.Name = "mainSizeBox";
             this.mainSizeBox.ReadOnly = true;
-            this.mainSizeBox.Size = new System.Drawing.Size(41, 23);
+            this.mainSizeBox.Size = new System.Drawing.Size(41, 31);
             this.mainSizeBox.TabIndex = 11;
             // 
             // mainFontBox
@@ -289,7 +289,7 @@
             this.mainFontBox.Location = new System.Drawing.Point(39, 25);
             this.mainFontBox.Name = "mainFontBox";
             this.mainFontBox.ReadOnly = true;
-            this.mainFontBox.Size = new System.Drawing.Size(90, 23);
+            this.mainFontBox.Size = new System.Drawing.Size(90, 31);
             this.mainFontBox.TabIndex = 8;
             // 
             // setMainFontBtn
@@ -307,7 +307,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(135, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 15);
+            this.label2.Size = new System.Drawing.Size(48, 25);
             this.label2.TabIndex = 10;
             this.label2.Text = "크기";
             // 
@@ -343,7 +343,7 @@
             this.yBar.Location = new System.Drawing.Point(11, 39);
             this.yBar.Name = "yBar";
             this.yBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.yBar.Size = new System.Drawing.Size(45, 288);
+            this.yBar.Size = new System.Drawing.Size(69, 288);
             this.yBar.TabIndex = 4;
             this.yBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.yBar.Value = 10;
@@ -363,7 +363,7 @@
             // 
             this.xBar.Location = new System.Drawing.Point(24, 22);
             this.xBar.Name = "xBar";
-            this.xBar.Size = new System.Drawing.Size(381, 45);
+            this.xBar.Size = new System.Drawing.Size(381, 69);
             this.xBar.TabIndex = 3;
             this.xBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.xBar.Value = 10;
@@ -382,9 +382,11 @@
             // classVisibleCheck
             // 
             this.classVisibleCheck.AutoSize = true;
+            this.classVisibleCheck.Checked = true;
+            this.classVisibleCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classVisibleCheck.Location = new System.Drawing.Point(448, 12);
             this.classVisibleCheck.Name = "classVisibleCheck";
-            this.classVisibleCheck.Size = new System.Drawing.Size(118, 19);
+            this.classVisibleCheck.Size = new System.Drawing.Size(176, 29);
             this.classVisibleCheck.TabIndex = 22;
             this.classVisibleCheck.Text = "교시 알림 활성화";
             this.classVisibleCheck.UseVisualStyleBackColor = true;
@@ -392,7 +394,7 @@
             // 
             // ClassForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(749, 418);

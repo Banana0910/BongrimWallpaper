@@ -57,7 +57,7 @@ namespace BongrimWallpaper
             try {
                 WebClient wc = new WebClient() {
                     QueryString = new System.Collections.Specialized.NameValueCollection() {
-                        { "dietDate", /* DateTime.Today.ToString("yyyyMMdd") */ "20220613"}
+                        { "dietDate",  DateTime.Today.ToString("yyyyMMdd") }
                     },
                     Encoding = Encoding.UTF8,
                 };

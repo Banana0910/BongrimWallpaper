@@ -71,7 +71,7 @@
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(480, 23);
             this.startBtn.TabIndex = 1;
-            this.startBtn.Text = "실행";
+            this.startBtn.Text = "시작";
             this.startBtn.UseVisualStyleBackColor = true;
             this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
@@ -96,7 +96,7 @@
             this.startupCheck.AutoSize = true;
             this.startupCheck.Location = new System.Drawing.Point(531, 12);
             this.startupCheck.Name = "startupCheck";
-            this.startupCheck.Size = new System.Drawing.Size(106, 19);
+            this.startupCheck.Size = new System.Drawing.Size(158, 29);
             this.startupCheck.TabIndex = 10;
             this.startupCheck.Text = "컴터 킬때 실행";
             this.startupCheck.UseVisualStyleBackColor = true;
@@ -120,13 +120,13 @@
             this.menuClose});
             this.menu.Name = "contextMenuStrip1";
             this.menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menu.Size = new System.Drawing.Size(99, 70);
+            this.menu.Size = new System.Drawing.Size(121, 100);
             // 
             // menuStart
             // 
             this.menuStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuStart.Name = "menuStart";
-            this.menuStart.Size = new System.Drawing.Size(98, 22);
+            this.menuStart.Size = new System.Drawing.Size(120, 32);
             this.menuStart.Text = "시작";
             this.menuStart.Click += new System.EventHandler(this.menuStart_Click);
             // 
@@ -135,7 +135,7 @@
             this.menuStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuStop.Enabled = false;
             this.menuStop.Name = "menuStop";
-            this.menuStop.Size = new System.Drawing.Size(98, 22);
+            this.menuStop.Size = new System.Drawing.Size(120, 32);
             this.menuStop.Text = "중지";
             this.menuStop.Click += new System.EventHandler(this.menuStop_Click);
             // 
@@ -144,7 +144,7 @@
             this.menuClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuClose.Name = "menuClose";
             this.menuClose.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.menuClose.Size = new System.Drawing.Size(98, 22);
+            this.menuClose.Size = new System.Drawing.Size(120, 32);
             this.menuClose.Text = "종료";
             this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
             // 
@@ -154,7 +154,7 @@
             this.timetablePathBox.Location = new System.Drawing.Point(89, 10);
             this.timetablePathBox.Name = "timetablePathBox";
             this.timetablePathBox.ReadOnly = true;
-            this.timetablePathBox.Size = new System.Drawing.Size(316, 23);
+            this.timetablePathBox.Size = new System.Drawing.Size(316, 31);
             this.timetablePathBox.TabIndex = 12;
             // 
             // timetablePathBtn
@@ -172,7 +172,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 15);
+            this.label1.Size = new System.Drawing.Size(108, 25);
             this.label1.TabIndex = 14;
             this.label1.Text = "시간표 파일";
             // 

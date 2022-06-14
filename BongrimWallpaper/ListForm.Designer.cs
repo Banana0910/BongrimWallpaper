@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListForm));
             this.listVisibleCheck = new System.Windows.Forms.CheckBox();
             this.layoutGroup = new System.Windows.Forms.GroupBox();
+            this.listSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -67,8 +68,8 @@
             this.yBar = new System.Windows.Forms.TrackBar();
             this.xBar = new System.Windows.Forms.TrackBar();
             this.teacherVisibleCheck = new System.Windows.Forms.CheckBox();
-            this.listSpaceBox = new System.Windows.Forms.NumericUpDown();
             this.layoutGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).BeginInit();
             this.fontGroup.SuspendLayout();
             this.teacherGroup.SuspendLayout();
             this.subjectGroup.SuspendLayout();
@@ -76,15 +77,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).BeginInit();
             this.SuspendLayout();
             // 
             // listVisibleCheck
             // 
             this.listVisibleCheck.AutoSize = true;
+            this.listVisibleCheck.Checked = true;
+            this.listVisibleCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listVisibleCheck.Location = new System.Drawing.Point(448, 12);
             this.listVisibleCheck.Name = "listVisibleCheck";
-            this.listVisibleCheck.Size = new System.Drawing.Size(130, 19);
+            this.listVisibleCheck.Size = new System.Drawing.Size(194, 29);
             this.listVisibleCheck.TabIndex = 23;
             this.listVisibleCheck.Text = "과목 표시기 활성화";
             this.listVisibleCheck.UseVisualStyleBackColor = true;
@@ -107,12 +109,26 @@
             this.layoutGroup.TabStop = false;
             this.layoutGroup.Text = "레이아웃";
             // 
+            // listSpaceBox
+            // 
+            this.listSpaceBox.Location = new System.Drawing.Point(219, 34);
+            this.listSpaceBox.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.listSpaceBox.Name = "listSpaceBox";
+            this.listSpaceBox.Size = new System.Drawing.Size(58, 31);
+            this.listSpaceBox.TabIndex = 17;
+            this.listSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.listSpaceBox.ValueChanged += new System.EventHandler(this.listSpaceBox_ValueChanged);
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(182, 39);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(31, 15);
+            this.label9.Size = new System.Drawing.Size(48, 25);
             this.label9.TabIndex = 16;
             this.label9.Text = "간격";
             // 
@@ -137,7 +153,7 @@
             this.horizontalBtn.AutoSize = true;
             this.horizontalBtn.Location = new System.Drawing.Point(73, 40);
             this.horizontalBtn.Name = "horizontalBtn";
-            this.horizontalBtn.Size = new System.Drawing.Size(14, 13);
+            this.horizontalBtn.Size = new System.Drawing.Size(21, 20);
             this.horizontalBtn.TabIndex = 5;
             this.horizontalBtn.TabStop = true;
             this.horizontalBtn.UseVisualStyleBackColor = true;
@@ -163,7 +179,7 @@
             this.verticalBtn.AutoSize = true;
             this.verticalBtn.Location = new System.Drawing.Point(15, 40);
             this.verticalBtn.Name = "verticalBtn";
-            this.verticalBtn.Size = new System.Drawing.Size(14, 13);
+            this.verticalBtn.Size = new System.Drawing.Size(21, 20);
             this.verticalBtn.TabIndex = 2;
             this.verticalBtn.TabStop = true;
             this.verticalBtn.UseVisualStyleBackColor = true;
@@ -222,7 +238,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(78, 57);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 15);
+            this.label3.Size = new System.Drawing.Size(90, 25);
             this.label3.TabIndex = 14;
             this.label3.Text = "강조 색상";
             // 
@@ -240,7 +256,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 57);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 15);
+            this.label4.Size = new System.Drawing.Size(48, 25);
             this.label4.TabIndex = 12;
             this.label4.Text = "색상";
             // 
@@ -249,7 +265,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 30);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(31, 15);
+            this.label6.Size = new System.Drawing.Size(48, 25);
             this.label6.TabIndex = 9;
             this.label6.Text = "폰트";
             // 
@@ -259,7 +275,7 @@
             this.teacherSizeBox.Location = new System.Drawing.Point(227, 25);
             this.teacherSizeBox.Name = "teacherSizeBox";
             this.teacherSizeBox.ReadOnly = true;
-            this.teacherSizeBox.Size = new System.Drawing.Size(41, 23);
+            this.teacherSizeBox.Size = new System.Drawing.Size(41, 31);
             this.teacherSizeBox.TabIndex = 11;
             // 
             // teacherFontBox
@@ -268,7 +284,7 @@
             this.teacherFontBox.Location = new System.Drawing.Point(39, 25);
             this.teacherFontBox.Name = "teacherFontBox";
             this.teacherFontBox.ReadOnly = true;
-            this.teacherFontBox.Size = new System.Drawing.Size(146, 23);
+            this.teacherFontBox.Size = new System.Drawing.Size(146, 31);
             this.teacherFontBox.TabIndex = 8;
             // 
             // setTeacherFontBtn
@@ -286,7 +302,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(191, 30);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(31, 15);
+            this.label8.Size = new System.Drawing.Size(48, 25);
             this.label8.TabIndex = 10;
             this.label8.Text = "크기";
             // 
@@ -322,7 +338,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(78, 57);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(59, 15);
+            this.label5.Size = new System.Drawing.Size(90, 25);
             this.label5.TabIndex = 14;
             this.label5.Text = "강조 색상";
             // 
@@ -340,7 +356,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(6, 57);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 15);
+            this.label7.Size = new System.Drawing.Size(48, 25);
             this.label7.TabIndex = 12;
             this.label7.Text = "색상";
             // 
@@ -349,7 +365,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 15);
+            this.label1.Size = new System.Drawing.Size(48, 25);
             this.label1.TabIndex = 9;
             this.label1.Text = "폰트";
             // 
@@ -359,7 +375,7 @@
             this.subjectSizeBox.Location = new System.Drawing.Point(227, 25);
             this.subjectSizeBox.Name = "subjectSizeBox";
             this.subjectSizeBox.ReadOnly = true;
-            this.subjectSizeBox.Size = new System.Drawing.Size(41, 23);
+            this.subjectSizeBox.Size = new System.Drawing.Size(41, 31);
             this.subjectSizeBox.TabIndex = 11;
             // 
             // subjectFontBox
@@ -368,7 +384,7 @@
             this.subjectFontBox.Location = new System.Drawing.Point(39, 25);
             this.subjectFontBox.Name = "subjectFontBox";
             this.subjectFontBox.ReadOnly = true;
-            this.subjectFontBox.Size = new System.Drawing.Size(146, 23);
+            this.subjectFontBox.Size = new System.Drawing.Size(146, 31);
             this.subjectFontBox.TabIndex = 8;
             // 
             // setSubjectFontBtn
@@ -386,7 +402,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(191, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 15);
+            this.label2.Size = new System.Drawing.Size(48, 25);
             this.label2.TabIndex = 10;
             this.label2.Text = "크기";
             // 
@@ -444,7 +460,7 @@
             this.yBar.Location = new System.Drawing.Point(8, 37);
             this.yBar.Name = "yBar";
             this.yBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.yBar.Size = new System.Drawing.Size(45, 282);
+            this.yBar.Size = new System.Drawing.Size(69, 282);
             this.yBar.TabIndex = 9;
             this.yBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.yBar.Value = 10;
@@ -454,7 +470,7 @@
             // 
             this.xBar.Location = new System.Drawing.Point(25, 18);
             this.xBar.Name = "xBar";
-            this.xBar.Size = new System.Drawing.Size(380, 45);
+            this.xBar.Size = new System.Drawing.Size(380, 69);
             this.xBar.TabIndex = 8;
             this.xBar.TickFrequency = 0;
             this.xBar.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -465,28 +481,14 @@
             this.teacherVisibleCheck.AutoSize = true;
             this.teacherVisibleCheck.Location = new System.Drawing.Point(498, 173);
             this.teacherVisibleCheck.Name = "teacherVisibleCheck";
-            this.teacherVisibleCheck.Size = new System.Drawing.Size(15, 14);
+            this.teacherVisibleCheck.Size = new System.Drawing.Size(22, 21);
             this.teacherVisibleCheck.TabIndex = 24;
             this.teacherVisibleCheck.UseVisualStyleBackColor = true;
             this.teacherVisibleCheck.CheckedChanged += new System.EventHandler(this.teacherVisibleCheck_CheckedChanged);
             // 
-            // listSpaceBox
-            // 
-            this.listSpaceBox.Location = new System.Drawing.Point(219, 34);
-            this.listSpaceBox.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.listSpaceBox.Name = "listSpaceBox";
-            this.listSpaceBox.Size = new System.Drawing.Size(58, 23);
-            this.listSpaceBox.TabIndex = 17;
-            this.listSpaceBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.listSpaceBox.ValueChanged += new System.EventHandler(this.listSpaceBox_ValueChanged);
-            // 
             // ListForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(743, 438);
@@ -508,6 +510,7 @@
             this.Load += new System.EventHandler(this.ListForm_Load);
             this.layoutGroup.ResumeLayout(false);
             this.layoutGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).EndInit();
             this.fontGroup.ResumeLayout(false);
             this.teacherGroup.ResumeLayout(false);
             this.teacherGroup.PerformLayout();
@@ -518,7 +521,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.listSpaceBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

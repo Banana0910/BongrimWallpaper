@@ -42,6 +42,7 @@ namespace BongrimWallpaper
 
         private bool verifyTimeTable() {
             if (timetablePathBox.Text == "") return false;
+            if (!File.Exists(timetablePathBox.Text)) return false;
             string jsonString = File.ReadAllText(timetablePathBox.Text);
             try {
                 TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
@@ -58,7 +59,7 @@ namespace BongrimWallpaper
         private Subject getTimeTable() {
             string jsonString = File.ReadAllText(timetablePathBox.Text);
             TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-            return timetable.weekday[2];
+            return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
         }
         
         private int getNowWeekCount() {
@@ -636,7 +637,7 @@ namespace BongrimWallpaper
             this.Activate();
         }
 
-        private void startBtn_Click(object sender, EventArgs e) { updateState((startBtn.Text == "실행")); }
+        private void startBtn_Click(object sender, EventArgs e) { updateState((startBtn.Text == "시작")); }
 
         // Option Form Open Events
         private void openClassFormBtn_Click(object sender, EventArgs e) { (new ClassForm()).Show(); }
