@@ -247,6 +247,8 @@ namespace BongrimWallpaper
         {
             fontGroup.Enabled = classVisibleCheck.Checked;
             layoutGroup.Enabled = classVisibleCheck.Checked;
+            xBar.Enabled = classVisibleCheck.Checked;
+            yBar.Enabled = classVisibleCheck.Checked;
         }
 
         private void mainColorBox_Click(object sender, EventArgs e)

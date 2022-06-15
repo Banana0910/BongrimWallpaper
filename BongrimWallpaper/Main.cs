@@ -656,10 +656,10 @@ namespace BongrimWallpaper
         }
     }
 
-    public class Subject {
-        public string[] name { get; set; }
-        public string[] teacher { get; set; }
-    }
+        public class Subject {
+            public string[] name { get; set; }
+            public string[] teacher { get; set; }
+        }
 
     public class TimeTable {
         public List<Subject> weekday { get; set; }

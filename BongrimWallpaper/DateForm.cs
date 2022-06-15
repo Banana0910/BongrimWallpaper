@@ -144,6 +144,8 @@ namespace BongrimWallpaper
         {
             fontGroup.Enabled = dateVisibleCheck.Checked;
             dateGroup.Enabled = dateVisibleCheck.Checked;
+            xBar.Enabled = dateVisibleCheck.Checked;
+            yBar.Enabled = dateVisibleCheck.Checked;
         }
     }
 }

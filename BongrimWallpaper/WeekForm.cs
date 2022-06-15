@@ -226,6 +226,8 @@ namespace BongrimWallpaper
         {
             weekGroup.Enabled = weekVisibleCheck.Checked;
             fontGroup.Enabled = weekVisibleCheck.Checked;
+            xBar.Enabled = weekVisibleCheck.Checked;
+            yBar.Enabled = weekVisibleCheck.Checked;
         }
 
         private void setFontBtn_Click(object sender, EventArgs e)

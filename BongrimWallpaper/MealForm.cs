@@ -378,6 +378,8 @@ namespace BongrimWallpaper
         {
             fontGroup.Enabled = mealVisibleCheck.Checked;
             layoutGroup.Enabled = mealVisibleCheck.Checked;
+            xBar.Enabled = mealVisibleCheck.Checked;
+            yBar.Enabled = mealVisibleCheck.Checked;
         }
 
     }
