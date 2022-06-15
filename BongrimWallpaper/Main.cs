@@ -473,6 +473,10 @@ namespace BongrimWallpaper
                 string title = (lesson == 7) ? "청소 시간" : (lesson == 5) ? "점심 시간" : "쉬는 시간";
 
                 Subject subject = getTimeTable();
+                string next = (string.IsNullOrEmpty(subject.teacher[lesson-1]))
+                    ? $"Next {subject.name[lesson-1]}" 
+                    : $"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})";
+
                 string time = $"{times[lesson * 2 - 2]} ~ {times[lesson * 2 - 1]}";
 
                 SolidBrush mainSB = new SolidBrush(config.classMainColor);
@@ -488,7 +492,7 @@ namespace BongrimWallpaper
                     float classX = config.classX;
                     float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
-                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    g.DrawString(next, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classY += nextSize.Height;
 
                     g.DrawString(title, config.classMainFont, mainSB, new RectangleF(classX, classY, image.Width, image.Height), StringFormat.GenericTypographic);
@@ -499,7 +503,7 @@ namespace BongrimWallpaper
                     float classX = config.classX - (nextSize.Width / 2);
                     float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
-                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    g.DrawString(next, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = config.classX - (titleSize.Width / 2);
                     classY += nextSize.Height;
 
@@ -512,7 +516,7 @@ namespace BongrimWallpaper
                     float classX = config.classX - nextSize.Width;
                     float classY = config.classY - ((nextSize.Height + titleSize.Height + timeSize.Height) / 2);
 
-                    g.DrawString($"Next {subject.name[lesson-1]}({subject.teacher[lesson-1]})", config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
+                    g.DrawString(next, config.classSubFont, subSB, new RectangleF(classX, classY, image.Width, image.Height));
                     classX = config.classX - titleSize.Width;
                     classY += nextSize.Height;
 
