@@ -18,7 +18,8 @@ namespace BongrimWallpaper
         private int getNowWeekCount() {
             int weekCount = 0;
             DateTime today = DateTime.Today;
-            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
+            int days = today.AddMonths(1).AddDays(-today.Day).Day;
+            for (int i = 1; i <= days; i++) {
                 DateTime d = new DateTime(today.Year, today.Month, i);
                 if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
                 if (d == today) return weekCount;  
@@ -228,6 +229,8 @@ namespace BongrimWallpaper
             fontGroup.Enabled = weekVisibleCheck.Checked;
             xBar.Enabled = weekVisibleCheck.Checked;
             yBar.Enabled = weekVisibleCheck.Checked;
+            xCenterBtn.Enabled = weekVisibleCheck.Checked;
+            yCenterBtn.Enabled = weekVisibleCheck.Checked;
         }
 
         private void setFontBtn_Click(object sender, EventArgs e)

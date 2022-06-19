@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace BongrimWallpaper
 {
@@ -34,6 +35,29 @@ namespace BongrimWallpaper
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Main());
             }
+        }
+    }
+    public class Subjects {
+        public string[] name { get; set; }
+        public string[] teacher { get; set; }
+    }
+
+    public class TimeTable {
+        public List<Subjects> weekday { get; set; }
+        public TimeTable() {
+            this.weekday = new List<Subjects>();
+        }
+    }
+
+    public class Meal {
+        public string title { get; set; }
+        public string[] content { get; set; }
+        public string calorie { get; set;}
+
+        public Meal (string title, string[] content, string calorie) {
+            this.title = title;
+            this.content = content;
+            this.calorie = calorie;
         }
     }
 }

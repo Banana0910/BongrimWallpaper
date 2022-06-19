@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using HtmlAgilityPack;
 using System.IO;
 using System.Xml;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Windows.Forms;
@@ -31,7 +31,6 @@ namespace BongrimWallpaper
             "15:20", "15:35", 
             "16:25"
         };
-        private bool forceExit = false;
         private string backupWallpaper = "";
         private int nowWallpaper = -2;
 
@@ -41,31 +40,35 @@ namespace BongrimWallpaper
         public static void setWallpaper(string path) { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }
 
         private bool verifyTimeTable() {
-            if (timetablePathBox.Text == "") return false;
+            if (string.IsNullOrEmpty(timetablePathBox.Text)) return false;
             if (!File.Exists(timetablePathBox.Text)) return false;
-            string jsonString = File.ReadAllText(timetablePathBox.Text);
+            string xmlString = File.ReadAllText(timetablePathBox.Text);
             try {
-                TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-                if (timetable.weekday.Count == 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (i != 2) { if (timetable.weekday[i].name.Length != 7 || timetable.weekday[i].teacher.Length != 7) return false; } 
-                        else { if (timetable.weekday[i].name.Length != 6 || timetable.weekday[i].teacher.Length != 6) return false; }
-                    }
-                } else { return false; }
-                return true;
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(xmlString);
+                return (doc.GetElementsByTagName("weekday").Count == 5) ? true : false;
             } catch { return false; }
         }
 
-        private Subject getTimeTable() {
-            string jsonString = File.ReadAllText(timetablePathBox.Text);
-            TimeTable timetable = JsonSerializer.Deserialize<TimeTable>(jsonString);
-            return timetable.weekday[(int)DateTime.Now.DayOfWeek-1];
+        private Subjects getTimeTable() {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(File.ReadAllText(timetablePathBox.Text));
+            XmlNode subject = doc.GetElementsByTagName("weekday")[2];
+            int subjectCount = subject.ChildNodes.Count;
+            string[] name = new string[subjectCount];
+            string[] teacher = new string[subjectCount];
+            for (int i = 0; i < subjectCount; i++) {
+                name[i] = subject.ChildNodes[i].Attributes["name"].InnerText;
+                teacher[i] = subject.ChildNodes[i].Attributes["teacher"].InnerText;
+            }
+            return new Subjects() { name = name, teacher = teacher };
         }
         
         private int getNowWeekCount() {
             int weekCount = 0;
             DateTime today = DateTime.Today;
-            for (int i = 1; i <= today.AddMonths(1).AddDays(-today.Day).Day; i ++) {
+            int days = today.AddMonths(1).AddDays(-today.Day).Day;
+            for (int i = 1; i <= days; i++) {
                 DateTime d = new DateTime(today.Year, today.Month, i);
                 if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
                 if (d == today) return weekCount;  
@@ -299,7 +302,7 @@ namespace BongrimWallpaper
             }
             
             if (config.listVisible) {
-                Subject subject = getTimeTable();
+                Subjects subject = getTimeTable();
                 int subjectCount = subject.name.Length;
                 List<SizeF> subjectSizes = new List<SizeF>();
 
@@ -392,7 +395,7 @@ namespace BongrimWallpaper
 
             drawBase(config, ref g, image, lesson);
             if (config.classVisible) {
-                Subject subject = getTimeTable();
+                Subjects subject = getTimeTable();
                 string time = $"{times[lesson * 2 - 1]} ~ {times[lesson * 2]}";
 
                 SolidBrush mainSB = new SolidBrush(config.classMainColor);
@@ -472,7 +475,7 @@ namespace BongrimWallpaper
             if (config.classVisible) {
                 string title = (lesson == 7) ? "청소 시간" : (lesson == 5) ? "점심 시간" : "쉬는 시간";
 
-                Subject subject = getTimeTable();
+                Subjects subject = getTimeTable();
                 string next = (string.IsNullOrEmpty(subject.teacher[lesson-1]))
                     ? $"Next {subject.name[lesson-1]}" 
                     : $"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})";
@@ -558,29 +561,32 @@ namespace BongrimWallpaper
             timetablePathBox.Text = Properties.Settings.Default.timetablePath;
             timetablePathBox.Text = (verifyTimeTable()) ? timetablePathBox.Text : "";
             startupCheck.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
-            if (!string.IsNullOrEmpty(timetablePathBox.Text)) updateState(true);
+            bool isWeekend = (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
+            if (!(string.IsNullOrEmpty(timetablePathBox.Text) || isWeekend)) updateState(true); // 드 모르간의 법칙 이용
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e) {
-            if (!forceExit) {
+            if (e.CloseReason == CloseReason.UserClosing) {
                 e.Cancel = true;
                 this.Hide();
+                return;
             }
+            if (!string.IsNullOrEmpty(backupWallpaper)) setWallpaper(backupWallpaper);
         }
 
         private void checker_Tick(object sender, EventArgs e) {
             DateTime now = DateTime.Now;
 
             if (DateTime.Parse("08:30:00") > now && nowWallpaper != -1) {
-                drawEvent("조례 시간");
+                new Thread(() => drawEvent("조례 시간")).Start();
                 nowWallpaper = -1;
             }
 
             int loopCount = (now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14;
             for (int i = 1; i <= loopCount; i++) {
                 if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && nowWallpaper != i) {
-                    if (i % 2 == 1) drawBreak((i + 1) / 2);
-                    else drawSubject(i / 2);
+                    if (i % 2 == 1) new Thread(() => drawBreak((i + 1) / 2)).Start();
+                    else new Thread(() => drawSubject(i / 2)).Start();
                     nowWallpaper = i;
                     return;
                 }
@@ -589,7 +595,7 @@ namespace BongrimWallpaper
             bool condition = (DateTime.Parse(times[12]) <= now && now.DayOfWeek == DayOfWeek.Wednesday) ||
                 (DateTime.Parse(times[14]) <= now && now.DayOfWeek != DayOfWeek.Wednesday) && nowWallpaper != 15;
             if (condition) {
-                drawEvent("종례 시간");
+                new Thread(() => drawEvent("종례 시간")).Start();
                 nowWallpaper = 15;
             }
         }
@@ -607,7 +613,7 @@ namespace BongrimWallpaper
         private void timetablePathBtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog() {
-                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*",
                 FileName = (string.IsNullOrWhiteSpace(timetablePathBox.Text)) ? Application.StartupPath : timetablePathBox.Text
             };
 
@@ -641,7 +647,13 @@ namespace BongrimWallpaper
             this.Activate();
         }
 
-        private void startBtn_Click(object sender, EventArgs e) { updateState((startBtn.Text == "시작")); }
+        private void startBtn_Click(object sender, EventArgs e) { 
+            // if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) {
+            //     MessageBox.Show("주말에는 나도 쉬자..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //     return;
+            // }
+            updateState((startBtn.Text == "시작")); 
+        }
 
         // Option Form Open Events
         private void openClassFormBtn_Click(object sender, EventArgs e) { (new ClassForm()).Show(); }
@@ -653,34 +665,6 @@ namespace BongrimWallpaper
         // Menu Click Events
         private void menuStart_Click(object sender, EventArgs e) { updateState(true); }
         private void menuStop_Click(object sender, EventArgs e) { updateState(false); }
-        private void menuClose_Click(object sender, EventArgs e) {
-            if (backupWallpaper.Length > 0) setWallpaper(backupWallpaper);
-            forceExit = true;
-            Application.Exit();
-        }
-    }
-
-        public class Subject {
-            public string[] name { get; set; }
-            public string[] teacher { get; set; }
-        }
-
-    public class TimeTable {
-        public List<Subject> weekday { get; set; }
-        public TimeTable() {
-            this.weekday = new List<Subject>();
-        }
-    }
-
-    public class Meal {
-        public string title { get; set; }
-        public string[] content { get; set; }
-        public string calorie { get; set;}
-
-        public Meal (string title, string[] content, string calorie) {
-            this.title = title;
-            this.content = content;
-            this.calorie = calorie;
-        }
+        private void menuClose_Click(object sender, EventArgs e) { Application.Exit(); }
     }
 }

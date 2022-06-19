@@ -65,6 +65,7 @@ namespace BongrimWallpaper
             sizeBox.Text = font.Size.ToString();
             dateFormatBox.Text = Properties.Settings.Default.dateFormat;
             colorBox.BackColor = Properties.Settings.Default.dateColor;
+            dateVisibleCheck.Checked = Properties.Settings.Default.dateVisible;
             refreshPreview();
         }
 
@@ -146,6 +147,8 @@ namespace BongrimWallpaper
             dateGroup.Enabled = dateVisibleCheck.Checked;
             xBar.Enabled = dateVisibleCheck.Checked;
             yBar.Enabled = dateVisibleCheck.Checked;
+            xCenterBtn.Enabled = dateVisibleCheck.Checked;
+            yCenterBtn.Enabled = dateVisibleCheck.Checked;
         }
     }
 }

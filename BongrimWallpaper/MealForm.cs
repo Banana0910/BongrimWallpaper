@@ -380,7 +380,8 @@ namespace BongrimWallpaper
             layoutGroup.Enabled = mealVisibleCheck.Checked;
             xBar.Enabled = mealVisibleCheck.Checked;
             yBar.Enabled = mealVisibleCheck.Checked;
+            xCenterBtn.Enabled = mealVisibleCheck.Checked;
+            yCenterBtn.Enabled = mealVisibleCheck.Checked;
         }
-
     }
 }
