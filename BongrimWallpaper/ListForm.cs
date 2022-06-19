@@ -54,10 +54,13 @@ namespace BongrimWallpaper
                     float listY = (yBar.Maximum - yBar.Value) - ((allHeight + (subject.Length - 1) * listSpace) / 2);
                     
                     for (int i = 0; i < subject.Length; i++) {
-                        g.DrawString(subject[i], subjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                        SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        g.DrawString(subject[i], subjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listX += subjectSizes[i].Width + 10;
                         listY += subjectSizes[i].Height - teacherSizes[i].Height;
-                        g.DrawString(teacher[i], teacherFont, (i==lesson-1) ? teacherAccentSB : teacherSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+
+                        sb = (i==lesson-1) ? teacherAccentSB : teacherSB;
+                        g.DrawString(teacher[i], teacherFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listX = xBar.Value;
                         listY += teacherSizes[i].Height + listSpace;
                     }
@@ -70,10 +73,14 @@ namespace BongrimWallpaper
                     for (int i = 0; i < subject.Length; i++) {
                         float maxWidth = (subjectSizes[i].Width > teacherSizes[i].Width) ? subjectSizes[i].Width : teacherSizes[i].Width;
                         listX += (maxWidth - subjectSizes[i].Width) / 2;
-                        g.DrawString(subject[i], subjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+
+                        SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        g.DrawString(subject[i], subjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listX += (subjectSizes[i].Width - teacherSizes[i].Width) / 2;
                         listY += subjectSizes[i].Height;
-                        g.DrawString(teacher[i], teacherFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+
+                        sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        g.DrawString(teacher[i], teacherFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listX += (teacherSizes[i].Width + maxWidth) / 2 + listSpace;
                         listY = (yBar.Maximum - yBar.Value);
                     }
@@ -85,7 +92,8 @@ namespace BongrimWallpaper
                     float listX = xBar.Value;
                     float listY = (yBar.Maximum - yBar.Value) - ((allHeight + (subject.Length - 1) * listSpace) / 2);
                     for (int i = 0 ; i < subject.Length; i++) {
-                        g.DrawString(subject[i], subjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                        SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        g.DrawString(subject[i], subjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listY += subjectSizes[i].Height + listSpace;
                     }
                 } else {
@@ -93,7 +101,8 @@ namespace BongrimWallpaper
                     float listX = xBar.Value - ((allWidth + (subject.Length - 1) * listSpace) / 2);
                     float listY = (yBar.Maximum - yBar.Value);
                     for (int i = 0; i < subject.Length; i++) {
-                        g.DrawString(subject[i], subjectFont, (i == lesson-1) ? subjectAccentSB : subjectSB, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
+                        SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        g.DrawString(subject[i], subjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
                         listX += subjectSizes[i].Width + listSpace;
                     }
                 }
