@@ -35,9 +35,12 @@ namespace BongrimWallpaper
         private int nowWallpaper = -2;
 
         // Methods
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]   
         static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
         public static void setWallpaper(string path) { SystemParametersInfo(20, 0, path, 0x01 | 0x02); }
+
+        [DllImport("user32.dll")]
+        public static extern bool SetProcessDPIAware();
 
         private bool verifyTimeTable() {
             if (string.IsNullOrEmpty(timetablePathBox.Text)) return false;
@@ -53,7 +56,7 @@ namespace BongrimWallpaper
         private Subjects getTimeTable() {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(File.ReadAllText(timetablePathBox.Text));
-            XmlNode subject = doc.GetElementsByTagName("weekday")[2];
+            XmlNode subject = doc.GetElementsByTagName("weekday")[(int)DateTime.Today.DayOfWeek-1];
             int subjectCount = subject.ChildNodes.Count;
             string[] name = new string[subjectCount];
             string[] teacher = new string[subjectCount];
@@ -575,6 +578,7 @@ namespace BongrimWallpaper
 
         //Interaction Methods
         private void Main_Load(object sender, EventArgs e) {
+            SetProcessDPIAware();
             timetablePathBox.Text = Properties.Settings.Default.timetablePath;
             timetablePathBox.Text = (verifyTimeTable()) ? timetablePathBox.Text : "";
             startupCheck.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
