@@ -160,7 +160,7 @@ namespace BongrimWallpaper
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
             string backgroundPath = config.backgroundPath;
-            if (backgroundPath.Length > 0) g.DrawImage(Image.FromFile(backgroundPath), 0, 0, image.Width, image.Height);
+            if (File.Exists(backgroundPath)) g.DrawImage(Image.FromFile(backgroundPath), 0, 0, image.Width, image.Height);
             else g.FillRectangle(Brushes.Black, 0, 0, image.Width, image.Height);
 
             SizeF baseSize = new SizeF(image.Width, image.Height);
@@ -507,7 +507,7 @@ namespace BongrimWallpaper
 
                 SizeF baseSize = new SizeF(image.Width, image.Height);
 
-                SizeF nextSize = g.MeasureString($"Next {subject.name[lesson - 1]}({subject.teacher[lesson - 1]})", config.classSubFont, baseSize);
+                SizeF nextSize = g.MeasureString(next, config.classSubFont, baseSize);
                 SizeF titleSize = g.MeasureString(title, config.classMainFont, baseSize, StringFormat.GenericTypographic);
                 SizeF timeSize = g.MeasureString(time, config.classSubFont, baseSize);
                 
@@ -578,11 +578,10 @@ namespace BongrimWallpaper
 
         //Interaction Methods
         private void Main_Load(object sender, EventArgs e) {
-            SetProcessDPIAware();
             timetablePathBox.Text = Properties.Settings.Default.timetablePath;
             timetablePathBox.Text = (verifyTimeTable()) ? timetablePathBox.Text : "";
             startupCheck.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
-            bool isWeekend = (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
+            bool isWeekend = (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
             if (!(string.IsNullOrEmpty(timetablePathBox.Text) || isWeekend)) updateState(true); // 드 모르간의 법칙 이용
         }
 
@@ -592,22 +591,44 @@ namespace BongrimWallpaper
                 this.Hide();
                 return;
             }
-            if (!string.IsNullOrEmpty(backupWallpaper)) setWallpaper(backupWallpaper);
+            if (File.Exists(backupWallpaper)) setWallpaper(backupWallpaper);
         }
 
         private void checker_Tick(object sender, EventArgs e) {
             DateTime now = DateTime.Now;
 
             if (DateTime.Parse("08:30:00") > now && nowWallpaper != -1) {
-                new Thread(() => drawEvent("조례 시간")).Start();
+                new Thread(() => {
+                    try { drawEvent("조례 시간"); }
+                    catch(Exception ex) { 
+                        updateState(false);
+                        MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                    }
+                }).Start();
                 nowWallpaper = -1;
             }
 
             int loopCount = (now.DayOfWeek == DayOfWeek.Wednesday) ? 12 : 14;
             for (int i = 1; i <= loopCount; i++) {
                 if (DateTime.Parse(times[i - 1]) <= now && DateTime.Parse(times[i]) > now && nowWallpaper != i) {
-                    if (i % 2 == 1) new Thread(() => drawBreak((i + 1) / 2)).Start();
-                    else new Thread(() => drawSubject(i / 2)).Start();
+                    if (i % 2 == 1) {
+                        new Thread(() => {
+                            try { drawBreak((i + 1) / 2); }
+                            catch(Exception ex) { 
+                                updateState(false);
+                                MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                            }
+                        }).Start();
+                    }
+                    else {
+                        new Thread(() => {
+                            try { drawSubject(i / 2); }
+                            catch(Exception ex) { 
+                                updateState(false);
+                                MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                            }
+                        }).Start();
+                    } 
                     nowWallpaper = i;
                     return;
                 }
@@ -616,7 +637,13 @@ namespace BongrimWallpaper
             bool condition = (DateTime.Parse(times[12]) <= now && now.DayOfWeek == DayOfWeek.Wednesday) ||
                 (DateTime.Parse(times[14]) <= now && now.DayOfWeek != DayOfWeek.Wednesday) && nowWallpaper != 15;
             if (condition) {
-                new Thread(() => drawEvent("종례 시간")).Start();
+                new Thread(() => {
+                    try { drawEvent("종례 시간"); }
+                    catch(Exception ex) {
+                        updateState(false);
+                        MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                    }
+                }).Start();
                 nowWallpaper = 15;
             }
         }
@@ -669,10 +696,10 @@ namespace BongrimWallpaper
         }
 
         private void startBtn_Click(object sender, EventArgs e) { 
-            // if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) {
-            //     MessageBox.Show("주말에는 나도 쉬자..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //     return;
-            // }
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) {
+                MessageBox.Show("주말에는 나도 쉬자..", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             updateState((startBtn.Text == "시작")); 
         }
 

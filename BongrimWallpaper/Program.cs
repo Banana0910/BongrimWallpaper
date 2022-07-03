@@ -41,14 +41,6 @@ namespace BongrimWallpaper
         public string[] name { get; set; }
         public string[] teacher { get; set; }
     }
-
-    public class TimeTable {
-        public List<Subjects> weekday { get; set; }
-        public TimeTable() {
-            this.weekday = new List<Subjects>();
-        }
-    }
-
     public class Meal {
         public string title { get; set; }
         public string[] content { get; set; }
