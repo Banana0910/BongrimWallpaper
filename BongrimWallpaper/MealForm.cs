@@ -25,7 +25,7 @@ namespace BongrimWallpaper
             string[] output = Regex.Replace(Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", ""), @"<br\s*/?>", "\n")
                 .Replace("&nbsp", " ").Replace("()", "").Split('\n');
             int outputLength = output.Length;
-            for (int i = 0; i < outputLength; i++) output[i] = output[i].Trim();
+            for (int i = 0; i < outputLength; i++) output[i] = Regex.Replace(output[i].Trim(), @"^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]\)", "");
             return output;
         }
 
@@ -241,10 +241,10 @@ namespace BongrimWallpaper
                 yBar.Value = yBar.Maximum;
             }
 
-            neisCheck.Checked = Properties.Settings.Default.isNeis;
-            meals = (neisCheck.Checked) ? getMealNeis() : getMealPage();
             titleFont = Properties.Settings.Default.mealTitleFont;
             contentFont = Properties.Settings.Default.mealContentFont;
+            neisCheck.Checked = Properties.Settings.Default.isNeis;
+            meals = (neisCheck.Checked) ? getMealNeis() : getMealPage();
             titleColorBox.BackColor = Properties.Settings.Default.mealTitleColor;
             contentColorBox.BackColor = Properties.Settings.Default.mealContentColor;
             contentSpaceBox.Value = (decimal)Properties.Settings.Default.mealContentSpace;
@@ -277,6 +277,7 @@ namespace BongrimWallpaper
                 config.mealX = xBar.Value;
                 config.mealY = yBar.Maximum - yBar.Value;
                 config.mealVisible = true;
+                config.isNeis = neisCheck.Checked;
             } else {
                 config.mealVisible = false;
             }

@@ -75,7 +75,7 @@ namespace BongrimWallpaper
                 DateTime d = new DateTime(today.Year, today.Month, i);
                 if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
                 if (d == today) return weekCount;  
-            } 
+            }   
             return -1;
         }
 
@@ -83,7 +83,7 @@ namespace BongrimWallpaper
             string[] output = Regex.Replace(Regex.Replace(target.Trim(), @"\n|[0-9\.]{2,}", ""), @"<br\s*/?>", "\n")
                 .Replace("&nbsp", " ").Replace("()", "").Split('\n');
             int outputLength = output.Length;
-            for (int i = 0; i < outputLength; i++) output[i] = output[i].Trim();
+            for (int i = 0; i < outputLength; i++) output[i] = Regex.Replace(output[i].Trim(), @"^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]\)", "");
             return output;
         }
 
@@ -686,8 +686,10 @@ namespace BongrimWallpaper
         }
 
         private void wallpaperPreview_Click(object sender, EventArgs e) {
-            ProcessStartInfo psi = new ProcessStartInfo(wallpaperPreview.ImageLocation);
-            Process.Start(psi);
+            if (string.IsNullOrEmpty(wallpaperPreview.ImageLocation)) {
+                ProcessStartInfo psi = new ProcessStartInfo(wallpaperPreview.ImageLocation);
+                Process.Start(psi);
+            }
         }
 
         private void notifyIcon_DoubleClick(object sender, EventArgs e) {
