@@ -17,13 +17,13 @@ namespace BongrimWallpaper
 
         private int getNowWeekCount() {
             int weekCount = 0;
-            DateTime today = DateTime.Today;
-            int days = today.AddMonths(1).AddDays(-today.Day).Day;
+            int days = DateTime.Today.DayOfYear;
+            DateTime target = new DateTime(DateTime.Today.Year, 1, 1);
             for (int i = 1; i <= days; i++) {
-                DateTime d = new DateTime(today.Year, today.Month, i);
-                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
-                if (d == today) return weekCount;  
-            } 
+                target = target.AddDays(1);
+                if (target.DayOfWeek == DayOfWeek.Sunday) weekCount++;
+                if (target == DateTime.Today) return weekCount;  
+            }   
             return -1;
         }
 

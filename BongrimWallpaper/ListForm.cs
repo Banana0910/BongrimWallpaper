@@ -49,19 +49,19 @@ namespace BongrimWallpaper
                     teacherSizes.Add(g.MeasureString(teacher[i], teacherFont, baseSize, StringFormat.GenericTypographic));
                 }
                 if (verticalBtn.Checked) {
-                    float allHeight = subjectSizes.Sum(s => s.Height);
+                    float allHeight = subjectSizes.Sum(s => s.Height) + teacherSizes.Sum(s => s.Height) + (subject.Length - 1) * listSpace;
                     float listX = xBar.Value;
                     float listY = (yBar.Maximum - yBar.Value) - ((allHeight + (subject.Length - 1) * listSpace) / 2);
                     
                     for (int i = 0; i < subject.Length; i++) {
                         SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                        listX = xBar.Value - (subjectSizes[i].Width / 2);
                         g.DrawString(subject[i], subjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        listX += subjectSizes[i].Width + 10;
-                        listY += subjectSizes[i].Height - teacherSizes[i].Height;
+                        listY += subjectSizes[i].Height;
 
                         sb = (i==lesson-1) ? teacherAccentSB : teacherSB;
+                        listX = xBar.Value - (teacherSizes[i].Width / 2);
                         g.DrawString(teacher[i], teacherFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
-                        listX = xBar.Value;
                         listY += teacherSizes[i].Height + listSpace;
                     }
                 } else {

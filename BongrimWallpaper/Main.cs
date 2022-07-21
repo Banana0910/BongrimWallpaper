@@ -19,7 +19,12 @@ namespace BongrimWallpaper
 {
     public partial class Main : Form
     {
-        public Main() { InitializeComponent(); }
+        public Main(bool updated) { 
+            InitializeComponent(); 
+            if (updated == true) {
+                MessageBox.Show($"{Application.ProductVersion}으로 업데이트 되었습니다!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
 
         private readonly string[] times = new string[] { 
             "08:30", "08:40", 
@@ -69,12 +74,12 @@ namespace BongrimWallpaper
         
         private int getNowWeekCount() {
             int weekCount = 0;
-            DateTime today = DateTime.Today;
-            int days = today.AddMonths(1).AddDays(-today.Day).Day;
+            int days = DateTime.Today.DayOfYear;
+            DateTime target = new DateTime(DateTime.Today.Year, 1, 1);
             for (int i = 1; i <= days; i++) {
-                DateTime d = new DateTime(today.Year, today.Month, i);
-                if (d.DayOfWeek == DayOfWeek.Sunday) weekCount++;
-                if (d == today) return weekCount;  
+                target = target.AddDays(1);
+                if (target.DayOfWeek == DayOfWeek.Sunday) weekCount++;
+                if (target == DateTime.Today) return weekCount;  
             }   
             return -1;
         }
@@ -331,12 +336,13 @@ namespace BongrimWallpaper
                         
                         for (int i = 0; i < subjectCount; i++) {
                             SolidBrush sb = (i == lesson-1) ? subjectAccentSB : subjectSB;
+                            listX = config.listX - (subjectSizes[i].Width / 2);
                             g.DrawString(subject.name[i], config.listSubjectFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            listX += subjectSizes[i].Width + 10;
-                            listY += subjectSizes[i].Height - teacherSizes[i].Height;
+                            listY += subjectSizes[i].Height;
+
                             sb = (i==lesson-1) ? teacherAccentSB : teacherSB;
+                            listX = config.listX - (teacherSizes[i].Width / 2);
                             g.DrawString(subject.teacher[i], config.listTeacherFont, sb, new RectangleF(listX, listY, image.Width, image.Height), StringFormat.GenericTypographic);
-                            listX = config.listX;
                             listY += teacherSizes[i].Height + listSpace;
                         }
                     } else {
@@ -583,8 +589,55 @@ namespace BongrimWallpaper
             startupCheck.Checked = (Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true).GetValue(this.Text) != null);
             bool isWeekend = (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday);
             if (!(string.IsNullOrEmpty(timetablePathBox.Text) || isWeekend)) updateState(true); // 드 모르간의 법칙 이용
+            new Thread(checkUpdate).Start();
+            
+        }
+        private void checkUpdate() {
+            try {
+                string updaterPath = @"C:\Users\Banana\Desktop\github\BongrimWallpaperUpdater\BongrimWallpaperUpdater\bin\Debug\BongrimWallpaperUpdater.exe";
+                Process updater = new Process();
+                updater.StartInfo.FileName = updaterPath;
+                updater.StartInfo.Arguments = Application.ProductVersion;
+                updater.StartInfo.RedirectStandardOutput = true;
+                updater.StartInfo.UseShellExecute = false;
+                updater.EnableRaisingEvents = true;
+                updater.StartInfo.CreateNoWindow = true;
+                updater.Start();
+                updater.OutputDataReceived += (object sender, DataReceivedEventArgs e) => {
+                    if (!string.IsNullOrEmpty(e.Data)) {
+                        DialogResult msg = MessageBox.Show(
+                            $"현재 {Application.ProductVersion}버전에서 {e.Data}으로의 업데이트가 있습니다.\n업데이트를 하시겠습니까?", 
+                            this.Text,
+                            MessageBoxButtons.OKCancel, 
+                            MessageBoxIcon.Information
+                        ); 
+                        if (msg == DialogResult.OK) {
+                            runUpdate();
+                        }
+                        updater.Close(); 
+                    }
+                };
+                updater.BeginOutputReadLine();
+            } catch  {
+                MessageBox.Show("업데이트 확인 중 오류가 발생했습니다\n1학년 2반에 이대현 좀 불러와주세요", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private void runUpdate() {
+            try {
+                string updaterPath = @"C:\Users\Banana\Desktop\github\BongrimWallpaperUpdater\BongrimWallpaperUpdater\bin\Debug\BongrimWallpaperUpdater.exe";
+                Process updater = new Process();
+                updater.StartInfo.FileName = updaterPath;
+                updater.StartInfo.Arguments = "Update";
+                updater.StartInfo.RedirectStandardOutput = true;
+                updater.StartInfo.UseShellExecute = false;
+                updater.EnableRaisingEvents = true;
+                updater.StartInfo.CreateNoWindow = true;
+                updater.Start();
+            } catch {
+                MessageBox.Show("업데이트 중 오류가 발생했습니다\n1학년 2반에 이대현 좀 불러와주세요", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void Main_FormClosing(object sender, FormClosingEventArgs e) {
             if (e.CloseReason == CloseReason.UserClosing) {
                 e.Cancel = true;

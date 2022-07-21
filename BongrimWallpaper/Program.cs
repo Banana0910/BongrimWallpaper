@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace BongrimWallpaper
 
         [DllImport("user32")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
-
         [DllImport("user32")]
         private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
 
@@ -21,7 +21,7 @@ namespace BongrimWallpaper
         /// 해당 애플리케이션의 주 진입점입니다.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Process[] p = Process.GetProcessesByName("BongrimWallpaper");
             if (p.Length > 1 ) {
@@ -30,10 +30,14 @@ namespace BongrimWallpaper
                     ShowWindowAsync(hWnd, 1);
                 }
                 SetForegroundWindow(hWnd);
-            } else {
+            } else { 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Main());
+                if (args[0] == "Updated") {
+                    Application.Run(new Main(true));
+                } else {
+                    Application.Run(new Main(false));
+                }
             }
         }
     }
